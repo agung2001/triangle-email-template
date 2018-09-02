@@ -1,0 +1,24 @@
+{
+	"name"			: "Triangle",
+	"description"	: "Mail engine system by applebydesign",
+	"stage"			: "development",
+	"license"		: "MIT",
+	"author":[
+		{
+			"name"		: "Muhammad Agung Sundoro",
+			"email"		: "muhagung2001@gmail.com",
+			"role"		: "Developer"
+		}
+	],
+	"version"		:"0.1",
+	"require": {
+    	"pelago/emogrifier": "^1.2"
+  	},
+	"autoload"		: {
+		"classmap":[
+			"includes",
+			"modules"
+		]	
+	}
+	
+}

@@ -1,0 +1,7 @@
+{
+	"name"			: "Oval",
+	"version" 		: "0.1",
+	"active"		: true,
+	"debug"			: false,
+	"default"		: "muhagung2001@gmail.com"
+}
