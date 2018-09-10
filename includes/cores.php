@@ -3,10 +3,10 @@
 /**
  * Plugin core function
  *
- * @link       https://www.applebydesign.com.au
+ * @link       https://twitter.com/agung2001
  *
- * @package    Appleby
- * @subpackage Appleby\includes
+ * @package    ASU
+ * @subpackage ASU\includes
  */
 
 namespace Triangle\Includes;
@@ -169,7 +169,7 @@ class Cores {
 		$config['async']	= ($config['async']==true) ? 'async' : '';
 		if(strpos($link, "http://") === false && strpos($link, "https://") === false)
 			$link = $this->get_res($type.'/'.$link);
-		elseif($type=='css')
+		if($type=='css')
 			return "<link rel='stylesheet' id='{$config['id']}' type='text/css' href='{$link}'>";
 		elseif($type=='js')
 			return "<script src='{$link}' {$config['async']}></script>";

@@ -3,10 +3,10 @@
 /**
  * Register all actions and filters for the plugin
  *
- * @link       https://www.applebydesign.com.au
+ * @link       https://twitter.com/agung2001
  *
- * @package    Appleby
- * @subpackage Appleby/includes
+ * @package    ASU
+ * @subpackage ASU/includes
  */
 
 namespace Triangle\Includes;

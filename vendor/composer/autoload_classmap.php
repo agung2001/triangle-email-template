@@ -7,14 +7,10 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Triangle\\Includes\\Cores' => $baseDir . '/includes/cores.php',
-    'Triangle\\Includes\\Gravity\\Controller' => $baseDir . '/modules/gravity/controller.php',
-    'Triangle\\Includes\\Gravity\\Modules' => $baseDir . '/modules/gravity/modules.php',
-    'Triangle\\Includes\\Gravity\\Shortcode' => $baseDir . '/modules/gravity/shortcode.php',
     'Triangle\\Includes\\Loader' => $baseDir . '/includes/loader.php',
-    'Triangle\\Includes\\Oval\\Controller' => $baseDir . '/modules/oval/controller.php',
-    'Triangle\\Includes\\Oval\\Modules' => $baseDir . '/modules/oval/modules.php',
-    'Triangle\\Includes\\Oval\\Shortcode' => $baseDir . '/modules/oval/shortcode.php',
     'Triangle\\Includes\\Plugins' => $baseDir . '/includes/plugins.php',
     'Triangle\\Includes\\Triangle\\Controller' => $baseDir . '/modules/triangle/controller.php',
     'Triangle\\Includes\\Triangle\\Menu' => $baseDir . '/modules/triangle/menu.php',
+    'Triangle\\Includes\\Triangle\\Modules' => $baseDir . '/modules/triangle/modules.php',
+    'Triangle\\Includes\\Triangle\\Shortcode' => $baseDir . '/modules/triangle/shortcode.php',
 );

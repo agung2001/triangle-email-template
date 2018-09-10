@@ -3,11 +3,10 @@
 /**
  * Setup modular plugin system
  *
- * @link       https://www.applebydesign.com.au
- * @since      0.1
+ * @link       https://twitter.com/agung2001
  *
- * @package    Appleby
- * @subpackage Appleby/includes
+ * @package    ASU
+ * @subpackage ASU/includes
  */
 
 namespace Triangle\Includes;

@@ -1,6 +1,6 @@
 {
 	"name"			: "Triangle",
-	"description"	: "Mail engine system by applebydesign",
+	"description"	: "Triangle is made to deliver good looking and beautiful email template with wordpress mail.",
 	"stage"			: "development",
 	"license"		: "MIT",
 	"author":[

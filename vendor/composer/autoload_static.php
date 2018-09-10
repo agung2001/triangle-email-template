@@ -22,16 +22,12 @@ class ComposerStaticInit9a17c1042ab07fddafa850b6ab951603
 
     public static $classMap = array (
         'Triangle\\Includes\\Cores' => __DIR__ . '/../..' . '/includes/cores.php',
-        'Triangle\\Includes\\Gravity\\Controller' => __DIR__ . '/../..' . '/modules/gravity/controller.php',
-        'Triangle\\Includes\\Gravity\\Modules' => __DIR__ . '/../..' . '/modules/gravity/modules.php',
-        'Triangle\\Includes\\Gravity\\Shortcode' => __DIR__ . '/../..' . '/modules/gravity/shortcode.php',
         'Triangle\\Includes\\Loader' => __DIR__ . '/../..' . '/includes/loader.php',
-        'Triangle\\Includes\\Oval\\Controller' => __DIR__ . '/../..' . '/modules/oval/controller.php',
-        'Triangle\\Includes\\Oval\\Modules' => __DIR__ . '/../..' . '/modules/oval/modules.php',
-        'Triangle\\Includes\\Oval\\Shortcode' => __DIR__ . '/../..' . '/modules/oval/shortcode.php',
         'Triangle\\Includes\\Plugins' => __DIR__ . '/../..' . '/includes/plugins.php',
         'Triangle\\Includes\\Triangle\\Controller' => __DIR__ . '/../..' . '/modules/triangle/controller.php',
         'Triangle\\Includes\\Triangle\\Menu' => __DIR__ . '/../..' . '/modules/triangle/menu.php',
+        'Triangle\\Includes\\Triangle\\Modules' => __DIR__ . '/../..' . '/modules/triangle/modules.php',
+        'Triangle\\Includes\\Triangle\\Shortcode' => __DIR__ . '/../..' . '/modules/triangle/shortcode.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
