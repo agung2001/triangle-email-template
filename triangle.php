@@ -3,10 +3,10 @@
  * @wordpress-plugin
  * Plugin Name:       Triangle
  * Plugin URI:        http://www.applebydesign.com.au
- * Description:       Triangle is made to deliver good looking and beautiful email template with wordpress mail.
+ * Description:       Mail engine system by applebydesign
  * Version:           0.1
  * Author:            Agung Sundoro
- * Author URI:        https://twitter.com/agung2001
+ * Author URI:        https://applebydesign.com.au
  * License:           GPL-3.0
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
 */

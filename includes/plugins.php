@@ -1,12 +1,13 @@
 <?php 
 
 /**
- * Setup modular plugin system
+ * Register all function for plugin
  *
- * @link       https://twitter.com/agung2001
+ * @link       https://www.applebydesign.com.au
+ * @since      0.1
  *
- * @package    ASU
- * @subpackage ASU/includes
+ * @package    Appleby
+ * @subpackage Appleby/includes
  */
 
 namespace Triangle\Includes;

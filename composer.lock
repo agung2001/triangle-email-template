@@ -1,27 +1,27 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "6eb588c3d3fbe843e345912f9f014e36",
     "packages": [
         {
             "name": "pelago/emogrifier",
-            "version": "v1.2.1",
+            "version": "V1.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/MyIntervals/emogrifier.git",
-                "reference": "e005ae86dbf11d385ea26dcc7299d22bc0238bc5"
+                "url": "https://github.com/jjriv/emogrifier.git",
+                "reference": "a1db453bb504597d821efcc04b21c79a6021e00c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MyIntervals/emogrifier/zipball/e005ae86dbf11d385ea26dcc7299d22bc0238bc5",
-                "reference": "e005ae86dbf11d385ea26dcc7299d22bc0238bc5",
+                "url": "https://api.github.com/repos/jjriv/emogrifier/zipball/a1db453bb504597d821efcc04b21c79a6021e00c",
+                "reference": "a1db453bb504597d821efcc04b21c79a6021e00c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0,<=7.2.99"
+                "php": ">=5.4.0,<=7.1.99"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.8.27",
@@ -64,7 +64,7 @@
             ],
             "description": "Converts CSS styles into inline style attributes in your HTML code",
             "homepage": "http://www.pelagodesign.com/sidecar/emogrifier/",
-            "time": "2018-06-26T10:13:48+00:00"
+            "time": "2017-03-02T12:51:48+00:00"
         }
     ],
     "packages-dev": [],

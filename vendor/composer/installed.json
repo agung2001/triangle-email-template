@@ -1,27 +1,27 @@
 [
     {
         "name": "pelago/emogrifier",
-        "version": "v1.2.1",
-        "version_normalized": "1.2.1.0",
+        "version": "V1.2.0",
+        "version_normalized": "1.2.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/MyIntervals/emogrifier.git",
-            "reference": "e005ae86dbf11d385ea26dcc7299d22bc0238bc5"
+            "url": "https://github.com/jjriv/emogrifier.git",
+            "reference": "a1db453bb504597d821efcc04b21c79a6021e00c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/MyIntervals/emogrifier/zipball/e005ae86dbf11d385ea26dcc7299d22bc0238bc5",
-            "reference": "e005ae86dbf11d385ea26dcc7299d22bc0238bc5",
+            "url": "https://api.github.com/repos/jjriv/emogrifier/zipball/a1db453bb504597d821efcc04b21c79a6021e00c",
+            "reference": "a1db453bb504597d821efcc04b21c79a6021e00c",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.4.0,<=7.2.99"
+            "php": ">=5.4.0,<=7.1.99"
         },
         "require-dev": {
             "phpunit/phpunit": "4.8.27",
             "squizlabs/php_codesniffer": "2.6.0"
         },
-        "time": "2018-06-26T10:13:48+00:00",
+        "time": "2017-03-02T12:51:48+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {

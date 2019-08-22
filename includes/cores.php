@@ -1,108 +1,83 @@
 <?php 
 
 /**
- * Plugin core function
+ * Register all function for plugin
  *
- * @link       https://twitter.com/agung2001
+ * @link       https://www.applebydesign.com.au
+ * @since      0.1
  *
- * @package    ASU
- * @subpackage ASU\includes
+ * @package    Appleby
+ * @subpackage Appleby\includes
  */
 
 namespace Triangle\Includes;
 
 class Cores {
 
-	/**
-	* Configuration file for each module
-	* 
-	* @access	public
-	* @var		array collection of module configuration
+	/*
+	* Configuration file setting.php/config.php
 	*/
 	public $config = array();
 
-	/**
-	* Configuration file modules/config.php
-	* 
-	* @access	public
-	* @var		array save plugin configuration
+	/*
+	* Configuration file moudles/config.php
 	*/
 	public $module = array();	
 
 	/**
 	 * The WordPress database class.
-	 * 
-	 * @access	public
-	 * @var 	WPDB wordpress database class
+	 * @var WPDB
 	 */
 	public $wpdb;
 
-	/** 
+	/*
 	* Used by developer for debuging
-	*
-	* @access	public
-	* @var 		data - can be anything for debugging purpose
+	* @data 	can be anything for debug
 	*/
 	public function debug($data){
 	    echo '<pre>';
 	    print_r($data);
 	}
 
-	/** 
+	/*
 	* Get Path (FILE, PATH, URL)
-	*
-	* @access	public
-	* @var		path - module path
-	* @var		file - filename to get
-	* @var		error - error message, if occur
-	* @return 	path
-	* @note		dont need '/' because constant already contain it
+	* Note :
+	* return 	don't need '/' because constant already contain it
 	*/
-	// public function get_path($path, $file='',$error=false){
-	// 	$path = $this->config[$path].$file;
-	// 	if($error) $this->directory_error('path',$path);
-	// 	return $path;
-	// }
-
-	/**
-	* Validate path configuration
-	*
-	* @access	public
-	* @var		config - path configuration
-	* @var 		path
-	* @return 	validatedPath
-	*/
-	public function config_path($config,$path){
-		return [
-			'type'	=> (isset($config['type'])) ? $path.'_'.$config['type'] : $path.'_path',
-			'error' => (isset($config['error'])) ? $config['error'] : false
-		];
-	}
-
-	/**
-	* Get module asset path
-	*
-	* @access	public
-	* @var		module - module name
-	* @var		file - filaneme to get
-	* @var		config - path configuration
-	* @return	/module/assets/$dir
-	*/
-	public function get_asset($module, $file='', $config=array()){
-		$config = $this->config_path($config,'asset');
-		$path 	= $this->config[$config['type']].strtolower($module)."/$file";
-		if($config['error']) $this->directory_error('asset',$path);
+	public function get_path($path, $file='',$error=false){
+		$path = $this->config[$path].$file;
+		if($error) $this->directory_error('path',$path);
 		return $path;
 	}
 
-	/**
-	* Get module path 
-	*
-	* @access	public
-	* @var 		module - module name
-	* @var		file - filename to get
-	* @var		config - path configuration
-	* @return 	/modules/$dir
+	/*
+	* Get module resource = CSS || JS file
+	*/
+	public function get_res($file,$config = array()){
+		$config['type'] = 'url';
+		return $this->get_module(
+			$this->module['name'],
+			$file,
+			$config
+		);
+	}
+
+	/*
+	* Get module resource = CSS || JS file
+	*/
+	public function get_element($file,$config = array()){
+		$file = 'elements/'.$file;
+		return $this->get_module(
+			$this->module['name'],
+			$file,
+			$config
+		);
+	}
+
+	/*
+	* Get MODULE path directory
+	* return 	/modules/$dir
+	* - path,url
 	*/
 	public function get_module($module, $file='', $config=array()){
 		$config = $this->config_path($config,'module');
@@ -111,104 +86,110 @@ class Cores {
 		return $path;
 	}
 
-	/** 
-	* Get module resource (CSS or JS) 
-	*
-	* @access	public
-	* @var		file - filename to get
-	* @var 		config - path configuration
-	* @return 	/modules/_name/_filepath
-	* @note		dont need '/' because constant already contain it
+	/*
+	* Get ASSET path directory
+	* return 	/assets/$dir
 	*/
-	public function get_res($file,$config = array()){
-		$config['type'] = 'url';
-		return $this->get_module( $this->module['name'], $file, $config );
+	public function get_asset($module, $file='', $config=array()){
+		$config = $this->config_path($config,'asset');
+		$path 	= $this->config[$config['type']].strtolower($module)."/$file";
+		if($config['error']) $this->directory_error('asset',$path);
+		return $path;
 	}
 
-	/** 
-	* Get module element (PHP, HTML)
-	*
-	* @access	public
-	* @var		file - filename to get
-	* @var 		config - path configuration
-	* @return	/modules/_name/elements
-	* @note		dont need '/' because constant already contain it
-	*/
-	public function get_element($file,$config = array()){
-		$file = 'elements/'.$file;
-		return $this->get_module( $this->module['name'], $file, $config );
-	}
-
-	/**
+	/*
 	* Get class name with namespace
-	*
-	* @access	public
-	* @var		module - module name
-	* @var		class - class name
-	* @return	ClassName
 	*/
-	public function get_class($module,$class){
+	public function get_class($module_name,$class_name){
 		$namespace 	= $this->config['namespace'];
-		$module = ucwords($module);
-		$class	= ucwords($class);
-		return '\\'.$namespace.'\\'.$module.'\\'.$class;
+		$module_name= ucwords($module_name);
+		$class_name	= ucwords($class_name);
+		return '\\'.$namespace.'\\'.$module_name.'\\'.$class_name;
 	}
 
-	/**
-	* Include Resources
-	*
-	* @access	public
-	* @var		type - (CSS or JS)
-	* @var 		link - resource link (local or external)
-	* @var		config - resource configuration
-	* @return 	resource
+	/*
+	* Seperate shortcode by module
 	*/
-	public function inc_res($type,$link, $config = array()){
-		$config['id'] 		= (isset($config['id'])) ? $config['id'] : '';
-		$config['async'] 	= (isset($config['async'])) ? $config['async'] : false;
-		$config['async']	= ($config['async']==true) ? 'async' : '';
-		if(strpos($link, "http://") === false && strpos($link, "https://") === false)
-			$link = $this->get_res($type.'/'.$link);
-		if($type=='css')
-			return "<link rel='stylesheet' id='{$config['id']}' type='text/css' href='{$link}'>";
-		elseif($type=='js')
-			return "<script src='{$link}' {$config['async']}></script>";
+	public function module_shortcode($plugin,$module,$atts,$content){
+		ob_start();
+			$shortcode = '['.$plugin.'_'.$module.' ';
+				foreach($atts as $key => $att){
+					$shortcode .= $key.'='."'$att' ";
+				}
+			$shortcode .= ']';
+				echo $content;
+			$shortcode .= '[/'.$plugin.'_'.$module.']';
+			echo $shortcode;
+		return do_shortcode(ob_get_clean());
 	}
 
-	/**
-	* Directory Error
-	*
-	* @access	public
-	* @var 		directory - type of path
-	* @var		path - specific path to file
+	/*
+	* Truncate text
 	*/
-	private function directory_error($directory,$path){
+	public function truncate($text, $chars = 25) {
+	    $text = $text." ";
+	    $text = substr($text,0,$chars);
+	    $text = substr($text,0,strrpos($text,' '));
+	    $text = $text."...";
+	    return $text;
+	}
+
+	/*
+	* Error
+	*/
+	public function directory_error($directory,$path){
 		if(!file_exists($path)){
 			if('path' == $directory)
 				die('Path not exists, please contact developer!');
-			elseif('module' == $directory)
+			if('module' == $directory)
 				die("$module directory not found, please contact developer!");
-			elseif('asset' == $directory)
+			if('asset' == $directory)
 				die("$asset directory not found, please contact developer!");
-			else
-				die("Critical error, please contact developer!");
 		}	
 	}
 
-	/**
+	/*
+	* Validate path
+	*/
+	public function config_path($config,$path){
+		//Is set
+		if(isset($config['type']))
+			$config['type'] = $path.'_'.$config['type'];
+		//Not set
+		if(!isset($config['error']))
+			$config['error'] = false;
+		if(!isset($config['type']))
+			$config['type'] = $path.'_path';
+		return $config;
+	}
+
+	/*
 	* Validate configuration file on modules
-	*
-	* @access	public
-	* @var		config - module configuration file
-	* @var 		module - module name
+	* - validate name, version
 	*/
 	public function validate_config($config,$module = null){
 		if(!isset($config['name']))
 			die('Please specify plugin name in config.php!');
-		elseif(!isset($config['version']))
+		if(!isset($config['version']))
 			die('Please specify plugin version in config.php!');
-		elseif(!isset($config['modules'][$module]['name']) && null != $module)
+		if(!isset($config['modules'][$module]['name']) && null != $module)
 			die('Please specify module name in config.php!');
+	}
+
+	/*
+	* Check accessor capability
+	* - Check wether the accessor is from the right resource
+	* - Check wether the capability is right 
+	*/
+	public function check_capability($capability){
+		if($capability == 'back' && current_user_can( $this->config['capability'] ))
+			return true;
+		elseif($capability == 'front' && !current_user_can( $this->config['capability'] ))
+			return true;
+		elseif($capability == 'both')
+			return true;
+		else
+			return false;
 	}
 
 }
