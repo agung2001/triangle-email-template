@@ -26,7 +26,7 @@ class Service {
             'plugin_url' => plugin_dir_url($path)
         ];
         $path['view_path'] = $path['plugin_path'] . 'view/';
-        define('Triangle_PATH', serialize($path));
+        define('TRIANGLE_PATH', serialize($path));
         return $path;
     }
 

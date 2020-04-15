@@ -129,7 +129,7 @@ class Plugins {
     public function setName($name)
     {
         $this->name = $name;
-        define('Triangle_NAME', $name);
+        define('TRIANGLE_NAME', $name);
     }
 
     /**
@@ -146,7 +146,7 @@ class Plugins {
     public function setVersion($version)
     {
         $this->version = $version;
-        define('Triangle_VERSION', $version);
+        define('TRIANGLE_VERSION', $version);
     }
 
     /**
@@ -163,7 +163,7 @@ class Plugins {
     public function setStage($stage)
     {
         $this->stage = $stage;
-        define('Triangle_STAGE', $stage);
+        define('TRIANGLE_STAGE', $stage);
     }
 
     /**

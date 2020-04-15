@@ -1,1 +1,1 @@
-Welcome to <?= Triangle_NAME ?> plugin!
+Welcome to <?= TRIANGLE_NAME ?> plugin!

@@ -42,7 +42,7 @@ function Triangle() {
     $plugins = new Triangle\Includes\Plugins(__FILE__);
     $plugins->setName('Triangle');
     $plugins->setVersion(2.0);
-    $plugins->setStage(1);
+    $plugins->setStage(0);
     $plugins->load_api();
     $plugins->load_controller();
     $plugins->load_model();

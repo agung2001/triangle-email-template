@@ -40,7 +40,7 @@ class FrontendController extends BaseController {
      * @return  string              Generated html page
      */
     public function plugin_shortcode($atts, $content = null){
-        $atts = shortcode_atts([ 'request' => 'default' ], $atts, strtolower(Triangle_NAME) );
+        $atts = shortcode_atts([ 'request' => 'default' ], $atts, strtolower(TRIANGLE_NAME) );
         if($atts['request']) {
             $view = new View();
             $view->setTemplate('blank');

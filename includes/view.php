@@ -54,7 +54,7 @@ class View {
      */
     public function load_content($content){
         ob_start();
-            $path = unserialize(Triangle_PATH);
+            $path = unserialize(TRIANGLE_PATH);
             include_once $path['view_path'] . str_replace('.','/',$content) . '.php';
         $content = ob_get_clean();
         if(isset($this->options['shortcode']) && $this->options['shortcode']) $content = do_shortcode($content);
