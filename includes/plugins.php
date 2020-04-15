@@ -1,152 +1,201 @@
-<?php 
-
-/**
- * Register all function for plugin
- *
- * @link       https://www.applebydesign.com.au
- * @since      0.1
- *
- * @package    Appleby
- * @subpackage Appleby/includes
- */
+<?php
 
 namespace Triangle\Includes;
 
-use Triangle\Includes\Loader;
-use Triangle\Includes\Cores;
+!defined( 'WPINC ' ) or die;
 
-class Plugins extends Cores {
+/**
+ * Initiate plugins
+ *
+ * @package    Triangle
+ * @subpackage Triangle\Includes
+ */
 
-	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power the plugin.
-	 *
-	 * @access   protected
-	 * @var      loader   Maintains and registers all hooks for the plugin.
-	 */
-	protected $loader;
+use Triangle\Includes\Wordpress\Service;
 
-	/**
-	* Consist of all active module and configuration
-	*
-	* @access	private
-	* @var		modules - lists of modules used by plugin
-	*/
-	private $modules;
+class Plugins {
 
-	/**
-	 * Define the core functionality of the plugin.
-	 *
-	 * Set the plugin name and the plugin version that can be used throughout the plugin.
-	 * Load the dependencies, define the locale, and set the hooks for the Dashboard and
-	 * the public-facing side of the site.
-	 *
-	 * @access	public
-	 */
-	public function __construct($cap,$config,$path){
-		$this->load_dependencies($cap,$config,$path);
-		$this->load_modules();
-		$this->loader->run(); 
-	}
+    /**
+     * Plugin name
+     * @var     string
+     */
+    protected $name;
 
-	/**
-	* Set variable, setting file and path
-	*
-	* @access	public
-	* @var 		cap - minimum capability to access plugin
-	* @var 		config - plugin configuration
-	* @var 		path - core module path
-	* @note 	define global accessed variable
-	*/
-	private function load_dependencies($cap,$config,$path){
-		$this->loader 				= new Loader();
-		$this->config 				= json_decode($config,true);
-		$this->config['capability']	= $cap;
-		$this->config['namespace'] 	= __NAMESPACE__;
-		$this->config['path']		= plugin_dir_path($path);
-		$this->config['url']		= plugin_dir_url($path);
-		$this->config['asset_path']	= $this->config['path'].'assets/';
-		$this->config['asset_url']	= $this->config['url'].'assets/';
-		$this->config['module_path']= $this->config['path'].'modules/';
-		$this->config['module_url']	= $this->config['url'].'modules/';
-		$this->validate_config($this->config);
-	}
+    /**
+     * Plugin version
+     * @var     string
+     */
+    protected $version;
 
-	/**
-	* Load Modules 
-	*
-	* @access 	private
-	* - Load config.json file from the module directory
-	* - Load 'load_ajax' function for ajax module handler
-	* - Load 'load_cores' function for module 
-	* - (Controller, Post, Menu, Action, Filter, Shortcode, API)
-	*/
-	private function load_modules(){
-		$modules = scandir($this->config['module_path']);
-		$modules = array_diff($modules, array('.', '..','.DS_Store'));
-		foreach($modules as $module){
-			$module = file_get_contents($this->get_module($module,'config.json'));
-			$module = json_decode($module,true);
-			if(false == $module['active']) continue;
-			$this->config['modules'][$module['name']] = $module;
-			$this->config['active_module'] = $module['name'];
-			$this->validate_config($this->config,$module['name']);
-			$this->load_cores($this->config,'controller');
-			$this->load_cores($this->config,'post');
-			$this->load_cores($this->config,'menu');
-			$this->load_cores($this->config,'action');
-			$this->load_cores($this->config,'filter');
-			$this->load_cores($this->config,'shortcode');
-			$this->load_cores($this->config,'api');
-			$this->modules[$module['name']] = $module;
-		}
-	}
+    /**
+     * Plugin stage (0 = development, 1 = production)
+     * @var     bool
+     */
+    protected $stage;
 
-	/**
-	* Load CoreWP (Action, Filter, Shortcode) - within modules callback
-	*
-	* @access	private
-	* @var		config - module configuration
-	* @var 		core - core (Controller, Post, Menu, Action, Filter, Shortcode, API)
-	* - Register loader from module callback
-	*/
-	private function load_cores($config,$core){
-		$paths = $this->get_module($config['active_module'],$core);
-		$paths = (is_dir($paths)) ? glob($paths.'/*.php') : ["{$paths}.php"];
-		foreach($paths as $path){
-			if(!file_exists($path)) continue;
-			$module = $this->get_class($config['active_module'],basename($path,".php"));
-			$module = new $module($config);
-			$this->load_core_callback($module,$core,$config);
-		}
-	}
+    /**
+     * Enable/Disable plugins hook (Action, Filter, Shortcode)
+     * @var     array   ['action', 'filter', 'shortcode']
+     */
+    protected $enableHooks;
 
-	/**
-	* Load callback for registration to loader hook
-	*
-	* @access	public
-	* @var		module - module name
-	* @var 		core - core (Controller, Post, Menu, Action, Filter, Shortcode, API)
-	* @var 		config - module configuration
-	* @note 	module callback return 'array' of core function like Action, Filter, Shortcodes
-	*/
-	private function load_core_callback($module,$core,$config){
-		$default_cores = array('action','filter','shortcode');
-		if(!empty($module->callback())){
-			$core = (in_array($core,$default_cores)) ? $core : 'action'; 
-			foreach($module->callback() as $loader){
-				$loader['module'] = $module;
-				$function = (isset($loader['core'])) ? "add_{$loader['core']}" : "add_$core";
-				$capability = (isset($loader['caps'])) ? current_user_can($loader['caps']) : true;
-				if($capability)
-					$this->loader->$function(
-						$loader['hook'], 
-						$loader['module'], 
-						$loader['callback'],
-						$loader['priority'],
-						$loader['args']
-					);
-			}
-		}
-	}
+    /**
+     * Plugin path
+     * @var     string
+     */
+    protected $path;
+
+    /**
+     * Plugin path
+     * @var     string
+     */
+    protected $helper;
+
+    /**
+     * Define the core functionality of the plugin.
+     *
+     * Set the plugin name and that can be used throughout the plugin.
+     * Load the dependencies, and set the hooks for backend and frontend.
+     *
+     * @param   array   $path     Wordpress plugin path
+     * @return void
+     */
+    public function __construct($path){
+        $this->enableHooks = ['action', 'filter', 'shortcode'];
+        $this->path = Service::getPath($path);
+        $this->helper = new Helper();
+    }
+
+    /**
+     * Load hook in a api
+     * @return void
+     */
+    public function load_api(){
+        $this->load_hooks('api');
+    }
+
+    /**
+     * Load hook in a controller
+     * @return void
+     */
+    public function load_controller(){
+        $this->load_hooks('controller');
+    }
+
+    /**
+     * Load registered hooks in a controller
+     * @return  void
+     * @var     string  $dir   plugin hooks directory (Api, Controller)
+     * @pattern bridge
+     */
+    private function load_hooks($dir){
+        $controllers = $this->helper->getDirFiles($this->path['plugin_path'] . $dir);
+        $allow = ['.', '..','.DS_Store','index.php','BaseController.php'];
+        foreach($controllers as $controller){
+            if(in_array(basename($controller), $allow)) continue;
+            $controller = '\\Triangle\\'.ucwords($dir).'\\'.basename( $controller, '.php' );
+            $controller = new $controller($this);
+            foreach($controller->getHooks() as $hook){
+                $class = str_replace( 'Triangle\\Includes\\Wordpress\\' , '', get_class($hook) );
+                if(in_array(strtolower($class), $this->enableHooks)) $hook->run();
+            }
+        }
+    }
+
+    /**
+     * Load registered models
+     * @return  void
+     */
+    public function load_model(){
+        $models = scandir( $this->path['plugin_path'] . 'model/' );
+        $models = array_diff($models, array('.', '..','.DS_Store','index.php','Model.php'));
+        foreach($models as $model){
+            $model = '\\Triangle\\Model\\'.basename( $model, '.php' );
+            new $model($this);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        define('Triangle_NAME', $name);
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param string $version
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+        define('Triangle_VERSION', $version);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStage()
+    {
+        return $this->stage;
+    }
+
+    /**
+     * @param bool $stage
+     */
+    public function setStage($stage)
+    {
+        $this->stage = $stage;
+        define('Triangle_STAGE', $stage);
+    }
+
+    /**
+     * @return array
+     */
+    public function getEnableHooks()
+    {
+        return $this->enableHooks;
+    }
+
+    /**
+     * @param array $enableHooks
+     */
+    public function setEnableHooks($enableHooks)
+    {
+        $this->enableHooks = $enableHooks;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
 
 }

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9a17c1042ab07fddafa850b6ab951603
+class ComposerStaticInit6a6cd5115f1872df8a0128b1c583bd8e
 {
     public static $prefixLengthsPsr4 = array (
         'P' => 
@@ -20,25 +20,46 @@ class ComposerStaticInit9a17c1042ab07fddafa850b6ab951603
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'P' => 
+        array (
+            'Parsedown' => 
+            array (
+                0 => __DIR__ . '/..' . '/erusev/parsedown',
+            ),
+        ),
+    );
+
     public static $classMap = array (
-        'Triangle\\Includes\\Cores' => __DIR__ . '/../..' . '/includes/cores.php',
-        'Triangle\\Includes\\Gravity\\Controller' => __DIR__ . '/../..' . '/modules/gravity/controller.php',
-        'Triangle\\Includes\\Gravity\\Modules' => __DIR__ . '/../..' . '/modules/gravity/modules.php',
-        'Triangle\\Includes\\Gravity\\Shortcode' => __DIR__ . '/../..' . '/modules/gravity/shortcode.php',
-        'Triangle\\Includes\\Loader' => __DIR__ . '/../..' . '/includes/loader.php',
+        'Triangle\\Controller\\BackendController' => __DIR__ . '/../..' . '/controller/backend/BackendController.php',
+        'Triangle\\Controller\\BaseController' => __DIR__ . '/../..' . '/controller/BaseController.php',
+        'Triangle\\Controller\\FrontendController' => __DIR__ . '/../..' . '/controller/frontend/FrontendController.php',
+        'Triangle\\Controller\\PageController' => __DIR__ . '/../..' . '/controller/backend/PageController.php',
+        'Triangle\\Includes\\Helper' => __DIR__ . '/../..' . '/includes/helper.php',
         'Triangle\\Includes\\Plugins' => __DIR__ . '/../..' . '/includes/plugins.php',
-        'Triangle\\Includes\\Triangle\\Controller' => __DIR__ . '/../..' . '/modules/triangle/controller.php',
-        'Triangle\\Includes\\Triangle\\Menu' => __DIR__ . '/../..' . '/modules/triangle/menu.php',
-        'Triangle\\Includes\\Triangle\\Modules' => __DIR__ . '/../..' . '/modules/triangle/modules.php',
-        'Triangle\\Includes\\Triangle\\Shortcode' => __DIR__ . '/../..' . '/modules/triangle/shortcode.php',
+        'Triangle\\Includes\\View' => __DIR__ . '/../..' . '/includes/view.php',
+        'Triangle\\Includes\\Wordpress\\Action' => __DIR__ . '/../..' . '/includes/wordpress/hook/action.php',
+        'Triangle\\Includes\\Wordpress\\Filter' => __DIR__ . '/../..' . '/includes/wordpress/hook/filter.php',
+        'Triangle\\Includes\\Wordpress\\Hook' => __DIR__ . '/../..' . '/includes/wordpress/hook/hook.php',
+        'Triangle\\Includes\\Wordpress\\MenuPage' => __DIR__ . '/../..' . '/includes/wordpress/page/menupage.php',
+        'Triangle\\Includes\\Wordpress\\Model' => __DIR__ . '/../..' . '/includes/wordpress/model/model.php',
+        'Triangle\\Includes\\Wordpress\\Page' => __DIR__ . '/../..' . '/includes/wordpress/page/page.php',
+        'Triangle\\Includes\\Wordpress\\Service' => __DIR__ . '/../..' . '/includes/wordpress/service.php',
+        'Triangle\\Includes\\Wordpress\\Shortcode' => __DIR__ . '/../..' . '/includes/wordpress/hook/shortcode.php',
+        'Triangle\\Includes\\Wordpress\\SubmenuPage' => __DIR__ . '/../..' . '/includes/wordpress/page/submenupage.php',
+        'Triangle\\Includes\\Wordpress\\Taxonomy' => __DIR__ . '/../..' . '/includes/wordpress/model/taxonomy.php',
+        'Triangle\\Includes\\Wordpress\\Type' => __DIR__ . '/../..' . '/includes/wordpress/model/type.php',
+        'Triangle\\Model\\Model' => __DIR__ . '/../..' . '/model/Model.php',
+        'Triangle\\Model\\Sample' => __DIR__ . '/../..' . '/model/Sample.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9a17c1042ab07fddafa850b6ab951603::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9a17c1042ab07fddafa850b6ab951603::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9a17c1042ab07fddafa850b6ab951603::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6a6cd5115f1872df8a0128b1c583bd8e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6a6cd5115f1872df8a0128b1c583bd8e::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit6a6cd5115f1872df8a0128b1c583bd8e::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit6a6cd5115f1872df8a0128b1c583bd8e::$classMap;
 
         }, null, ClassLoader::class);
     }
