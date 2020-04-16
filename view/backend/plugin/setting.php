@@ -2,7 +2,7 @@
     <li class="nav-tab nav-tab-active" data-tab="section-about">About</li>
 </ul>
 
-<div id="section-about" class="tab-content current">
+<div id="section-about" style="height:100%;" class="tab-content current">
     <?php
         $path = unserialize(TRIANGLE_PATH);
         $path = $path['plugin_path'] . 'README.md';

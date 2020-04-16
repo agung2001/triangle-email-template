@@ -31,7 +31,6 @@ class Model {
             'public'			=> true,
             'labels' 			=> array('name' => ucwords($name)),
         ]);
-        $type->build();
         return $type;
     }
 

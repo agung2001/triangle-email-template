@@ -1,8 +1,7 @@
 /**
-* Page User
+* Page Contact
 * @backend
 */
-
 
 /**
 * Page Setting
@@ -17,9 +16,11 @@ ul.tabs li.current{
 }
 .tab-content{
   display: none;
-  background: #ededed;
+  background: #f4f5f6;
   padding: 15px;
 }
-.tab-content.current{
+.tab-content.current {
   display: inherit;
+  border: 1px solid #ccc;
+  border-top: 0px;
 }

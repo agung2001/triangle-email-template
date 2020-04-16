@@ -39,6 +39,12 @@ class PageController extends BaseController {
         $action->setHook('admin_menu');
         $action->setCallback('page_contact');
         $this->hooks[] = $action;
+        /** @backend - Add template submenu link for template cpt */
+        $action = clone $action;
+        $action->setComponent($this);
+        $action->setHook('admin_menu');
+        $action->setCallback('link_email_template');
+        $this->hooks[] = $action;
     }
 
     /**
@@ -95,6 +101,21 @@ class PageController extends BaseController {
         $page->setMenuSlug(strtolower(TRIANGLE_NAME) . '-contact');
         $page->setFunction([$page, 'load_view']);
         $page->setView($view);
+        $page->build();
+    }
+
+    /**
+     * Page Contact
+     * @backend @submenu Triangle
+     * @return  void
+     */
+    public function link_email_template(){
+        $page = new SubmenuPage();
+        $page->setParentSlug(strtolower(TRIANGLE_NAME));
+        $page->setPageTitle('Email Template');
+        $page->setMenuTitle('Template');
+        $page->setCapability('manage_options');
+        $page->setMenuSlug('edit.php?post_type=emailtemplate');
         $page->build();
     }
 

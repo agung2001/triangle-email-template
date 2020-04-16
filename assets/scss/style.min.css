@@ -1,1 +1,1 @@
-.nav-tab{margin-bottom:-1px}ul.tabs li.current{background:#ededed;color:#222}.tab-content{display:none;background:#ededed;padding:15px}.tab-content.current{display:inherit}
+.triangle-loading{text-align:center;padding:40px 0}.triangle-loading .ico-loading{width:150px}.nav-tab{margin-bottom:-1px}ul.tabs li.current{background:#ededed;color:#222}.tab-content{display:none;background:#f4f5f6;padding:15px}.tab-content.current{display:inherit;border:1px solid #ccc;border-top:0}

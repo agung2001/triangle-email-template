@@ -13,7 +13,7 @@ namespace Triangle\Model;
 
 use Triangle\Includes\Wordpress\Taxonomy;
 
-class Sample extends Model {
+class EmailTemplate extends Model {
 
     /**
      * Model constructor
@@ -25,17 +25,9 @@ class Sample extends Model {
     {
         /** @backend - Auto create sample post type */
         $type = parent::__construct($plugin);
-        /** @backend */
-        $taxonomy = new Taxonomy();
-        $taxonomy->setName('category');
-        $taxonomy->setType($type);
-        $taxonomy->setArgs([
-            'labels'		=> [
-                'name'			=> 'Categories',
-                'singular_name'	=> 'Category'
-            ],
-        ]);
-        $taxonomy->build();
+        $args = ['show_in_menu' => false];
+        $type->setArgs(array_merge($type->getArgs(), $args));
+        $type->build();
     }
 
 }
