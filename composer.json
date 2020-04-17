@@ -4,8 +4,7 @@
   "license"		    : "GPL-3.0",
   "require"         : {
     "erusev/parsedown" : "*",
-    "pelago/emogrifier": "^1.2",
-    "webonyx/graphql-php": "^0.13.8"
+    "pelago/emogrifier": "^1.2"
   },
   "autoload"		: {
     "classmap":[

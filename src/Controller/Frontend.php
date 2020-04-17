@@ -14,7 +14,7 @@ namespace Triangle\Controller;
 use Triangle\View;
 use Triangle\Wordpress\Shortcode;
 
-class FrontendController extends BaseController {
+class Frontend extends Controller {
 
     /**
      * Admin constructor

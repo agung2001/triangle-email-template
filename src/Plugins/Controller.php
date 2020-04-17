@@ -11,7 +11,7 @@ namespace Triangle\Controller;
  * @subpackage Triangle/Controller
  */
 
-class BaseController {
+class Controller {
 
     /**
      * @access   protected

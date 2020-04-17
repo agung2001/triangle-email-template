@@ -16,12 +16,18 @@ use Triangle\Wordpress\Type;
 class Model {
 
     /**
-     * Model constructor
+     * @access   protected
+     * @var      array    $hook    Lists of hooks to register within controller
+     */
+    protected $types = [];
+
+    /**
+     * Initialize Model
      * @return void
      * @var    object $plugin Plugin configuration
      * @pattern prototype
      */
-    public function __construct($plugin)
+    public function init($plugin)
     {
         $name = substr(strrchr(get_called_class(), "\\"), 1);
         $name = strtolower($name);
@@ -32,6 +38,22 @@ class Model {
             'labels' 			=> array('name' => ucwords($name)),
         ]);
         return $type;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTypes(): array
+    {
+        return $this->types;
+    }
+
+    /**
+     * @param array $types
+     */
+    public function setTypes(array $types): void
+    {
+        $this->types = $types;
     }
 
 }

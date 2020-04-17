@@ -18,7 +18,7 @@ use Triangle\Wordpress\SubmenuPage;
 
 use Parsedown;
 
-class PageController extends BaseController {
+class Page extends Controller {
 
     /**
      * Admin constructor

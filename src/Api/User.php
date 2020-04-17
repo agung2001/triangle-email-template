@@ -11,9 +11,7 @@ namespace Triangle\Api;
  * @subpackage Triangle/Controller
  */
 
-use Triangle\Wordpress\Action;
-
-class UserApi extends Api {
+class User extends Api {
 
     /**
      * User API constructor
@@ -22,22 +20,17 @@ class UserApi extends Api {
      * @pattern prototype
      */
     public function __construct($plugin){
-        /** @backend - Eneque scripts */
-        $action = new Action();
-        $action->setComponent($this);
-        $action->setHook('wp_ajax_nopriv_get_users');
-        $action->setCallback('get_users');
-        $action->setAcceptedArgs(1);
-        $this->hooks[] = $action;
+        /** @backend - Init API */
+        $this->hooks[] = $this->init($plugin);
     }
 
     /**
-     * Get All Users
+     * API Callback
      * @backend
      * @return  void
      */
-    public function get_users(){
-        wp_send_json('test');
+    public function callback(){
+        wp_send_json(['SUCCESS!']);
         exit;
     }
 

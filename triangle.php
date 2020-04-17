@@ -43,8 +43,8 @@ function Triangle() {
     $plugins->setName('Triangle');
     $plugins->setVersion(2.0);
     $plugins->setStage(0);
-    $plugins->load_api();
     $plugins->load_controller();
     $plugins->load_model();
+    $plugins->load_api();
 }
 add_action('init', 'Triangle');

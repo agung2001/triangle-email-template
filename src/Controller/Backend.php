@@ -11,10 +11,9 @@ namespace Triangle\Controller;
  * @subpackage Triangle/Controller
  */
 
-use Triangle\View;
 use Triangle\Wordpress\Action;
 
-class BackendController extends BaseController {
+class Backend extends Controller {
 
     /**
      * Admin constructor

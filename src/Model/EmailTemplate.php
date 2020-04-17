@@ -23,11 +23,11 @@ class EmailTemplate extends Model {
      */
     public function __construct($plugin)
     {
-        /** @backend - Auto create sample post type */
-        $type = parent::__construct($plugin);
+        /** @backend - Init model */
+        $type = $this->init($plugin);
         $args = ['show_in_menu' => false];
         $type->setArgs(array_merge($type->getArgs(), $args));
-        $type->build();
+        $this->types[] = $type;
     }
 
 }

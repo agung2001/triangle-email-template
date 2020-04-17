@@ -2,7 +2,7 @@
     <li class="nav-tab nav-tab-active" data-tab="section-contact">Contact</li>
 </ul>
 
-<div id="section-about" style="height:100%;" class="tab-content current">
+<div id="section-about" class="tab-content current">
 
     <div class="triangle-wrap-setting">
         <div class="triangle-setting-label">&nbsp;</div>

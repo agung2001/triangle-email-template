@@ -90,7 +90,7 @@ class Plugins {
      */
     private function load_hooks($dir){
         $controllers = $this->helper->getDirFiles($this->path['plugin_path'] . 'src/' . $dir);
-        $allow = ['.', '..','.DS_Store','index.php','BaseController.php'];
+        $allow = ['.', '..','.DS_Store','index.php'];
         foreach($controllers as $controller){
             if(in_array(basename($controller), $allow)) continue;
             $controller = '\\Triangle\\'.ucwords($dir).'\\'.basename( $controller, '.php' );
@@ -108,10 +108,13 @@ class Plugins {
      */
     public function load_model(){
         $models = scandir( $this->path['plugin_path'] . 'src/model/' );
-        $models = array_diff($models, array('.', '..','.DS_Store','index.php','Model.php'));
+        $models = array_diff($models, array('.', '..','.DS_Store','index.php'));
         foreach($models as $model){
             $model = '\\Triangle\\Model\\'.basename( $model, '.php' );
-            new $model($this);
+            $model = new $model($this);
+            foreach($model->getTypes() as $type){
+                $type->build();
+            }
         }
     }
 
