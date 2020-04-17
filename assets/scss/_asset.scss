@@ -3,10 +3,22 @@
 // Extra Color
 
 // Assets
+.field-ajax { display: none; }
 .triangle-loading {
   text-align:center;
   padding:40px 0px;
   .ico-loading {
     width:150px;
+  }
+}
+.triangle-loading-field {
+  @include grid(400, 12);
+  display:block;
+  margin: 0;
+  .loading-label {
+    margin: 8px 10px;
+  }
+  .ico-loading {
+    width: 35px;
   }
 }

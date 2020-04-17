@@ -2,3 +2,13 @@
 * Modify Template
 * @backend
 */
+.triangle-setting {
+  input, select {
+    width: 400px;
+  }
+  .field-info {
+    font-style:italic;
+    color: #808080;
+    padding-top:3px;
+  }
+}
