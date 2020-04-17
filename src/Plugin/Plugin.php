@@ -13,7 +13,7 @@ namespace Triangle;
 
 use Triangle\Wordpress\Service;
 
-class Plugins {
+class Plugin {
 
     /**
      * Plugin name
@@ -112,9 +112,7 @@ class Plugins {
         foreach($models as $model){
             $model = '\\Triangle\\Model\\'.basename( $model, '.php' );
             $model = new $model($this);
-            foreach($model->getTypes() as $type){
-                $type->build();
-            }
+            $model->getType()->build();
         }
     }
 

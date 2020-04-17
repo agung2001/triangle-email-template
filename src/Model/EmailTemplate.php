@@ -11,8 +11,6 @@ namespace Triangle\Model;
  * @subpackage Triangle/Model
  */
 
-use Triangle\Wordpress\Taxonomy;
-
 class EmailTemplate extends Model {
 
     /**
@@ -25,9 +23,11 @@ class EmailTemplate extends Model {
     {
         /** @backend - Init model */
         $type = $this->init($plugin);
-        $args = ['show_in_menu' => false];
-        $type->setArgs(array_merge($type->getArgs(), $args));
-        $this->types[] = $type;
+        $args = $type->getArgs();
+        $args['show_in_menu'] = false;
+        $args['labels'] = ['name' => 'Email Template'];
+        $type->setArgs($args);
+        $this->type = $type;
     }
 
 }

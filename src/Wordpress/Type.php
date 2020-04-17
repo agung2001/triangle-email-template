@@ -20,6 +20,13 @@ class Type extends Model {
     protected $taxonomies = [];
 
     /**
+     * Get Post Type
+     */
+    public function get_all(){
+        return get_posts($this->args);
+    }
+
+    /**
      * Method to model
      * @return void
      */

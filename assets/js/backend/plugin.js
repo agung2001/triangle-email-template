@@ -1,7 +1,8 @@
 jQuery(document).ready(function( $ ) {
 
     /**
-     * About Page
+     * Global Plugin Script
+     * @about-page
      * */
     $('ul.nav-tab-wrapper li').click(function(){
         var tab_id = $(this).attr('data-tab');
@@ -12,10 +13,5 @@ jQuery(document).ready(function( $ ) {
         $(this).addClass('nav-tab-active');
         $("#"+tab_id).addClass('current');
     })
-
-    /**
-     * Contact page
-     * */
-
 
 });

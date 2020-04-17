@@ -11,7 +11,7 @@
       "src/Api",
       "src/Controller",
       "src/Model",
-      "src/Plugins",
+      "src/Plugin",
       "src/View",
       "src/Wordpress"
     ]

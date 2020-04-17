@@ -23,7 +23,7 @@ abstract class Model {
      * @access   protected
      * @var      array    $args    Post type args
      */
-    protected $args;
+    protected $args = [];
 
     /**
      * Method to build model

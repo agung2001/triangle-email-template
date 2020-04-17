@@ -17,9 +17,9 @@ class Model {
 
     /**
      * @access   protected
-     * @var      array    $hook    Lists of hooks to register within controller
+     * @var      object    $type    Wordpress CPT Type
      */
-    protected $types = [];
+    protected $type;
 
     /**
      * Initialize Model
@@ -41,19 +41,19 @@ class Model {
     }
 
     /**
-     * @return array
+     * @return object
      */
-    public function getTypes(): array
+    public function getType(): object
     {
-        return $this->types;
+        return $this->type;
     }
 
     /**
-     * @param array $types
+     * @param object $type
      */
-    public function setTypes(array $types): void
+    public function setType(object $type): void
     {
-        $this->types = $types;
+        $this->type = $type;
     }
 
 }

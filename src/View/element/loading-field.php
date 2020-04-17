@@ -1,5 +1,5 @@
 <div
-    id="<? (isset($args['id'])) $args['id'] : '' ?>"
+    id="<?= (isset($args['id']))? $args['id'] : '' ?>"
     class="triangle-loading-field"
 >
     <div class="row">

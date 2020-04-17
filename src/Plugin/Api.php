@@ -32,10 +32,9 @@ class Api {
         $name = substr(strrchr(get_called_class(), "\\"), 1);
         $name = strtolower($name);
         $action = new Action();
-        $action->setHook('wp_ajax_nopriv_triangle-' . $name );
         $action->setCallback('callback');
         $action->setComponent($this);
-        $action->setAcceptedArgs(1);
+        $action->setAcceptedArgs(0);
         return $action;
     }
 

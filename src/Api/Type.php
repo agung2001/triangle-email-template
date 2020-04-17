@@ -11,9 +11,9 @@ namespace Triangle\Api;
  * @subpackage Triangle/Controller
  */
 
-use Triangle\Wordpress\User as WPUser;
+use Triangle\Wordpress\Type as WPType;
 
-class User extends Api {
+class Type extends Api {
 
     /**
      * User API constructor
@@ -24,7 +24,7 @@ class User extends Api {
     public function __construct($plugin){
         /** @backend - Init API */
         $api = $this->init($plugin);
-        $api->setHook('wp_ajax_triangle-user');
+        $api->setHook('wp_ajax_triangle-type');
         $this->hooks[] = $api;
     }
 
@@ -34,10 +34,10 @@ class User extends Api {
      * @return  void
      */
     public function callback(){
-        $user = new WPUser();
+        $type = new WPType();
         $method = $_POST['method'];
-        if(isset($_POST['args'])) $user->setArgs($_POST['args']);
-        if(isset($_POST['method'])) wp_send_json($user->$method());
+        if(isset($_POST['args'])) $type->setArgs($_POST['args']);
+        if(isset($_POST['method'])) wp_send_json($type->$method());
     }
 
 }
