@@ -112,7 +112,11 @@ class Plugin {
         foreach($models as $model){
             $model = '\\Triangle\\Model\\'.basename( $model, '.php' );
             $model = new $model($this);
-            $model->getType()->build();
+            $model->build();
+            foreach($model->getHooks() as $hook){
+                $class = str_replace( 'Triangle\\Wordpress\\' , '', get_class($hook) );
+                if(in_array(strtolower($class), $this->enableHooks)) $hook->run();
+            }
         }
     }
 

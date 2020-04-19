@@ -14,7 +14,7 @@ namespace Triangle\Controller;
 use Triangle\View;
 use Triangle\Wordpress\Shortcode;
 
-class Frontend extends Controller {
+class Frontend extends Base {
 
     /**
      * Admin constructor
@@ -23,6 +23,8 @@ class Frontend extends Controller {
      * @pattern prototype
      */
     public function __construct($plugin){
+        parent::__construct($plugin);
+
         /** @backend - Triangle Shortcode */
         $name = strtolower($plugin->getName());
         $shortcode = new Shortcode();

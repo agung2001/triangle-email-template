@@ -2,9 +2,13 @@
 * Page Email Template
 * @backend @edit
 */
-#triangle-code-editor {
+//#triangle-template-script-field { display:none; }
+#triangle-template-editor {
   width:100%;
-  min-height:400px;
+  height:400px !important;
+  textarea {
+    height:400px !important;
+  }
 }
 
 /**

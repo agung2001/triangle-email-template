@@ -15,9 +15,25 @@ class Controller {
 
     /**
      * @access   protected
+     * @var      object    $type    Model object that will used and controlled
+     */
+    protected $type;
+
+    /**
+     * @access   protected
      * @var      array    $hook    Lists of hooks to register within controller
      */
-    protected $hooks = [];
+    protected $hooks;
+
+    /**
+     * Admin constructor
+     * @return void
+     * @var    object   $plugin     Plugin configuration
+     * @pattern prototype
+     */
+    public function __construct($plugin){
+        $this->hooks = [];
+    }
 
     /**
      * @return array

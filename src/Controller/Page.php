@@ -18,7 +18,7 @@ use Triangle\Wordpress\SubmenuPage;
 
 use Parsedown;
 
-class Page extends Controller {
+class Page extends Base {
 
     /**
      * Admin constructor
@@ -27,6 +27,8 @@ class Page extends Controller {
      * @pattern prototype
      */
     public function __construct($plugin){
+        parent::__construct($plugin);
+
         /** @backend - Add custom admin page under settings */
         $action = new Action();
         $action->setComponent($this);
