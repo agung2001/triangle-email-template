@@ -22,7 +22,7 @@ class Type extends Model {
     /**
      * Get Post Type
      */
-    public function get_all(){
+    public function get_posts(){
         return get_posts($this->args);
     }
 

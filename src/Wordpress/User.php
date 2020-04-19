@@ -5,7 +5,7 @@ namespace Triangle\Wordpress;
 !defined( 'WPINC ' ) or die;
 
 /**
- * Initiate plugins
+ * Retrieve wordpress user data
  *
  * @package    Triangle
  * @subpackage Triangle/Controller

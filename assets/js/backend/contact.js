@@ -18,7 +18,7 @@ jQuery(document).ready(function( $ ) {
             dataType : "json",
             data: {
                 'action'    : 'triangle-type',
-                'method'    : 'get_all',
+                'method'    : 'get_posts',
                 'args'      : {
                     'numberposts': -1,
                     'orderby': 'post_title',

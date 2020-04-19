@@ -57,9 +57,13 @@
   padding-top: 3px; }
 
 /**
-* Page Contact
-* @backend
+* Page Email Template
+* @backend @edit
 */
+#triangle-code-editor {
+  width: 100%;
+  min-height: 400px; }
+
 /**
 * Page Setting
 * @backend

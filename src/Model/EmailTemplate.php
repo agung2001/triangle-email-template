@@ -24,8 +24,11 @@ class EmailTemplate extends Model {
         /** @backend - Init model */
         $type = $this->init($plugin);
         $args = $type->getArgs();
+        $args['publicly_queryable'] = false;
+        $args['has_archive'] = false;
         $args['show_in_menu'] = false;
         $args['labels'] = ['name' => 'Email Template'];
+        $args['supports'] = ['title', 'thumbnail'];
         $type->setArgs($args);
         $this->type = $type;
     }

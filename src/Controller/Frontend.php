@@ -5,7 +5,7 @@ namespace Triangle\Controller;
 !defined( 'WPINC ' ) or die;
 
 /**
-* Initiate plugins
+ * Plugin hooks in a frontend
 *
 * @package    Triangle
 * @subpackage Triangle/Controller
