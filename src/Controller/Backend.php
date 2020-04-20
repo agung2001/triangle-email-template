@@ -13,6 +13,7 @@ namespace Triangle\Controller;
 
 use Triangle\View;
 use Triangle\Wordpress\Action;
+use Triangle\Wordpress\Service;
 
 class Backend extends Base {
 
@@ -47,6 +48,7 @@ class Backend extends Base {
      * @var     array   $hook_suffix     The current admin page
      */
     public function backend_enequeue($hook_suffix){
+        define('TRIANGLE_SCREEN', serialize(Service::getScreen()));
         $this->backend_load_plugin_assets();
         $this->backend_load_plugin_libraries(['triangle_page_triangle-contact']);
         $this->backend_load_plugin_scripts();
@@ -57,11 +59,10 @@ class Backend extends Base {
      * @return  void
      */
     private function backend_load_plugin_assets(){
-        $path = unserialize(TRIANGLE_PATH)['plugin_url'] . 'assets/';
         /** Styles and Scripts */
-        $style = (TRIANGLE_STAGE) ? 'css/style.css' : 'css/style.min.css';
-        wp_enqueue_style('triangle_css', $path . $style );
-        wp_enqueue_script('triangle_js', $path . 'js/backend/plugin.js');
+        $style = (TRIANGLE_PRODUCTION) ? 'style.min.css' : 'style.css';
+        Service::wp_enqueue_style('triangle_css', $style );
+        Service::wp_enqueue_script('triangle_js', 'backend/plugin.js');
         /** Plugin configuration */
         $view = new View();
         $view->setTemplate('blank');
@@ -75,11 +76,9 @@ class Backend extends Base {
      * @return  void
      */
     private function backend_load_plugin_scripts(){
-        global $post;
-        $screen = get_current_screen();
-        $path = unserialize(TRIANGLE_PATH)['plugin_url'] . 'assets/';
-        if($screen->base=='users') wp_enqueue_script('triangle_user_js', $path . 'js/backend/user.js');
-        if($screen->base=='triangle_page_triangle-contact') wp_enqueue_script('triangle_contact_js', $path . 'js/backend/contact.js');
+        $screen = unserialize(TRIANGLE_SCREEN);
+        if($screen->base=='users') Service::wp_enqueue_script('triangle_user_js', 'backend/user.js');
+        if($screen->base=='triangle_page_triangle-contact') Service::wp_enqueue_script('triangle_contact_js', 'backend/contact.js');
     }
 
     /**

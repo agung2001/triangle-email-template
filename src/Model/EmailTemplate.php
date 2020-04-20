@@ -11,11 +11,10 @@ namespace Triangle\Model;
  * @subpackage Triangle/Model
  */
 
-use Triangle\Wordpress\Type;
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Meta;
 
-class EmailTemplate extends Type {
+class EmailTemplate extends Model {
 
     /**
      * Emailtemplate constructor
@@ -34,11 +33,17 @@ class EmailTemplate extends Type {
         $this->args['labels'] = ['name' => 'Email Template'];
         $this->args['supports'] = ['title', 'thumbnail'];
 
-        /** @backend - Meta_fields : template_header */
-        $meta = new Meta();
-        $meta->setType($this);
-        $meta->setKey('template_header');
-        $this->metas['template_header'] = $meta;
+        /** @backend - Meta_fields : Based on plugin config templates */
+        $templates = $plugin->getConfig()->templates;
+        foreach($templates as $template) {
+            foreach ($template->children as $children) {
+                $key = 'template_' . $children->id;
+                $meta = new Meta();
+                $meta->setType($this);
+                $meta->setKey($key);
+                $this->metas[$key] = $meta;
+            }
+        }
 
         /** @backend - Hooks - Emailtemplate save post hook */
         $action = new Action();
@@ -51,8 +56,8 @@ class EmailTemplate extends Type {
 
     /**
      * Save emailtemplate hook
-     * 1. Build email template script (html, css, js) file
-     * 2. Save page script as meta fields
+     * 1. Save page script as meta fields
+     * 2. Build email template script (html, css, js) file
      * @backend - @emailtemplate
      * @return  void
      * @var     int     $post_id    Post ID
@@ -61,8 +66,7 @@ class EmailTemplate extends Type {
      */
     public function save_emailtemplate($post_id, $post, $update){
         if ($post->post_type=='emailtemplate'){
-            // Build email template
-            // Save meta field
+            /** Save meta field */
             if(isset($this->metas['template_header'])){
                 $meta = $this->metas['template_header'];
                 $meta->setValue($_POST['template_header']);

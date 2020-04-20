@@ -15,6 +15,12 @@ class Controller {
 
     /**
      * @access   protected
+     * @var      object    $plugin  Store plugin object and configuration
+     */
+    protected $plugin;
+
+    /**
+     * @access   protected
      * @var      object    $type    Model object that will used and controlled
      */
     protected $type;
@@ -32,6 +38,7 @@ class Controller {
      * @pattern prototype
      */
     public function __construct($plugin){
+        $this->plugin = $plugin;
         $this->hooks = [];
     }
 

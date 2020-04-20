@@ -44,6 +44,12 @@ class Meta {
     protected $unique;
 
     /**
+     * @access   protected
+     * @var      bool    $single   	If true, returns only the first value for the specified meta key
+     */
+    protected $single;
+
+    /**
      * Meta constructor
      * @return void
      */
@@ -51,6 +57,16 @@ class Meta {
     {
         $this->prev_value = '';
         $this->unique = false;
+        $this->single = false;
+    }
+
+    /**
+     * Retrieves a post meta field for the given post ID.
+     * @return array       Will be an array if $single is false. Will be value of the meta field if $single is true
+     */
+    public function get_post_meta()
+    {
+        return get_post_meta( $this->type->getID(), $this->key, $this->single );
     }
 
     /**
@@ -59,7 +75,7 @@ class Meta {
      */
     public function add_post_meta()
     {
-        return add_post_meta( $this->type->ID, $this->key, $this->value, $this->unique );
+        return add_post_meta( $this->type->getID(), $this->key, $this->value, $this->unique );
     }
 
     /**
@@ -68,7 +84,7 @@ class Meta {
      */
     public function update_post_meta()
     {
-        return update_post_meta( $this->type->ID, $this->key, $this->value, $this->prev_value );
+        return update_post_meta( $this->type->getID(), $this->key, $this->value, $this->prev_value );
     }
 
     /**
@@ -149,6 +165,22 @@ class Meta {
     public function setUnique(bool $unique): void
     {
         $this->unique = $unique;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSingle(): bool
+    {
+        return $this->single;
+    }
+
+    /**
+     * @param bool $single
+     */
+    public function setSingle(bool $single): void
+    {
+        $this->single = $single;
     }
 
 }

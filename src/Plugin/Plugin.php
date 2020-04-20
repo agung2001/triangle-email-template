@@ -28,10 +28,10 @@ class Plugin {
     protected $version;
 
     /**
-     * Plugin stage (0 = development, 1 = production)
-     * @var     bool
+     * Plugin stage (true = production, false = development)
+     * @var     boolean
      */
-    protected $stage;
+    protected $production;
 
     /**
      * Enable/Disable plugins hook (Action, Filter, Shortcode)
@@ -46,73 +46,74 @@ class Plugin {
     protected $path;
 
     /**
-     * Plugin path
-     * @var     string
+     * Lists of plugin controllers
+     * @var     object
      */
-    protected $helper;
+    protected $api;
+
+    /**
+     * Lists of plugin controllers
+     * @var     array
+     */
+    protected $controllers;
+
+    /**
+     * Lists of plugin models
+     * @var     array
+     */
+    protected $models;
+
+    /**
+     * Plugin configuration
+     * @var     object
+     */
+    protected $config;
 
     /**
      * Define the core functionality of the plugin.
      *
-     * Set the plugin name and that can be used throughout the plugin.
-     * Load the dependencies, and set the hooks for backend and frontend.
-     *
      * @param   array   $path     Wordpress plugin path
      * @return void
      */
-    public function __construct($path){
-        $this->enableHooks = ['action', 'filter', 'shortcode'];
-        $this->path = Service::getPath($path);
-        $this->helper = new Helper();
+    public function __construct($config){
+        $this->name = $config->name;
+        $this->version = $config->version;
+        $this->production = $config->production;
+        $this->enableHooks = $config->enableHooks;
+        $this->controllers = [];
+        $this->models = [];
+        $this->path = Service::getPath($config->path);
+        $this->config = $config;
     }
 
     /**
-     * Load hook in a api
-     * @return void
-     */
-    public function load_api(){
-        $this->load_hooks('api');
-    }
-
-    /**
-     * Load hook in a controller
-     * @return void
-     */
-    public function load_controller(){
-        $this->load_hooks('controller');
-    }
-
-    /**
-     * Load registered hooks in a controller
+     * Run the plugin
+     * - Load plugin model
+     * - Load plugin API
+     * - Load plugin controller
      * @return  void
-     * @var     string  $dir   plugin hooks directory (Api, Controller)
-     * @pattern bridge
      */
-    private function load_hooks($dir){
-        $controllers = $this->helper->getDirFiles($this->path['plugin_path'] . 'src/' . $dir);
-        $allow = ['.', '..','.DS_Store','index.php'];
-        foreach($controllers as $controller){
-            if(in_array(basename($controller), $allow)) continue;
-            $controller = '\\Triangle\\'.ucwords($dir).'\\'.basename( $controller, '.php' );
-            $controller = new $controller($this);
-            foreach($controller->getHooks() as $hook){
-                $class = str_replace( 'Triangle\\Wordpress\\' , '', get_class($hook) );
-                if(in_array(strtolower($class), $this->enableHooks)) $hook->run();
-            }
-        }
+    public function run(){
+        Helper::defineConst($this);
+        $this->loadModel();
+        $this->loadHooks('controller');
+        $this->loadHooks('api');
     }
 
     /**
      * Load registered models
      * @return  void
      */
-    public function load_model(){
-        $models = scandir( $this->path['plugin_path'] . 'src/model/' );
-        $models = array_diff($models, array('.', '..','.DS_Store','index.php'));
+    public function loadModel(){
+        $models = Helper::getDirFiles($this->path['plugin_path'] . 'src/model');
+        $allow = ['.', '..','.DS_Store','index.php'];
         foreach($models as $model){
-            $model = '\\Triangle\\Model\\'.basename( $model, '.php' );
+            if(in_array(basename($model), $allow)) continue;
+            $name = basename( $model, '.php' );
+            $model = '\\Triangle\\Model\\'.$name;
             $model = new $model($this);
             $model->build();
+            $this->models[$name] = $model;
             foreach($model->getHooks() as $hook){
                 $class = str_replace( 'Triangle\\Wordpress\\' , '', get_class($hook) );
                 if(in_array(strtolower($class), $this->enableHooks)) $hook->run();
@@ -121,9 +122,31 @@ class Plugin {
     }
 
     /**
+     * Load registered hooks in a controller
+     * @return  void
+     * @var     string  $dir   plugin hooks directory (API, Controller)
+     * @pattern bridge
+     */
+    private function loadHooks($dir){
+        $controllers = Helper::getDirFiles($this->path['plugin_path'] . 'src/' . $dir);
+        $allow = ['.', '..','.DS_Store','index.php'];
+        foreach($controllers as $controller){
+            if(in_array(basename($controller), $allow)) continue;
+            $name = basename( $controller, '.php' );
+            $controller = '\\Triangle\\'.ucwords($dir).'\\'.$name;
+            $controller = new $controller($this);
+            $this->controllers[$name] = $controller;
+            foreach($controller->getHooks() as $hook){
+                $class = str_replace( 'Triangle\\Wordpress\\' , '', get_class($hook) );
+                if(in_array(strtolower($class), $this->enableHooks)) $hook->run();
+            }
+        }
+    }
+
+    /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -131,16 +154,15 @@ class Plugin {
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
-        define('TRIANGLE_NAME', $name);
     }
 
     /**
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->version;
     }
@@ -148,33 +170,31 @@ class Plugin {
     /**
      * @param string $version
      */
-    public function setVersion($version)
+    public function setVersion(string $version): void
     {
         $this->version = $version;
-        define('TRIANGLE_VERSION', $version);
     }
 
     /**
      * @return bool
      */
-    public function isStage()
+    public function isProduction(): bool
     {
-        return $this->stage;
+        return $this->production;
     }
 
     /**
-     * @param bool $stage
+     * @param bool $production
      */
-    public function setStage($stage)
+    public function setProduction(bool $production): void
     {
-        $this->stage = $stage;
-        define('TRIANGLE_STAGE', $stage);
+        $this->production = $production;
     }
 
     /**
      * @return array
      */
-    public function getEnableHooks()
+    public function getEnableHooks(): array
     {
         return $this->enableHooks;
     }
@@ -182,7 +202,7 @@ class Plugin {
     /**
      * @param array $enableHooks
      */
-    public function setEnableHooks($enableHooks)
+    public function setEnableHooks(array $enableHooks): void
     {
         $this->enableHooks = $enableHooks;
     }
@@ -190,7 +210,7 @@ class Plugin {
     /**
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -198,9 +218,73 @@ class Plugin {
     /**
      * @param string $path
      */
-    public function setPath($path)
+    public function setPath(string $path): void
     {
         $this->path = $path;
+    }
+
+    /**
+     * @return object
+     */
+    public function getApi(): object
+    {
+        return $this->api;
+    }
+
+    /**
+     * @param object $api
+     */
+    public function setApi(object $api): void
+    {
+        $this->api = $api;
+    }
+
+    /**
+     * @return array
+     */
+    public function getControllers(): array
+    {
+        return $this->controllers;
+    }
+
+    /**
+     * @param array $controllers
+     */
+    public function setControllers(array $controllers): void
+    {
+        $this->controllers = $controllers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getModels(): array
+    {
+        return $this->models;
+    }
+
+    /**
+     * @param array $models
+     */
+    public function setModels(array $models): void
+    {
+        $this->models = $models;
+    }
+
+    /**
+     * @return object
+     */
+    public function getConfig(): object
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param object $config
+     */
+    public function setConfig(object $config): void
+    {
+        $this->config = $config;
     }
 
 }

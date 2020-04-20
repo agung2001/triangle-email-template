@@ -39,12 +39,11 @@ require plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
  * Initiate Plugin
  */
 function Triangle() {
-    $plugins = new Triangle\Plugin(__FILE__);
-    $plugins->setName('Triangle');
-    $plugins->setVersion(1.0);
-    $plugins->setStage(0);
-    $plugins->load_controller();
-    $plugins->load_model();
-    $plugins->load_api();
+    $config = file_get_contents(dirname(__FILE__) . '/config.json');
+    $config = json_decode($config);
+    $config->path = __FILE__;
+    $plugin = new Triangle\Plugin($config);
+    $plugin->run();
+
 }
 add_action('init', 'Triangle');

@@ -38,24 +38,6 @@ class Type extends Model {
     protected $hooks;
 
     /**
-     * Construct type
-     * @return void
-     * @var    object $plugin Plugin configuration
-     * @pattern prototype
-     */
-    public function __construct($plugin)
-    {
-        $this->name = substr(strrchr(get_called_class(), "\\"), 1);
-        $this->name = strtolower($this->name);
-        $this->taxonomies = [];
-        $this->hooks = [];
-        $this->metas = [];
-        $this->args = [];
-        $this->args['public'] = true;
-        $this->args['labels'] = ['name' => ucwords($this->name)];
-    }
-
-    /**
      * Get Post Type
      * @return object   Post Type object
      */

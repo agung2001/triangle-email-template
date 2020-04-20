@@ -5,7 +5,7 @@ namespace Triangle\Api;
 !defined( 'WPINC ' ) or die;
 
 /**
- * Initiate plugins
+ * User API
  *
  * @package    Triangle
  * @subpackage Triangle/Controller
@@ -23,7 +23,7 @@ class User extends Api {
      */
     public function __construct($plugin){
         /** @backend - Init API */
-        $api = $this->init($plugin);
+        $api = parent::__construct($plugin);
         $api->setHook('wp_ajax_triangle-user');
         $this->hooks[] = $api;
     }

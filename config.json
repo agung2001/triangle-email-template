@@ -1,0 +1,22 @@
+{
+  "name" : "Triangle",
+  "version" : "1.0.1",
+  "production" : false,
+  "enableHooks" : ["action", "filter", "shortcode"],
+  "templates": [
+    {
+      "text": "Element",
+      "children": [
+        {"id": "header", "text": "Header", "mode" : "ace/mode/html"},
+        {"id": "content", "text": "Content", "mode" : "ace/mode/html"},
+        {"id": "footer", "text": "Footer", "mode" : "ace/mode/html"}
+      ]
+    },
+    {
+      "text": "Style",
+      "children": [
+        {"id": "style", "text": "Style", "mode" : "ace/mode/css"}
+      ]
+    }
+  ]
+}

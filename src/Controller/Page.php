@@ -55,12 +55,12 @@ class Page extends Base {
      * @return  void
      */
     public function page_setting(){
-        // Set View
+        /** Set View */
         $view = new View();
         $view->setTemplate('default');
         $view->setView('backend.setting');
         $view->setOptions(['shortcode' => false]);
-        // Set Main Page
+        /** Set Main Page */
         $page = new MenuPage();
         $page->setPageTitle(TRIANGLE_NAME . ' Setting');
         $page->setMenuTitle(TRIANGLE_NAME);
@@ -71,7 +71,7 @@ class Page extends Base {
         $page->setView($view);
         $page->setPosition(90);
         $page->build();
-        // Set Page
+        /** Set Page */
         $page = new SubmenuPage();
         $page->setParentSlug(strtolower(TRIANGLE_NAME));
         $page->setPageTitle(TRIANGLE_NAME . ' Setting');
@@ -88,12 +88,12 @@ class Page extends Base {
      * @return  void
      */
     public function page_contact(){
-        // Set View
+        /** Set View */
         $view = new View();
         $view->setTemplate('default');
         $view->setView('backend.contact');
         $view->setOptions(['shortcode' => false]);
-        // Set Page
+        /** Set Page */
         $page = new SubmenuPage();
         $page->setParentSlug(strtolower(TRIANGLE_NAME));
         $page->setPageTitle('Contact User');

@@ -1,18 +1,15 @@
-jQuery(document).ready(function( $ ) {
-
     /**
-     * Contact page
+     * Init page script
+     * @contact
      * */
-    (() => {
-        load_template();
-        load_user();
-    })()
+    load_template();
+    load_user();
 
     /**
      * Get lists of user
      * */
     function load_template(){
-        $.ajax({
+        jQuery.ajax({
             method: 'POST',
             url: 'admin-ajax.php',
             dataType : "json",
@@ -26,9 +23,9 @@ jQuery(document).ready(function( $ ) {
                 },
             },
             success: function(templates){
-                $('#field-template').show();
-                $('#loading-field-template').hide();
-                $('#field-template select').select2({
+                jQuery('#field-template').show();
+                jQuery('#loading-field-template').hide();
+                jQuery('#field-template select').select2({
                     data: templates.map((template) => {
                         return {id: template.ID, text: template.post_title};
                     })
@@ -41,7 +38,7 @@ jQuery(document).ready(function( $ ) {
      * Get lists of user
      * */
     function load_user(){
-        $.ajax({
+        jQuery.ajax({
             method: 'POST',
             url: 'admin-ajax.php',
             dataType : "json",
@@ -53,9 +50,9 @@ jQuery(document).ready(function( $ ) {
                 },
             },
             success: function(users){
-                $('#field-user').show();
-                $('#loading-field-user').hide();
-                $('#field-user select').select2({
+                jQuery('#field-user').fadeIn("slow");
+                jQuery('#loading-field-user').hide();
+                jQuery('#field-user select').select2({
                     data: users.map((user) => {
                         return {id: user.ID, text: `${user.display_name} - ${user.user_email}`};
                     })
@@ -63,5 +60,3 @@ jQuery(document).ready(function( $ ) {
             }
         });
     }
-
-});
