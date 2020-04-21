@@ -53,7 +53,7 @@ class Service {
             'plugin_path' => plugin_dir_path($path),
             'plugin_url' => plugin_dir_url($path)
         ];
-        $path['view_path'] = $path['plugin_path'] . 'src/view/';
+        $path['view_path'] = $path['plugin_path'] . 'src/View/';
         define('TRIANGLE_PATH', serialize($path));
         return $path;
     }

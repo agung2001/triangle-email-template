@@ -11,13 +11,20 @@ namespace Triangle;
  * @subpackage Triangle\Includes
  */
 
+use Triangle\Helper;
+
 class View {
 
     /**
      * Provide page information page_title, menu_title, etc
-     * @var     object  $page   Page object where the view is located
+     * @var     object  $Page   Page object where the view is located
      */
-    protected $page;
+    protected $Page;
+
+    /**
+     * @var     object  $Helper   Helper object for view
+     */
+    protected $Helper;
 
     /**
      * @access   protected
@@ -32,19 +39,38 @@ class View {
     protected $template;
 
     /**
+     * View data send from the controller
+     * @var     array   $data    View data
+     */
+    protected $data;
+
+    /**
      * Enable/Disable (Shortcode, etc)
      * @var     array   $options    View options
      */
-    protected $options = [];
+    protected $options;
 
     /**
-     * Page callback - load view
-     * @backend
-     * @var     object  $page   Page object where the view is located
-     * @return  void
+     * View constructor
+     * @return void
      */
-    public function build(){
-        echo $this->load_content('template/' . $this->template);
+    public function __construct()
+    {
+        $this->Helper = new Helper();
+        $this->data = [];
+        $this->options = [];
+    }
+
+    /**
+     * Overloading Method, for multiple arguments
+     * @method  setData     _ Set view data
+     * @method  build       _ Set build method
+     */
+    public function __call($method, $arguments){
+        if($method=='setData'){
+            if (count($arguments) == 1) $this->data = array_merge($this->data, $arguments);
+            if (count($arguments) == 2) $this->data[$arguments[0]] = $arguments[1];
+        }
     }
 
     /**
@@ -52,9 +78,10 @@ class View {
      * @backend
      * @return  content
      */
-    public function load_content($content, $args = []){
+    public function loadContent($content, $args = []){
         ob_start();
-            $path = unserialize(TRIANGLE_PATH);
+            extract($this->data);
+            $path = $this->Helper->getConst('TRIANGLE_PATH');
             include $path['view_path'] . str_replace('.','/',$content) . '.php';
         $content = ob_get_clean();
         if(isset($this->options['shortcode']) && $this->options['shortcode']) $content = do_shortcode($content);
@@ -62,19 +89,43 @@ class View {
     }
 
     /**
+     * Build view
+     * @return  void
+     */
+    public function build(){
+        echo $this->loadContent('Template/' . $this->template);
+    }
+
+    /**
      * @return object
      */
     public function getPage()
     {
-        return $this->page;
+        return $this->Page;
     }
 
     /**
-     * @param object $page
+     * @param object $Page
      */
-    public function setPage($page)
+    public function setPage($Page)
     {
-        $this->page = $page;
+        $this->Page = $Page;
+    }
+
+    /**
+     * @return object
+     */
+    public function getHelper()
+    {
+        return $this->Helper;
+    }
+
+    /**
+     * @param object $Helper
+     */
+    public function setHelper($Helper)
+    {
+        $this->Helper = $Helper;
     }
 
     /**

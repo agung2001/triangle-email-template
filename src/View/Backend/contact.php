@@ -9,7 +9,7 @@
             <tr>
                 <th scope="row"><label for="template">Template</label></th>
                 <td>
-                    <?= $this->load_content('element.loading-field', [
+                    <?= $this->loadContent('Element.loading-field', [
                         'id' => 'loading-field-template'
                     ]) ?>
                     <div id="field-template" class="field-ajax">
@@ -24,7 +24,7 @@
             <tr>
                 <th scope="row"><label for="user">User</label></th>
                 <td>
-                    <?= $this->load_content('element.loading-field', [
+                    <?= $this->loadContent('Element.loading-field', [
                         'id' => 'loading-field-user'
                     ]) ?>
                     <div id="field-user" class="field-ajax">

@@ -11,6 +11,7 @@ namespace Triangle\Api;
  * @subpackage Triangle/Controller
  */
 
+use Triangle\Wordpress\Action;
 use Triangle\Wordpress\User as WPUser;
 
 class User extends Api {
@@ -22,10 +23,15 @@ class User extends Api {
      * @pattern prototype
      */
     public function __construct($plugin){
+        parent::__construct($plugin);
+
         /** @backend - Init API */
-        $api = parent::__construct($plugin);
-        $api->setHook('wp_ajax_triangle-user');
-        $this->hooks[] = $api;
+        $action = new Action();
+        $action->setComponent($this);
+        $action->setHook('wp_ajax_triangle-user');
+        $action->setCallback('callback');
+        $action->setAcceptedArgs(0);
+        $this->hooks[] = $action;
     }
 
     /**

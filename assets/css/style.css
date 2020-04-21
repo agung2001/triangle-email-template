@@ -63,16 +63,13 @@
 #meta-templateeditor {
   display: none; }
   #meta-templateeditor #template-elements {
-    padding-bottom: 10px; }
-    #meta-templateeditor #template-elements #element-layout {
-      width: 100%; }
-    #meta-templateeditor #template-elements .template_fields {
-      display: none; }
+    width: 100%; }
   #meta-templateeditor #template-editor {
     width: 100%;
+    margin-top: 10px;
     min-height: 400px; }
     #meta-templateeditor #template-editor textarea {
-      height: 400px !important; }
+      min-height: 400px; }
 
 /**
 * Page Setting

@@ -26,8 +26,7 @@ class EmailTemplate extends Base {
      */
     public function __construct($plugin){
         parent::__construct($plugin);
-        $this->type = $plugin->getModels();
-        $this->type = $this->type['EmailTemplate'];
+        $this->loadModel('EmailTemplate');
 
         /** @backend - Eneque scripts */
         $action = new Action();
@@ -53,8 +52,8 @@ class EmailTemplate extends Base {
      */
     public function backend_enequeue($hook_suffix){
         $screen = Service::getScreen();
-        $this->backend_load_plugin_libraries([],[$this->type->getName()]);
-        if(isset($screen->post->post_type) && $screen->post->post_type==$this->type->getName()) {
+        $this->backend_load_plugin_libraries([],[$this->EmailTemplate->getName()]);
+        if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()) {
             Service::wp_enqueue_script('triangle_emailtemplate_js', 'backend/emailtemplate.js', [], false, true);
         }
     }
@@ -66,20 +65,20 @@ class EmailTemplate extends Base {
      */
     public function edit_emailtemplate(){
         $screen = Service::getScreen();
-        if(isset($screen->post->post_type) && $screen->post->post_type==$this->type->getName()){
+        if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
             /** Plugin script */
             $view = new View();
             $view->setTemplate('blank');
-            $view->setView('emailtemplate.edit-action');
+            $view->setView('EmailTemplate.edit-action');
             $view->setOptions(['shortcode' => false]);
             $view->build();
 
             /** Add custom meta box */
             $metabox = new MetaBox();
-            $metabox->setId($this->type->getName() . '-editor');
+            $metabox->setId($this->EmailTemplate->getName() . '-editor');
             $metabox->setTitle('Template Editor');
             $metabox->setCallback([$this, 'metabox_emailtemplate_editor']);
-            $metabox->setScreen($this->type->getName());
+            $metabox->setScreen($this->EmailTemplate->getName());
             $metabox->add_meta_box();
         }
     }
@@ -91,10 +90,10 @@ class EmailTemplate extends Base {
      */
     public function metabox_emailtemplate_editor(){
         $screen = Service::getScreen();
-        if(isset($screen->post->post_type) && $screen->post->post_type==$this->type->getName()){
+        if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
             $view = new View();
             $view->setTemplate('blank');
-            $view->setView('emailtemplate.edit-template_editor');
+            $view->setView('EmailTemplate.edit-template_editor');
             $view->setOptions(['shortcode' => false]);
             $view->build();
         }

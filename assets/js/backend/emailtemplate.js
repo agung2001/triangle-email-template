@@ -2,17 +2,27 @@
      * Init page script
      * @emailtemplate
      * */
-    var editor = init_editor();
+    jQuery('#publish').hide();
+    var elements = {};
+    init_editor();
     load_page();
 
     /**
      * Init code editor
      * */
     function init_editor(){
-        var editor = ace.edit("template-editor");
-        editor.session.setMode("ace/mode/html");
-        editor.setOption("enableEmmet", true);
-        return editor;
+        /** Load ACE Js */
+        if(window.editor) window.editor.destroy();
+        window.editor = ace.edit("template-editor");
+        window.editor.session.setMode("ace/mode/html");
+        window.editor.setOption("enableEmmet", true);
+        /** Template Editor Text Area Script */
+        if(window.textarea) {
+            window.editor.getSession().setValue(textarea.val());
+            window.editor.getSession().on('change', function () {
+                textarea.val(window.editor.getSession().getValue());
+            });
+        }
     }
 
     /**
@@ -41,11 +51,23 @@
      * Load elements
      * */
     function load_elements(data){
-        jQuery('#template-elements select').select2({data: data.templates});
+        jQuery('#template-elements').select2({data: data.templates});
         data.templates.map((template) => {
             template.children.map((children) => {
-                let html = `<textarea name="template_${children.id}" id="template_${children.id}" class="template_fields"></textarea>`;
-                jQuery('#element-fields').append(html);
+                let html = `<textarea name="template_${children.id}" id="template_${children.id}" class="element_fields" cols="10"></textarea>`;
+                jQuery('#template-fields').append(html);
+                elements[children.id] = children;
             });
         });
+        trigger_template_elements();
+    }
+
+    /**
+     * Trigger Template Elements
+     * */
+    jQuery(document).on("change", "#template-elements", trigger_template_elements);
+    function trigger_template_elements(){
+        let element = jQuery("#template-elements").val();
+        window.textarea = jQuery(`#template_${element}`);
+        init_editor();
     }

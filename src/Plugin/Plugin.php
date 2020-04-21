@@ -95,17 +95,17 @@ class Plugin {
      */
     public function run(){
         Helper::defineConst($this);
-        $this->loadModel();
-        $this->loadHooks('controller');
-        $this->loadHooks('api');
+        $this->loadModels();
+        $this->loadHooks('Controller');
+        $this->loadHooks('Api');
     }
 
     /**
      * Load registered models
      * @return  void
      */
-    public function loadModel(){
-        $models = Helper::getDirFiles($this->path['plugin_path'] . 'src/model');
+    public function loadModels(){
+        $models = Helper::getDirFiles($this->path['plugin_path'] . 'src/Model');
         $allow = ['.', '..','.DS_Store','index.php'];
         foreach($models as $model){
             if(in_array(basename($model), $allow)) continue;

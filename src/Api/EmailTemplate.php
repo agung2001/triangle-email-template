@@ -11,7 +11,7 @@ namespace Triangle\Api;
  * @subpackage Triangle/Controller
  */
 
-use Triangle\Controller\EmailTemplate as EmailTemplateController;
+use Triangle\Wordpress\Action;
 
 class EmailTemplate extends Api {
 
@@ -22,26 +22,15 @@ class EmailTemplate extends Api {
      * @pattern prototype
      */
     public function __construct($plugin){
-//        $this->type = $plugin->getModels();
-//        $this->type = $this->type['EmailTemplate'];
+        parent::__construct($plugin);
 
         /** @backend - Init API */
-        $api = parent::__construct($plugin);
-        $api->setHook('wp_ajax_triangle-emailtemplate-page-edit');
-        $api->setCallback('triangle_emailtemplate_page_edit');
-        $this->hooks[] = $api;
-    }
-
-    /**
-     * API Callback
-     * @backend
-     * @return  void
-     */
-    public function callback(){
-        $controller = new EmailTemplateController();
-        $method = $_POST['method'];
-        if(isset($_POST['args'])) $controller->setArgs($_POST['args']);
-        if(isset($_POST['method'])) wp_send_json($controller->$method());
+        $action = new Action();
+        $action->setComponent($this);
+        $action->setHook('wp_ajax_triangle-emailtemplate-page-edit');
+        $action->setCallback('page_edit');
+        $action->setAcceptedArgs(0);
+        $this->hooks[] = $action;
     }
 
     /**
@@ -49,15 +38,15 @@ class EmailTemplate extends Api {
      * @backend
      * @return  void
      */
-    public function triangle_emailtemplate_page_edit(){
-        $type = $this->plugin->getModels()['EmailTemplate'];
+    public function page_edit(){
+        $this->loadModel('EmailTemplate');
         if(!isset($_POST['args']['post_id'])) exit;
-        $type->setID($_POST['args']['post_id']);
-        $data = [ 'templates' => $this->plugin->getConfig()->templates ];
+        $this->EmailTemplate->setID($_POST['args']['post_id']);
+        $data = [ 'templates' => $this->Plugin->getConfig()->templates ];
         foreach($data['templates'] as $template){
             foreach($template->children as &$children){
                 $children->value = $children->id;
-                $children->value = $type->getMetas()["template_" . $children->id];
+                $children->value = $this->EmailTemplate->getMetas()["template_" . $children->id];
                 $children->value = $children->value->get_post_meta();
             }
         }

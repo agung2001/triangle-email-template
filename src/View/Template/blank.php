@@ -1,0 +1,1 @@
+<?= $this->loadContent($this->view) ?>

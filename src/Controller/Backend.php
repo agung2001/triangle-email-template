@@ -63,10 +63,11 @@ class Backend extends Base {
         $style = (TRIANGLE_PRODUCTION) ? 'style.min.css' : 'style.css';
         Service::wp_enqueue_style('triangle_css', $style );
         Service::wp_enqueue_script('triangle_js', 'backend/plugin.js');
+
         /** Plugin configuration */
         $view = new View();
         $view->setTemplate('blank');
-        $view->setView('backend.script');
+        $view->setView('Backend.script');
         $view->setOptions(['shortcode' => false]);
         $view->build();
     }

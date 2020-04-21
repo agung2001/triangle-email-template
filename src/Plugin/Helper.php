@@ -43,4 +43,13 @@ class Helper {
         return $results;
     }
 
+    /**
+     * Get plugin path
+     * @var     string      Constant name
+     * @return  array
+     */
+    public function getConst($name){
+        return unserialize(constant($name));
+    }
+
 }

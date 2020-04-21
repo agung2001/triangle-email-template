@@ -11,19 +11,21 @@ namespace Triangle\Controller;
  * @subpackage Triangle/Controller
  */
 
+use Triangle\Helper;
+
 class Controller {
 
     /**
      * @access   protected
-     * @var      object    $plugin  Store plugin object and configuration
+     * @var      object    $Plugin  Store plugin object and configuration
      */
-    protected $plugin;
+    protected $Plugin;
 
     /**
      * @access   protected
-     * @var      object    $type    Model object that will used and controlled
+     * @var      object    $helper  Helper object for controller
      */
-    protected $type;
+    protected $Helper;
 
     /**
      * @access   protected
@@ -38,8 +40,23 @@ class Controller {
      * @pattern prototype
      */
     public function __construct($plugin){
-        $this->plugin = $plugin;
+        $this->Plugin = $plugin;
+        $this->Helper = new Helper();
         $this->hooks = [];
+    }
+
+    /**
+     * Overloading Method, for multiple arguments
+     * @method  loadModel           _ Load model @var string name
+     * @method  loadController      _ Load controller @var string name
+     */
+    public function __call($method, $arguments){
+        if(in_array($method, ['loadModel', 'loadController'])){
+            $list = ($method=='loadModel') ? $this->Plugin->getModels() : [];
+            $list = ($method=='loadController') ? $this->Plugin->getController() : $list;
+            if(count($arguments)==1) $this->{$arguments[0]} = $list[$arguments[0]];
+            if(count($arguments)==2) $this->{$arguments[0]} = $list[$arguments[1]];
+        }
     }
 
     /**

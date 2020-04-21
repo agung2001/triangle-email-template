@@ -5,19 +5,17 @@
 #meta-templateeditor {
   display:none;
   #template-elements {
-    padding-bottom: 10px;
-    #element-layout {
-      width:100%;
-    }
-    .template_fields {
-      display:none;
-    }
+    width:100%;
+  }
+  .element_fields {
+    //display:none;
   }
   #template-editor {
     width:100%;
+    margin-top:10px;
     min-height:400px;
     textarea {
-      height:400px !important;
+      min-height:400px;
     }
   }
 }

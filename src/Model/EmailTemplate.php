@@ -48,7 +48,7 @@ class EmailTemplate extends Model {
         /** @backend - Hooks - Emailtemplate save post hook */
         $action = new Action();
         $action->setComponent($this);
-        $action->setHook('save_post');
+        $action->setHook('wp_insert_post_data');
         $action->setCallback('save_emailtemplate');
         $action->setAcceptedArgs(3);
         $this->hooks[] = $action;
@@ -64,19 +64,21 @@ class EmailTemplate extends Model {
      * @var     object  $post       Post Object
      * @var     bool    $update     Whether this is an existing post being updated or not.
      */
-    public function save_emailtemplate($post_id, $post, $update){
-        if ($post->post_type=='emailtemplate'){
+//    public function save_emailtemplate($post_id, $post, $update){
+    public function save_emailtemplate($data, $postarr){
+//        if ($post->post_type=='emailtemplate'){
             /** Save meta field */
-            if(isset($this->metas['template_header'])){
-                $meta = $this->metas['template_header'];
-                $meta->setValue($_POST['template_header']);
-                $result = $meta->update_post_meta();
-            }
+
+//            if(isset($this->metas['template_header'])){
+//                $meta = $this->metas['template_header'];
+//                $meta->setValue($_POST['template_header']);
+//                $result = $meta->update_post_meta();
+//            }
 
             echo '<pre>';
-            var_dump($result);
+            var_dump($data);
             exit;
-        }
+//        }
     }
 
 }

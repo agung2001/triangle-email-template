@@ -35,12 +35,14 @@ class Page extends Base {
         $action->setHook('admin_menu');
         $action->setCallback('page_setting');
         $this->hooks[] = $action;
+
         /** @backend - Add contact page to send an email */
         $action = clone $action;
         $action->setComponent($this);
         $action->setHook('admin_menu');
         $action->setCallback('page_contact');
         $this->hooks[] = $action;
+
         /** @backend - Add template submenu link for template cpt */
         $action = clone $action;
         $action->setComponent($this);
@@ -58,7 +60,7 @@ class Page extends Base {
         /** Set View */
         $view = new View();
         $view->setTemplate('default');
-        $view->setView('backend.setting');
+        $view->setView('Backend.setting');
         $view->setOptions(['shortcode' => false]);
         /** Set Main Page */
         $page = new MenuPage();
@@ -67,10 +69,10 @@ class Page extends Base {
         $page->setCapability('manage_options');
         $page->setMenuSlug(strtolower(TRIANGLE_NAME));
         $page->setIconUrl('dashicons-email');
-        $page->setFunction([$page, 'load_view']);
         $page->setView($view);
         $page->setPosition(90);
         $page->build();
+
         /** Set Page */
         $page = new SubmenuPage();
         $page->setParentSlug(strtolower(TRIANGLE_NAME));
@@ -78,6 +80,7 @@ class Page extends Base {
         $page->setMenuTitle('Setting');
         $page->setCapability('manage_options');
         $page->setMenuSlug(strtolower(TRIANGLE_NAME));
+        $page->setFunction('');
         $page->setView($view);
         $page->build();
     }
@@ -91,8 +94,10 @@ class Page extends Base {
         /** Set View */
         $view = new View();
         $view->setTemplate('default');
-        $view->setView('backend.contact');
+        $view->setView('Backend.contact');
         $view->setOptions(['shortcode' => false]);
+        $view->setData('agung','tampan');
+
         /** Set Page */
         $page = new SubmenuPage();
         $page->setParentSlug(strtolower(TRIANGLE_NAME));
@@ -100,7 +105,6 @@ class Page extends Base {
         $page->setMenuTitle('Contact');
         $page->setCapability('manage_options');
         $page->setMenuSlug(strtolower(TRIANGLE_NAME) . '-contact');
-        $page->setFunction([$page, 'load_view']);
         $page->setView($view);
         $page->build();
     }
@@ -117,6 +121,7 @@ class Page extends Base {
         $page->setMenuTitle('Template');
         $page->setCapability('manage_options');
         $page->setMenuSlug('edit.php?post_type=emailtemplate');
+        $page->setFunction([]);
         $page->build();
     }
 

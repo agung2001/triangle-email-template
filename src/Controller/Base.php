@@ -22,7 +22,7 @@ class Base extends Controller {
      * @var     array   $types       Lists of post_type where the library are loaded
      */
     protected function backend_load_plugin_libraries($screens = [], $types = []){
-        $screen = unserialize(TRIANGLE_SCREEN);
+        $screen = $this->Helper->getConst('TRIANGLE_SCREEN');
         if(in_array($screen->base,$screens) || (isset($screen->post->post_type) && in_array($screen->post->post_type,$types)) ){
             /** jQuery Select2 */
             Service::wp_enqueue_style('select2_css', 'https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css');

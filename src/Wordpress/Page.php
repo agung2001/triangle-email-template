@@ -56,6 +56,15 @@ abstract class Page {
     protected $view;
 
     /**
+     * Page constructor
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->function = [$this, 'loadView'];
+    }
+
+    /**
      * Method to build page
      * @return void
      */
@@ -65,7 +74,7 @@ abstract class Page {
      * Load page view
      * @return void
      */
-    public function load_view(){
+    public function loadView(){
         $this->view->setPage($this);
         $this->view->build();
     }
