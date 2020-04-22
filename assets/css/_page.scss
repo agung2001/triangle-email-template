@@ -3,21 +3,17 @@
 * @backend @edit
 */
 #rendered-template-container {
-  margin-top:10px;
-  border: 1px #808080 solid;
-  border-radius:2px;
   #rendered-template {
     width:100%;
-    min-height:500px;
+    min-height:300px;
   }
 }
-#meta-templateeditor {
-  display:none;
-  #template-elements {
-    width:100%;
-  }
-  .element_fields {
+.triangle-container {
+  .container, .element_fields, #template-src-url {
     display:none;
+  }
+  #template-elements, .select2-container {
+    width:100% !important;
   }
   #template-editor {
     width:100%;

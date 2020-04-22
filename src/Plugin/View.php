@@ -68,7 +68,7 @@ class View {
      */
     public function __call($method, $arguments){
         if($method=='setData'){
-            if (count($arguments) == 1) $this->data = array_merge($this->data, $arguments);
+            if (count($arguments) == 1) foreach($arguments[0] as $key => $value) $this->data[$key] = $value;
             if (count($arguments) == 2) $this->data[$arguments[0]] = $arguments[1];
         }
     }
@@ -94,7 +94,6 @@ class View {
      */
     public function build(){
         echo $this->loadContent('Template/' . $this->template);
-//        echo $this->loadContent('Frontend.support-cloud');
     }
 
     /**

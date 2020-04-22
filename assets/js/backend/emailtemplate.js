@@ -2,7 +2,6 @@
      * Init page script
      * @emailtemplate
      * */
-    /** Page Element */
     var elements = {};
     load_page();
 
@@ -40,11 +39,13 @@
                 }
             },
             success: function(data){
-                jQuery('#loading-meta-template').hide();
-                jQuery('#loading-meta-templateeditor').hide();
-                if(data.rendered==false) jQuery('#rendered-template-container').hide();
-                else jQuery('#rendered-template').attr('src', data.rendered);
-                jQuery('#meta-templateeditor').fadeIn("slow");
+                /** Init Page */
+                jQuery('.loading-page').hide();
+                jQuery('.container').fadeIn("slow");
+                jQuery('#template-src-url').fadeIn("slow");
+                jQuery('#template-elements').select2({data: data.templates});
+                jQuery('#publishing-action').append(`<input name="save" type="submit" class="button button-primary button-large" value="Build">`);
+                /** Load template editor */
                 load_elements(data);
             }
         });
@@ -54,7 +55,7 @@
      * Load elements
      * */
     function load_elements(data){
-        jQuery('#template-elements').select2({data: data.templates});
+        if(data.rendered) jQuery('#template-src-url').attr('href', data.rendered);
         data.templates.map((template) => {
             template.children.map((children) => {
                 let html = `<textarea name="template_${children.id}" id="template_${children.id}" class="element_fields" cols="10">${children.value}</textarea>`;

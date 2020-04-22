@@ -67,35 +67,12 @@ class EmailTemplate extends Base {
     public function edit_emailtemplate(){
         $screen = Service::getScreen();
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
-            /** Emailtemplate Edit Action */
+            /** Emailtemplate Code Editor */
             $view = new View();
             $view->setTemplate('blank');
-            $view->setView('EmailTemplate.edit-action');
+            $view->setView('EmailTemplate.edit-template');
             $view->setOptions(['shortcode' => false]);
-            $view->build();
-
-            /** Add custom meta box */
-            $metabox = new MetaBox();
-            $metabox->setId($this->EmailTemplate->getName() . '-editor');
-            $metabox->setTitle('Editor');
-            $metabox->setCallback([$this, 'metabox_emailtemplate_editor']);
-            $metabox->setScreen($this->EmailTemplate->getName());
-            $metabox->add_meta_box();
-        }
-    }
-
-    /**
-     * Metabox callback - @emailtemplate-editor
-     * @backend - @emailtemplate
-     * @return  void
-     */
-    public function metabox_emailtemplate_editor(){
-        $screen = Service::getScreen();
-        if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
-            $view = new View();
-            $view->setTemplate('blank');
-            $view->setView('EmailTemplate.edit-template_editor');
-            $view->setOptions(['shortcode' => false]);
+            $view->setData(compact('screen'));
             $view->build();
         }
     }

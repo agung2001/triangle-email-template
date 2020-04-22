@@ -24,6 +24,8 @@ class Base extends Controller {
     protected function backend_load_plugin_libraries($screens = [], $types = []){
         $screen = unserialize(TRIANGLE_SCREEN);
         if(in_array($screen->base,$screens) || (isset($screen->post->post_type) && in_array($screen->post->post_type,$types)) ){
+            /** Font Awesome */
+            Service::wp_enqueue_style('fontawesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css');
             /** jQuery Select2 */
             Service::wp_enqueue_style('select2_css', 'https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css');
             Service::wp_enqueue_script('select2_js', 'https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js');
