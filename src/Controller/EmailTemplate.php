@@ -54,6 +54,7 @@ class EmailTemplate extends Base {
         $screen = Service::getScreen();
         $this->backend_load_plugin_libraries([],[$this->EmailTemplate->getName()]);
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()) {
+            Service::wp_enqueue_style('triangle_emailtemplate_css', 'backend/emailtemplate.css');
             Service::wp_enqueue_script('triangle_emailtemplate_js', 'backend/emailtemplate.js', [], false, true);
         }
     }
@@ -66,7 +67,7 @@ class EmailTemplate extends Base {
     public function edit_emailtemplate(){
         $screen = Service::getScreen();
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
-            /** Plugin script */
+            /** Emailtemplate Edit Action */
             $view = new View();
             $view->setTemplate('blank');
             $view->setView('EmailTemplate.edit-action');
@@ -76,7 +77,7 @@ class EmailTemplate extends Base {
             /** Add custom meta box */
             $metabox = new MetaBox();
             $metabox->setId($this->EmailTemplate->getName() . '-editor');
-            $metabox->setTitle('Template Editor');
+            $metabox->setTitle('Editor');
             $metabox->setCallback([$this, 'metabox_emailtemplate_editor']);
             $metabox->setScreen($this->EmailTemplate->getName());
             $metabox->add_meta_box();

@@ -51,7 +51,8 @@ class Service {
             'home_path' => get_home_path(),
             'home_url' => get_home_url(),
             'plugin_path' => plugin_dir_path($path),
-            'plugin_url' => plugin_dir_url($path)
+            'plugin_url' => plugin_dir_url($path),
+            'upload_dir' => wp_upload_dir()
         ];
         $path['view_path'] = $path['plugin_path'] . 'src/View/';
         define('TRIANGLE_PATH', serialize($path));

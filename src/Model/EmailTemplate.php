@@ -48,7 +48,7 @@ class EmailTemplate extends Model {
         /** @backend - Hooks - Emailtemplate save post hook */
         $action = new Action();
         $action->setComponent($this);
-        $action->setHook('wp_insert_post_data');
+        $action->setHook('save_post');
         $action->setCallback('save_emailtemplate');
         $action->setAcceptedArgs(3);
         $this->hooks[] = $action;
@@ -64,21 +64,26 @@ class EmailTemplate extends Model {
      * @var     object  $post       Post Object
      * @var     bool    $update     Whether this is an existing post being updated or not.
      */
-//    public function save_emailtemplate($post_id, $post, $update){
-    public function save_emailtemplate($data, $postarr){
-//        if ($post->post_type=='emailtemplate'){
+    public function save_emailtemplate($post_id, $post, $update){
+        if ($post->post_type=='emailtemplate'){
+            $templates = $this->Plugin->getConfig()->templates;
+            $templates = $this->Helper->getTemplatesFromConfig($templates);
             /** Save meta field */
-
-//            if(isset($this->metas['template_header'])){
-//                $meta = $this->metas['template_header'];
-//                $meta->setValue($_POST['template_header']);
-//                $result = $meta->update_post_meta();
-//            }
-
-            echo '<pre>';
-            var_dump($data);
-            exit;
-//        }
+            $this->ID = $post_id;
+            $metas = $this->metas;
+            $html = ''; $css = '';
+            foreach($metas as $meta){
+                $name = $meta->getKey();
+                $configName = str_replace('template_','',$name);
+                if($templates[$configName]->mode=='ace/mode/html') $html .= $_POST[$name];
+                elseif($templates[$configName]->mode=='ace/mode/css') $css .= $_POST[$name];
+                $meta->setValue($_POST[$name]);
+                $results[] = $meta->update_post_meta();
+            }
+            /** Build template */
+            $this->Helper->buildEmailTemplate($post->post_name, $html, $css);
+            $this->Helper->standardizeEmailTemplate($post->post_name);
+        }
     }
 
 }

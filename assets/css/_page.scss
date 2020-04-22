@@ -2,18 +2,27 @@
 * Page Email Template
 * @backend @edit
 */
+#rendered-template-container {
+  margin-top:10px;
+  border: 1px #808080 solid;
+  border-radius:2px;
+  #rendered-template {
+    width:100%;
+    min-height:500px;
+  }
+}
 #meta-templateeditor {
   display:none;
   #template-elements {
     width:100%;
   }
   .element_fields {
-    //display:none;
+    display:none;
   }
   #template-editor {
     width:100%;
     margin-top:10px;
-    min-height:400px;
+    min-height:500px;
     textarea {
       min-height:400px;
     }

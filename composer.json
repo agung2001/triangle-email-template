@@ -4,7 +4,7 @@
   "license"		    : "GPL-3.0",
   "require"         : {
     "erusev/parsedown" : "*",
-    "pelago/emogrifier": "^1.2"
+    "tijsverkoyen/css-to-inline-styles": "^2.2"
   },
   "autoload"		: {
     "classmap":[

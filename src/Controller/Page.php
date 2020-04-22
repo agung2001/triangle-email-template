@@ -96,7 +96,6 @@ class Page extends Base {
         $view->setTemplate('default');
         $view->setView('Backend.contact');
         $view->setOptions(['shortcode' => false]);
-        $view->setData('agung','tampan');
 
         /** Set Page */
         $page = new SubmenuPage();

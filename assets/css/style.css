@@ -60,14 +60,24 @@
 * Page Email Template
 * @backend @edit
 */
+#rendered-template-container {
+  margin-top: 10px;
+  border: 1px #808080 solid;
+  border-radius: 2px; }
+  #rendered-template-container #rendered-template {
+    width: 100%;
+    min-height: 500px; }
+
 #meta-templateeditor {
   display: none; }
   #meta-templateeditor #template-elements {
     width: 100%; }
+  #meta-templateeditor .element_fields {
+    display: none; }
   #meta-templateeditor #template-editor {
     width: 100%;
     margin-top: 10px;
-    min-height: 400px; }
+    min-height: 500px; }
     #meta-templateeditor #template-editor textarea {
       min-height: 400px; }
 

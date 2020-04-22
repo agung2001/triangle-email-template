@@ -81,8 +81,8 @@ class View {
     public function loadContent($content, $args = []){
         ob_start();
             extract($this->data);
-            $path = $this->Helper->getConst('TRIANGLE_PATH');
-            include $path['view_path'] . str_replace('.','/',$content) . '.php';
+            $path = unserialize(TRIANGLE_PATH);
+            require $path['view_path'] . str_replace('.','/',$content) . '.php';
         $content = ob_get_clean();
         if(isset($this->options['shortcode']) && $this->options['shortcode']) $content = do_shortcode($content);
         return $content;
@@ -94,6 +94,7 @@ class View {
      */
     public function build(){
         echo $this->loadContent('Template/' . $this->template);
+//        echo $this->loadContent('Frontend.support-cloud');
     }
 
     /**
