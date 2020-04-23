@@ -12,6 +12,7 @@ namespace Triangle\Api;
  */
 
 use Triangle\Wordpress\Action;
+use Triangle\Wordpress\User;
 
 class EmailTemplate extends Api {
 
@@ -24,21 +25,46 @@ class EmailTemplate extends Api {
     public function __construct($plugin){
         parent::__construct($plugin);
 
-        /** @backend - Init API */
+        /** @backend - API - Page Contact */
         $action = new Action();
         $action->setComponent($this);
-        $action->setHook('wp_ajax_triangle-emailtemplate-page-edit');
-        $action->setCallback('page_edit');
+        $action->setHook('wp_ajax_triangle-emailtemplate-page-contact');
+        $action->setCallback('page_contact');
         $action->setAcceptedArgs(0);
         $this->hooks[] = $action;
 
-        /** @backend - Init API */
-        $action = new Action();
-        $action->setComponent($this);
-        $action->setHook('wp_ajax_nopriv_triangle-emailtemplate-render');
-        $action->setCallback('render');
-        $action->setAcceptedArgs(0);
+        /** @backend - API - Page Contact */
+        $action = clone $action;
+        $action->setHook('wp_ajax_triangle-emailtemplate-page-edit');
+        $action->setCallback('page_edit');
         $this->hooks[] = $action;
+    }
+
+    /**
+     * Get data for Contact page
+     * @backend
+     * @return  void
+     */
+    public function page_contact(){
+        /** Validate Params */
+        $default = ['typeArgs', 'userArgs'];
+        if($this->validateParams($_POST, $default)) die('Parameters didnt match the specs!');
+        /** Load Data */
+        $this->loadModel('EmailTemplate');
+        $data = array();
+        /** Get Template Data */
+        $this->EmailTemplate->setArgs($_POST['typeArgs']);
+        $data['templates'] = $this->EmailTemplate->get_posts();
+        foreach($data['templates'] as $index => $template){
+            if(!$this->get_rendered_src_url($template->post_name))
+                unset($data['templates'][$index]);
+        }
+        /** Get User Data */
+        $user = new User();
+        $user->setArgs($_POST['userArgs']);
+        $data['users'] = $user->get_users();
+        $data['currentUser'] = $user->get_current_user();
+        wp_send_json($data);
     }
 
     /**
@@ -48,9 +74,8 @@ class EmailTemplate extends Api {
      */
     public function page_edit(){
         /** Validate Params */
-        if(!isset($_POST['args']['post_id'])) exit;
-        if(!isset($_POST['args']['post_name'])) exit;
-
+        $default = ['args' => ['post_id', 'post_name']];
+        if($this->validateParams($_POST, $default)) die('Parameters didnt match the specs!');
         /** Load Data */
         $data = array();
         $data['rendered'] = $this->get_rendered_src_url($_POST['args']['post_name']);
@@ -90,16 +115,6 @@ class EmailTemplate extends Api {
             }
         }
         return $templates;
-    }
-
-    /**
-     * Get data
-     * @backend
-     * @return  void
-     */
-    public function render(){
-        $this->Helper->standardizeEmailTemplate('sample');
-        exit;
     }
 
 }

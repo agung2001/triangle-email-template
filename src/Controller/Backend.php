@@ -25,7 +25,6 @@ class Backend extends Base {
      */
     public function __construct($plugin){
         parent::__construct($plugin);
-
         /** @backend - Eneque scripts */
         $action = new Action();
         $action->setComponent($this);
@@ -33,7 +32,6 @@ class Backend extends Base {
         $action->setCallback('backend_enequeue');
         $action->setAcceptedArgs(1);
         $this->hooks[] = $action;
-
         /** @backend - Add setting link for plugin in plugins page */
         $pluginName = strtolower($plugin->getName());
         $action = clone $action;
@@ -63,8 +61,7 @@ class Backend extends Base {
         /** Styles and Scripts */
         $style = (TRIANGLE_PRODUCTION) ? 'style.min.css' : 'style.css';
         Service::wp_enqueue_style('triangle_css', $style );
-        Service::wp_enqueue_script('triangle_js_footer', 'backend/plugin_footer.js', '', '', true);
-
+        Service::wp_enqueue_script('triangle_js_footer', 'backend/plugin.js', '', '', true);
         /** Plugin configuration */
         $view = new View();
         $view->setTemplate('blank');
@@ -80,7 +77,7 @@ class Backend extends Base {
     private function backend_load_plugin_scripts(){
         $screen = unserialize(TRIANGLE_SCREEN);
         if($screen->base=='users') Service::wp_enqueue_script('triangle_user_js', 'backend/user.js');
-        if($screen->base=='triangle_page_triangle-contact') Service::wp_enqueue_script('triangle_contact_js', 'backend/contact.js');
+        if($screen->base=='triangle_page_triangle-contact') Service::wp_enqueue_script('triangle_contact_js', 'backend/contact.js', '', '', true);
     }
 
     /**

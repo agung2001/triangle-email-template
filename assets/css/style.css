@@ -31,6 +31,7 @@
     .triangle-container .header .nav-tab-wrapper {
       padding: 5px 10px 2px 10px; }
       .triangle-container .header .nav-tab-wrapper .nav-tab {
+        cursor: pointer;
         color: #c4c4c4;
         background: transparent;
         padding: 5px 15px;
@@ -43,7 +44,7 @@
         font-weight: bold; }
   .triangle-container .content .tab-content {
     display: none;
-    padding: 10px; }
+    padding: 10px 20px; }
     .triangle-container .content .tab-content.current {
       display: block; }
 
@@ -96,29 +97,58 @@
     width: 35px; }
 
 /**
-* Modify Template - Setting
-* @backend
-*/
-.triangle-setting input, .triangle-setting select {
-  width: 400px; }
-.triangle-setting .field-info {
-  font-style: italic;
-  color: #808080;
-  padding-top: 3px; }
-
-/**
 * Page Email Template
 * @backend @edit
 */
-.triangle-container .container, .triangle-container .element_fields, .triangle-container #template-src-url {
-  display: none; }
-.triangle-container #template-elements, .triangle-container .select2-container {
-  width: 100% !important; }
-.triangle-container #template-editor {
-  width: 100%;
-  margin-top: 10px;
-  min-height: 800px; }
-  .triangle-container #template-editor textarea {
-    min-height: 400px; }
+#section-codeeditor {
+  padding: 10px; }
+  #section-codeeditor .container, #section-codeeditor .element_fields, #section-codeeditor #template-src-url {
+    display: none; }
+  #section-codeeditor #template-elements, #section-codeeditor .select2-container {
+    width: 100% !important; }
+  #section-codeeditor #template-editor {
+    width: 100%;
+    margin-top: 10px;
+    min-height: 800px; }
+    #section-codeeditor #template-editor textarea {
+      min-height: 400px; }
+
+/**
+* Page Contact
+*/
+#section-contact {
+  padding: 5px 20px; }
+  #section-contact #field-users, #section-contact .field-ajax {
+    display: none; }
+  #section-contact .field-container {
+    max-width: 550px !important; }
+  #section-contact input, #section-contact .select2-container {
+    width: 90% !important; }
+  #section-contact .field-info {
+    font-style: italic;
+    color: #808080; }
+  #section-contact #field-user-container .select2-container {
+    margin-top: -7px; }
+  #section-contact #field-user-container #add-user-to-lists {
+    cursor: pointer;
+    color: #000;
+    text-decoration: none;
+    font-size: 20px; }
+  #section-contact .badges {
+    display: inline-block;
+    background: #bdc3c7;
+    padding: 5px 10px;
+    margin: 2px; }
+    #section-contact .badges i {
+      cursor: pointer;
+      margin-right: 5px; }
+  #section-contact .btn-submit {
+    border: none;
+    float: right;
+    background: #e67e22;
+    color: #fff;
+    padding: 8px 25px;
+    border-radius: 5px;
+    margin-right: 10%; }
 
 /*# sourceMappingURL=style.css.map */

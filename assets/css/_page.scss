@@ -2,7 +2,8 @@
 * Page Email Template
 * @backend @edit
 */
-.triangle-container {
+#section-codeeditor {
+  padding: 10px;
   .container, .element_fields, #template-src-url {
     display:none;
   }
@@ -16,5 +17,51 @@
     textarea {
       min-height:400px;
     }
+  }
+}
+
+/**
+* Page Contact
+*/
+#section-contact {
+  padding: 5px 20px;
+  #field-users, .field-ajax { display:none; }
+  .field-container { max-width: 550px !important; }
+  input, .select2-container {
+    width:90% !important;
+  }
+  .field-info {
+    font-style:italic;
+    color: #808080;
+  }
+  #field-user-container {
+    .select2-container {
+      margin-top:-7px;
+    }
+    #add-user-to-lists {
+      cursor: pointer;
+      color:#000;
+      text-decoration: none;
+      font-size:20px;
+    }
+  }
+  .badges {
+    display:inline-block;
+    background: $silver;
+    padding:5px 10px;
+    margin:2px;
+    i {
+      cursor: pointer;
+      margin-right: 5px;
+    }
+  }
+  .btn-submit {
+    border:none;
+    float:right;
+    background: $carrot;
+    color:#fff;
+    padding: 8px 25px;
+    border-radius:5px;
+    margin-right:10%;
   }
 }

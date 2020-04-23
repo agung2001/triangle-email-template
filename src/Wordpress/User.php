@@ -30,6 +30,15 @@ class User {
     }
 
     /**
+     * Retrieve the current user object.
+     * @backend
+     * @return  void
+     */
+    public function get_current_user(){
+        return wp_get_current_user();
+    }
+
+    /**
      * @return array
      */
     public function getArgs(): array
