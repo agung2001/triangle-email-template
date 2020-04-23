@@ -2,12 +2,6 @@
 * Page Email Template
 * @backend @edit
 */
-#rendered-template-container {
-  #rendered-template {
-    width:100%;
-    min-height:300px;
-  }
-}
 .triangle-container {
   .container, .element_fields, #template-src-url {
     display:none;
@@ -18,31 +12,9 @@
   #template-editor {
     width:100%;
     margin-top:10px;
-    min-height:500px;
+    min-height:800px;
     textarea {
       min-height:400px;
     }
   }
-}
-
-/**
-* Page Setting
-* @backend
-*/
-.nav-tab {
-  margin-bottom: -1px;
-}
-ul.tabs li.current{
-  background: #ededed;
-  color: #222;
-}
-.tab-content{
-  display: none;
-  background: #f4f5f6;
-  padding: 15px;
-}
-.tab-content.current {
-  display: inherit;
-  border: 1px solid #ccc;
-  border-top: 0px;
 }

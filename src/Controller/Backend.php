@@ -49,8 +49,9 @@ class Backend extends Base {
      */
     public function backend_enequeue($hook_suffix){
         define('TRIANGLE_SCREEN', serialize(Service::getScreen()));
+        $screens = ['toplevel_page_triangle','triangle_page_triangle-contact'];
         $this->backend_load_plugin_assets();
-        $this->backend_load_plugin_libraries(['triangle_page_triangle-contact']);
+        $this->backend_load_plugin_libraries($screens);
         $this->backend_load_plugin_scripts();
     }
 
@@ -62,7 +63,7 @@ class Backend extends Base {
         /** Styles and Scripts */
         $style = (TRIANGLE_PRODUCTION) ? 'style.min.css' : 'style.css';
         Service::wp_enqueue_style('triangle_css', $style );
-        Service::wp_enqueue_script('triangle_js', 'backend/plugin.js');
+        Service::wp_enqueue_script('triangle_js_footer', 'backend/plugin_footer.js', '', '', true);
 
         /** Plugin configuration */
         $view = new View();

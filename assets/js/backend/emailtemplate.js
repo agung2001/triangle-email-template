@@ -39,31 +39,26 @@
                 }
             },
             success: function(data){
-                /** Init Page */
-                jQuery('.loading-page').hide();
-                jQuery('.container').fadeIn("slow");
-                jQuery('#template-src-url').fadeIn("slow");
+                /** Load Page Elements */
+                animate('.loading-page', 'animated fadeOut').hide();
+                animate('.container', 'animated fadeIn').show();
                 jQuery('#template-elements').select2({data: data.templates});
                 jQuery('#publishing-action').append(`<input name="save" type="submit" class="button button-primary button-large" value="Build">`);
-                /** Load template editor */
-                load_elements(data);
+                /** Load Page Data */
+                if(data.rendered) {
+                    jQuery('#template-src-url').attr('href', data.rendered);
+                    animate('#template-src-url', 'animated fadeIn').show();
+                }
+                data.templates.map((template) => {
+                    template.children.map((children) => {
+                        let html = `<textarea name="template_${children.id}" id="template_${children.id}" class="element_fields" cols="10">${children.value}</textarea>`;
+                        jQuery('#template-fields').append(html);
+                        elements[children.id] = children;
+                    });
+                });
+                trigger_template_elements();
             }
         });
-    }
-
-    /**
-     * Load elements
-     * */
-    function load_elements(data){
-        if(data.rendered) jQuery('#template-src-url').attr('href', data.rendered);
-        data.templates.map((template) => {
-            template.children.map((children) => {
-                let html = `<textarea name="template_${children.id}" id="template_${children.id}" class="element_fields" cols="10">${children.value}</textarea>`;
-                jQuery('#template-fields').append(html);
-                elements[children.id] = children;
-            });
-        });
-        trigger_template_elements();
     }
 
     /**
