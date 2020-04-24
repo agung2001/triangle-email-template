@@ -48,7 +48,7 @@ class EmailTemplate extends Api {
     public function page_contact(){
         /** Validate Params */
         $default = ['typeArgs', 'userArgs'];
-        if($this->validateParams($_POST, $default)) die('Parameters didnt match the specs!');
+        if($this->validateParams($_POST, $default)) die('Parameters is not match the specs!');
         /** Load Data */
         $this->loadModel('EmailTemplate');
         $data = array();
@@ -59,11 +59,11 @@ class EmailTemplate extends Api {
             if(!$this->get_rendered_src_url($template->post_name))
                 unset($data['templates'][$index]);
         }
-        /** Get User Data */
-        $user = new User();
-        $user->setArgs($_POST['userArgs']);
-        $data['users'] = $user->get_users();
-        $data['currentUser'] = $user->get_current_user();
+        /** Get User Data */;
+        $data['users'] = User::get_users($_POST['userArgs']);
+        $data['currentUser'] = User::get_current_user();
+        $data['defaultUser'] = User::get_user_by('ID',$_POST['user_id']);
+        /** Get default user */
         wp_send_json($data);
     }
 
@@ -75,7 +75,7 @@ class EmailTemplate extends Api {
     public function page_edit(){
         /** Validate Params */
         $default = ['args' => ['post_id', 'post_name']];
-        if($this->validateParams($_POST, $default)) die('Parameters didnt match the specs!');
+        if($this->validateParams($_POST, $default)) die('Parameters is not match the specs!');
         /** Load Data */
         $data = array();
         $data['rendered'] = $this->get_rendered_src_url($_POST['args']['post_name']);

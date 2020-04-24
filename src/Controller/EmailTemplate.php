@@ -13,8 +13,9 @@ namespace Triangle\Controller;
 
 use Triangle\View;
 use Triangle\Wordpress\Action;
-use Triangle\Wordpress\MetaBox;
+use Triangle\Wordpress\Email;
 use Triangle\Wordpress\Service;
+use Triangle\Wordpress\User;
 
 class EmailTemplate extends Base {
 
@@ -75,6 +76,34 @@ class EmailTemplate extends Base {
             $view->setData(compact('screen'));
             $view->build();
         }
+    }
+
+    /**
+     * Send template email
+     * @backend - @emailtemplate from [@contactPage]
+     * @return  void
+     */
+    public function send($params){
+        /** Validate Params */
+        $default = ['field_template', 'field_users', 'field_from_name', 'field_from_email', 'field_email_subject'];
+        if($this->validateParams($_POST, $default)) die('Parameters is not match the specs!');
+
+        /** Prepare Data */
+        $this->loadModel('EmailTemplate');
+        $template = $this->EmailTemplate::get_post($params['field_template']);
+        $template = $this->Helper->getStandardEmailTemplate($template->post_name);
+        $users = explode(',',$params['field_users']);
+        foreach($users as &$user) $user = User::get_user_by('ID', $user)->data->user_email;
+
+        /** Send Email */
+        $email = new Email();
+        $headers = $email->getHeaders();
+        $headers[] = 'From: ' . $params['field_from_name'] . ' <' . $params['field_from_email'] . '> ';
+        $email->setHeaders($headers);
+        $email->setTo($users);
+        $email->setSubject($params['field_email_subject']);
+        $email->setMessage($template);
+        return $email->send();
     }
 
 }

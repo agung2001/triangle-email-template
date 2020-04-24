@@ -53,10 +53,22 @@ class Controller {
     public function __call($method, $arguments){
         if(in_array($method, ['loadModel', 'loadController'])){
             $list = ($method=='loadModel') ? $this->Plugin->getModels() : [];
-            $list = ($method=='loadController') ? $this->Plugin->getController() : $list;
+            $list = ($method=='loadController') ? $this->Plugin->getControllers() : $list;
             if(count($arguments)==1) $this->{$arguments[0]} = $list[$arguments[0]];
             if(count($arguments)==2) $this->{$arguments[0]} = $list[$arguments[1]];
         }
+    }
+
+    /**
+     * Validate $_POST Params
+     * @return  bool    Validation result
+     */
+    private function validateParams($params, $default, $validated = true){
+        foreach($default as $index => $key){
+            if(!isset($params[$key]) && !is_array($key)){ $validated = false; break; }
+            if(is_array($key)) $validated = $this->validateParams($params[$index], $key, $validated);
+        }
+        return $validated;
     }
 
     /**

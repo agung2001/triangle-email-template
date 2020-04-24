@@ -25,12 +25,18 @@ class Backend extends Base {
      */
     public function __construct($plugin){
         parent::__construct($plugin);
-        /** @backend - Eneque scripts */
+        /** @backend - Setup email config */
         $action = new Action();
+        $action->setComponent($this);
+        $action->setHook('phpmailer_init');
+        $action->setCallback('mail_config');
+        $action->setAcceptedArgs(1);
+
+        /** @backend - Eneque scripts */
+        $action = clone $action;
         $action->setComponent($this);
         $action->setHook('admin_enqueue_scripts');
         $action->setCallback('backend_enequeue');
-        $action->setAcceptedArgs(1);
         $this->hooks[] = $action;
         /** @backend - Add setting link for plugin in plugins page */
         $pluginName = strtolower($plugin->getName());
@@ -38,6 +44,16 @@ class Backend extends Base {
         $action->setHook("plugin_action_links_$pluginName/$pluginName.php");
         $action->setCallback('backend_plugin_setting_link');
         $this->hooks[] = $action;
+    }
+
+    public function mail_config($phpmailer){
+//        $phpmailer->Mailer     = 'smtp';
+//        $phpmailer->Host       = 'mail.appleby.design';
+//        $phpmailer->SMTPAuth   = true;
+//        $phpmailer->Port       = 587;
+//        $phpmailer->Username   = 'agung@appleby.design';
+//        $phpmailer->Password   = '%f$;U]nr}H&c';
+//        $phpmailer->SMTPSecure = 'tls';
     }
 
     /**

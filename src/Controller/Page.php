@@ -14,6 +14,7 @@ namespace Triangle\Controller;
 use Triangle\View;
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\MenuPage;
+use Triangle\Wordpress\Service;
 use Triangle\Wordpress\SubmenuPage;
 
 use Parsedown;
@@ -91,11 +92,22 @@ class Page extends Base {
      * @return  void
      */
     public function page_contact(){
+        /** Handle submission */
+        if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle-contact'){
+            $this->loadController('EmailTemplate');
+            $result = $this->EmailTemplate->send($_POST);
+        }
+
+        $menuSlug = strtolower(TRIANGLE_NAME) . '-contact';
+
         /** Set View */
         $view = new View();
         $view->setTemplate('default');
         $view->setView('Backend.contact');
         $view->setOptions(['shortcode' => false]);
+        $view->setData('user_id', (isset($_GET['user_id'])) ? $_GET['user_id'] : '');
+        $view->setData('result', isset($result) ? $result : '');
+        $view->setData(compact('menuSlug'));
 
         /** Set Page */
         $page = new SubmenuPage();
@@ -103,7 +115,7 @@ class Page extends Base {
         $page->setPageTitle('Contact User');
         $page->setMenuTitle('Contact');
         $page->setCapability('manage_options');
-        $page->setMenuSlug(strtolower(TRIANGLE_NAME) . '-contact');
+        $page->setMenuSlug($menuSlug);
         $page->setView($view);
         $page->build();
     }

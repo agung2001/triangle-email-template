@@ -135,7 +135,7 @@ class Plugin {
             $name = basename( $controller, '.php' );
             $controller = '\\Triangle\\'.ucwords($dir).'\\'.$name;
             $controller = new $controller($this);
-            $this->controllers[$name] = $controller;
+            if($dir=='Controller') $this->controllers[$name] = $controller;
             foreach($controller->getHooks() as $hook){
                 $class = str_replace( 'Triangle\\Wordpress\\' , '', get_class($hook) );
                 if(in_array(strtolower($class), $this->enableHooks)) $hook->run();

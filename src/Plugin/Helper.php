@@ -11,6 +11,7 @@ namespace Triangle;
  * @subpackage Triangle\Includes
  */
 
+use Triangle\Wordpress\Service;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 class Helper {
@@ -43,6 +44,18 @@ class Helper {
             }
         }
         return $results;
+    }
+
+    /**
+     * Get standard.html content from EmailTemplate dir
+     * @var     string  $slug   EmailTemplate slug = post name slug
+     * @return  void
+     */
+    public function getStandardEmailTemplate($slug){
+        $path = unserialize(TRIANGLE_PATH);
+        $dir = $path['upload_dir']['basedir'] . '/EmailTemplate/' . $slug;
+        ob_start(); echo file_get_contents($dir . '/' . 'standard.html');
+        return ob_get_clean();
     }
 
     /**
@@ -83,11 +96,14 @@ class Helper {
         $dir = $path['upload_dir']['basedir'] . '/EmailTemplate/' . $slug;
         if(is_dir($dir)){
             /** Get Contents */
-            $html = file_get_contents($dir . '/' . $slug . '.html');
+            ob_start(); echo file_get_contents($dir . '/' . $slug . '.html');
+            $html = Service::do_shortcode(ob_get_clean());
             $css = file_get_contents($dir . '/' . $slug . '.css');
             /** Standarize */
-            $tool = new CssToInlineStyles();
-            $standard = $this->inspectorEmailTemplate($tool, $html, $css, 10);
+            if($css){
+                $tool = new CssToInlineStyles();
+                $standard = $this->inspectorEmailTemplate($tool, $html, $css, 10);
+            } else { $standard = $html; }
             if($standard) file_put_contents($dir . '/standard.html', $standard);
         } else return false;
     }

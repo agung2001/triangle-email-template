@@ -14,6 +14,15 @@ namespace Triangle\Wordpress;
 class Service {
 
     /**
+     * Search content for shortcodes and filter shortcodes through their hooks.
+     * @var     string      $content        Content to search for shortcodes.
+     * @var     bool        $ignore_html    When true, shortcodes inside HTML elements will be skipped.
+     */
+    public static function do_shortcode($content, $ignore_html = false){
+        do_shortcode($content, $ignore_html);
+    }
+
+    /**
      * Wordpress enqueue style
      * @var   string    $handle     Name of the script. Should be unique
      * @var   string    $src        Full URL of the script, or path of the script relative to the WordPress root directory

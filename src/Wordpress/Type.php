@@ -38,10 +38,22 @@ class Type extends Model {
     protected $hooks;
 
     /**
+     * Retrieves post data given a post ID or post object.
+     * @var     int|object      Post ID or post object. Defaults to global $post
+     * @var     string          The required return type. One of OBJECT, ARRAY_A, or ARRAY_N
+     * @var     filter          Type of filter to apply. Accepts 'raw', 'edit', 'db', or 'display'
+     * @return  object          Post Type object
+     */
+    public static function get_post($ID, $output = OBJECT, $filter = 'raw'){
+        return get_post($ID, $output, $filter);
+    }
+
+    /**
      * Get Post Type
      * @return object   Post Type object
      */
     public function get_posts(){
+        if($this->name) $this->args['post_type'] = $this->name;
         return get_posts($this->args);
     }
 

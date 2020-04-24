@@ -14,44 +14,30 @@ namespace Triangle\Wordpress;
 class User {
 
     /**
-     * @access   protected
-     * @var      array    $args    Arguments to retrieve users
-     * Wordpress : @get_users
-     */
-    protected $args = [];
-
-    /**
      * Retrieve list of users matching criteria.
      * @backend
-     * @return  void
+     * @return  object  Lists of user object
      */
-    public function get_users(){
-        return get_users($this->args);
+    public static function get_users($args){
+        return get_users($args);
+    }
+
+    /**
+     * Retrieve user info by a given field
+     * @backend
+     * @return  object  User object
+     */
+    public static function get_user_by($field, $value){
+        return get_user_by($field, $value);
     }
 
     /**
      * Retrieve the current user object.
      * @backend
-     * @return  void
+     * @return  object  User object
      */
-    public function get_current_user(){
+    public static function get_current_user(){
         return wp_get_current_user();
-    }
-
-    /**
-     * @return array
-     */
-    public function getArgs(): array
-    {
-        return $this->args;
-    }
-
-    /**
-     * @param array $args
-     */
-    public function setArgs(array $args): void
-    {
-        $this->args = $args;
     }
 
 }

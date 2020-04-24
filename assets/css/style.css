@@ -118,7 +118,7 @@
 */
 #section-contact {
   padding: 5px 20px; }
-  #section-contact #field-users, #section-contact .field-ajax {
+  #section-contact .field-ajax {
     display: none; }
   #section-contact .field-container {
     max-width: 550px !important; }
@@ -127,6 +127,15 @@
   #section-contact .field-info {
     font-style: italic;
     color: #808080; }
+  #section-contact #form-message {
+    display: none;
+    padding: 10px 0;
+    color: #e74c3c;
+    font-weight: bold; }
+  #section-contact #form-result {
+    padding: 10px 0;
+    color: #27ae60;
+    font-weight: bold; }
   #section-contact #field-user-container .select2-container {
     margin-top: -7px; }
   #section-contact #field-user-container #add-user-to-lists {
@@ -143,6 +152,7 @@
       cursor: pointer;
       margin-right: 5px; }
   #section-contact .btn-submit {
+    cursor: pointer;
     border: none;
     float: right;
     background: #e67e22;

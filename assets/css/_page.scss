@@ -25,7 +25,7 @@
 */
 #section-contact {
   padding: 5px 20px;
-  #field-users, .field-ajax { display:none; }
+  .field-ajax { display:none; }
   .field-container { max-width: 550px !important; }
   input, .select2-container {
     width:90% !important;
@@ -33,6 +33,17 @@
   .field-info {
     font-style:italic;
     color: #808080;
+  }
+  #form-message {
+    display:none;
+    padding:10px 0;
+    color: $alizarin;
+    font-weight:bold;
+  }
+  #form-result {
+    padding:10px 0;
+    color: $nephritis;
+    font-weight:bold;
   }
   #field-user-container {
     .select2-container {
@@ -56,6 +67,7 @@
     }
   }
   .btn-submit {
+    cursor:pointer;
     border:none;
     float:right;
     background: $carrot;
