@@ -86,11 +86,26 @@ class Backend extends Base {
     /**
      * Add setting link in plugin page
      * @backend
-     * @return  void
+     * @return  array   $links     Combined links with the new added one
      * @var     array   $links     Plugin links
      */
     public function backend_plugin_setting_link($links){
         return array_merge($links, ['<a href="options-general.php?page=' . strtolower(TRIANGLE_NAME). '">Settings</a>']);
+    }
+
+    /**
+     * Save given options to database
+     * @backend - @pageSetting
+     * @return  void
+     */
+    public function saveSettings($params){
+        /** Prepare Data */
+        $options = array();
+        $options['triangle_animation'] = isset($params['field_option_animation']) ? true : false;
+        /** Save settings */
+        foreach($options as $key => $option){
+            Service::update_option($key, $option);
+        }
     }
 
 }

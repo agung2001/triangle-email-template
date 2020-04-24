@@ -23,6 +23,27 @@ class Service {
     }
 
     /**
+     * Retrieves an option value based on an option name.
+     * @return  mixed       Value set for the option
+     * @var     string      $option         Name of option to retrieve. Expected to not be SQL-escaped.
+     * @var     array       $default    	Default value to return if the option does not exist.
+     */
+    public static function get_option($option, $default = false){
+        return get_option($option, $default);
+    }
+
+    /**
+     * Retrieves an option value based on an option name.
+     * @return  bool        False if value was not updated and true if value was updated.
+     * @var     string      $option         Option name. Expected to not be SQL-escaped.
+     * @var     array       $value      	Option value. Must be serializable if non-scalar. Expected to not be SQL-escaped.
+     * @var     array       $autoload    	Whether to load the option when WordPress starts up.
+     */
+    public static function update_option($option, $value, $autoload = null){
+        return update_option($option, $value, $autoload);
+    }
+
+    /**
      * Wordpress enqueue style
      * @var   string    $handle     Name of the script. Should be unique
      * @var   string    $src        Full URL of the script, or path of the script relative to the WordPress root directory

@@ -15,6 +15,7 @@ use Triangle\View;
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\MenuPage;
 use Triangle\Wordpress\SubmenuPage;
+use Triangle\Wordpress\Service;
 
 use Parsedown;
 
@@ -57,12 +58,23 @@ class Page extends Base {
      * @return  void
      */
     public function page_setting(){
+        /** Handle submission */
+        $menuSlug = strtolower(TRIANGLE_NAME);
+        if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle'){
+            $this->loadController('Backend');
+            $this->Backend->saveSettings($_POST);
+        }
+
         /** Set View */
         $view = new View();
         $view->setTemplate('default');
         $view->setOptions(['shortcode' => false]);
+        $view->addData(compact('menuSlug'));
         $view->addData(['title' => 'Triangle Setting']);
         $view->addData(['background' => 'bg-alizarin']);
+        $view->addData(['options' => [
+            'triangle_animation' => Service::get_option('triangle_animation')
+        ]]);
         $view->setSections([
             'Backend.setting.setting' => ['name' => 'Setting', 'active' => true],
             'Backend.setting.about' => ['name' => 'About']
@@ -73,7 +85,7 @@ class Page extends Base {
         $page->setPageTitle(TRIANGLE_NAME . ' Setting');
         $page->setMenuTitle(TRIANGLE_NAME);
         $page->setCapability('manage_options');
-        $page->setMenuSlug(strtolower(TRIANGLE_NAME));
+        $page->setMenuSlug($menuSlug);
         $page->setIconUrl('dashicons-email');
         $page->setView($view);
         $page->setPosition(90);
@@ -85,7 +97,7 @@ class Page extends Base {
         $page->setPageTitle(TRIANGLE_NAME . ' Setting');
         $page->setMenuTitle('Setting');
         $page->setCapability('manage_options');
-        $page->setMenuSlug(strtolower(TRIANGLE_NAME));
+        $page->setMenuSlug($menuSlug);
         $page->setFunction('');
         $page->setView($view);
         $page->build();
@@ -97,9 +109,8 @@ class Page extends Base {
      * @return  void
      */
     public function page_contact(){
-        $menuSlug = strtolower(TRIANGLE_NAME) . '-contact';
-
         /** Handle submission */
+        $menuSlug = strtolower(TRIANGLE_NAME) . '-contact';
         if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle-contact'){
             $this->loadController('EmailTemplate');
             $result = $this->EmailTemplate->send($_POST);
