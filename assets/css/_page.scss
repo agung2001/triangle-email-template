@@ -1,0 +1,92 @@
+/**
+* Page Setting
+*/
+#section-setting {
+  .btn-submit {
+    float:right;
+    background: $alizarin;
+    color:#fff;
+    margin-right:10%;
+  }
+}
+
+/**
+* Page Contact
+*/
+#section-contact {
+  padding: 5px 20px;
+  .field-ajax { display:none; }
+  input, .select2-container {
+    width:90% !important;
+  }
+  .field-info {
+    font-style:italic;
+    color: #808080;
+  }
+  #form-message {
+    display:none;
+    padding:10px 0;
+    font-weight:bold;
+    color: $alizarin;
+  }
+  #form-result {
+    display:none;
+    padding:10px 0;
+    font-weight:bold;
+    &.form-result-false{
+      color: $alizarin;
+    }
+    &.form-result-true{
+      color: $nephritis;
+    }
+  }
+  #field-user-container {
+    .select2-container {
+      margin-top:-7px;
+    }
+    #add-user-to-lists {
+      cursor: pointer;
+      color:#000;
+      text-decoration: none;
+      font-size:20px;
+    }
+  }
+  .badges {
+    display:inline-block;
+    background: $silver;
+    padding:5px 10px;
+    margin:2px;
+    i {
+      cursor: pointer;
+      margin-right: 5px;
+    }
+  }
+  .btn-submit {
+    float:right;
+    background: $carrot;
+    color:#fff;
+    margin-right:10%;
+  }
+}
+
+/**
+* Page Email Template
+* @backend @edit
+*/
+#section-codeeditor {
+  padding: 10px;
+  .container, .element_fields, #template-src-url {
+    display:none;
+  }
+  #template-elements, .select2-container {
+    width:100% !important;
+  }
+  #template-editor {
+    width:100%;
+    margin-top:10px;
+    min-height:800px;
+    textarea {
+      min-height:400px;
+    }
+  }
+}

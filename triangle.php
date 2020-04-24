@@ -1,9 +1,9 @@
 <?php
 /*
 * Plugin Name:       Triangle
-* Plugin URI:        https://yourwebsitename.com
+* Plugin URI:        https://agungsundoro.blogspot.com
 * Description:       Email Template, Newsletter, Campaign
-* Version:           2.0
+* Version:           2.0.0
 * Author:            Agung Sundoro
 * Author URI:        https://agungsundoro.blogspot.com
 * License:           GPL-3.0
@@ -39,12 +39,11 @@ require plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
  * Initiate Plugin
  */
 function Triangle() {
-    $plugins = new Triangle\Includes\Plugins(__FILE__);
-    $plugins->setName('Triangle');
-    $plugins->setVersion(2.0);
-    $plugins->setStage(0);
-    $plugins->load_api();
-    $plugins->load_controller();
-    $plugins->load_model();
+    $config = file_get_contents(dirname(__FILE__) . '/config.json');
+    $config = json_decode($config);
+    $config->path = __FILE__;
+    $plugin = new Triangle\Plugin($config);
+    $plugin->run();
+
 }
 add_action('init', 'Triangle');
