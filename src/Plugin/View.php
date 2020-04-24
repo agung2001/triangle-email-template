@@ -28,9 +28,9 @@ class View {
 
     /**
      * @access   protected
-     * @var      string    $view    	View path callback to load
+     * @var      array    $sections    	Lists of view path callback to load
      */
-    protected $view;
+    protected $sections;
 
     /**
      * @access   protected
@@ -62,15 +62,11 @@ class View {
     }
 
     /**
-     * Overloading Method, for multiple arguments
-     * @method  setData     _ Set view data
-     * @method  build       _ Set build method
+     * View constructor
+     * @return void
      */
-    public function __call($method, $arguments){
-        if($method=='setData'){
-            if (count($arguments) == 1) foreach($arguments[0] as $key => $value) $this->data[$key] = $value;
-            if (count($arguments) == 2) $this->data[$arguments[0]] = $arguments[1];
-        }
+    public function addData($data){
+        foreach($data as $key => $value) $this->data[$key] = $value;
     }
 
     /**
@@ -129,19 +125,19 @@ class View {
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getView()
+    public function getSections()
     {
-        return $this->view;
+        return $this->sections;
     }
 
     /**
-     * @param string $view
+     * @param array $sections
      */
-    public function setView($view)
+    public function setSections($sections)
     {
-        $this->view = $view;
+        $this->sections = $sections;
     }
 
     /**
@@ -158,6 +154,22 @@ class View {
     public function setTemplate($template)
     {
         $this->template = $template;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
     }
 
     /**

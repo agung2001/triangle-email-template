@@ -70,10 +70,12 @@ class EmailTemplate extends Base {
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
             /** Emailtemplate Code Editor */
             $view = new View();
-            $view->setTemplate('blank');
-            $view->setView('EmailTemplate.edit-template');
+            $view->setTemplate('default');
+            $view->setSections(['EmailTemplate.edit-codeeditor' => ['name' => 'Code editor', 'active' => true]]);
             $view->setOptions(['shortcode' => false]);
-            $view->setData(compact('screen'));
+            $view->addData(compact('screen'));
+            $view->addData(['background' => 'bg-wetasphalt']);
+            $view->addData(['nav' => 'EmailTemplate.edit-nav']);
             $view->build();
         }
     }
@@ -98,7 +100,7 @@ class EmailTemplate extends Base {
         /** Send Email */
         $email = new Email();
         $headers = $email->getHeaders();
-        $headers[] = 'From: ' . $params['field_from_name'] . ' <' . $params['field_from_email'] . '> ';
+        $headers[] = 'From: '.$params['field_from_name'].' <'.$params['field_from_email'].'> ';
         $email->setHeaders($headers);
         $email->setTo($users);
         $email->setSubject($params['field_email_subject']);

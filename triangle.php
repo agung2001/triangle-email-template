@@ -1,9 +1,9 @@
 <?php
 /*
 * Plugin Name:       Triangle
-* Plugin URI:        https://yourwebsitename.com
+* Plugin URI:        https://agungsundoro.blogspot.com
 * Description:       Email Template, Newsletter, Campaign
-* Version:           2.0
+* Version:           2.0.0
 * Author:            Agung Sundoro
 * Author URI:        https://agungsundoro.blogspot.com
 * License:           GPL-3.0

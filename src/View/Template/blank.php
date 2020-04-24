@@ -1,1 +1,3 @@
-<?= $this->loadContent($this->view) ?>
+<?php foreach($this->sections as $section): ?>
+    <?= $this->loadContent($section) ?>
+<?php endforeach; ?>

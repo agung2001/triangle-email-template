@@ -4,6 +4,13 @@
      * */
     init();
     function init(){
+        /** Email send status */
+        let html = `<i class="fas fas-sad-tear"></i> Email crashed, please turn off conflicting plugin and try again!`;
+        jQuery('.form-result-false').html(html);
+        jQuery('.form-result-true').html('Email successfully send!');
+        animate('.form-result-false','animated FadeIn').show();
+        animate('.form-result-true','animated FadeIn').show();
+        /** Request data */
         jQuery.ajax({
             method: 'POST',
             url: 'admin-ajax.php',
@@ -20,6 +27,9 @@
                 },
             },
             success: function(data){
+                setTimeout(function(){
+                    animate('.form-result-true','animated FadeOut').hide();
+                },5000)
                 jQuery('#field-users').val('');
                 load_field_templates(data);
                 load_field_users(data);

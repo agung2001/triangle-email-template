@@ -46,7 +46,7 @@ class Frontend extends Base {
         if($atts['request']) {
             $view = new View();
             $view->setTemplate('blank');
-            $view->setView('frontend.welcome');
+            $view->setSections(['frontend.welcome']);
             $view->setOptions(['shortcode' => true]);
             $view->build();
         }
