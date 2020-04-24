@@ -49,7 +49,7 @@ class Backend extends Base {
      */
     public function backend_enequeue($hook_suffix){
         define('TRIANGLE_SCREEN', serialize(Service::getScreen()));
-        $screens = ['toplevel_page_triangle','triangle_page_triangle-contact'];
+        $screens = ['toplevel_page_triangle','triangle_page_triangle-setting'];
         $this->backend_load_plugin_assets();
         $this->backend_load_plugin_libraries($screens);
         $this->backend_load_plugin_scripts();
@@ -80,7 +80,7 @@ class Backend extends Base {
     private function backend_load_plugin_scripts(){
         $screen = unserialize(TRIANGLE_SCREEN);
         if($screen->base=='users') Service::wp_enqueue_script('triangle_user_js', 'backend/user.js');
-        if($screen->base=='triangle_page_triangle-contact') Service::wp_enqueue_script('triangle_contact_js', 'backend/contact.js', '', '', true);
+        if($screen->base=='toplevel_page_triangle') Service::wp_enqueue_script('triangle_contact_js', 'backend/contact.js', '', '', true);
     }
 
     /**
@@ -96,16 +96,30 @@ class Backend extends Base {
     /**
      * Save given options to database
      * @backend - @pageSetting
-     * @return  void
+     * @return  bool
      */
     public function saveSettings($params){
-        /** Prepare Data */
-        $options = array();
-        $options['triangle_animation'] = isset($params['field_option_animation']) ? true : false;
+        $options = $params;
+
+        /** Set Default Values for checkbox */
+        $checkboxes = [ 'triangle_smtp', 'triangle_smtp_auth', 'triangle_smtp_tls', 'triangle_animation'];
+        $checkboxes = array_flip($checkboxes);
+        foreach($checkboxes as &$check) $check = false;
+        $options = array_merge($checkboxes, $options);
+
+        /** Transform field key to triangle */
+        unset($options['field_menu_slug']);
+        foreach($options as $key => $value){
+            unset($options[$key]);
+            $key = str_replace('field_option','triangle',$key);
+            $options[$key] = $value;
+        }
+
         /** Save settings */
         foreach($options as $key => $option){
             Service::update_option($key, $option);
         }
+        return true;
     }
 
 }

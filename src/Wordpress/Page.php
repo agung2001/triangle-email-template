@@ -47,7 +47,7 @@ abstract class Page {
      * @access   protected
      * @var      string    $position    	The position in the menu order this item should appear.
      */
-    protected $position = null;
+    protected $position;
 
     /**
      * @access   protected
@@ -61,6 +61,7 @@ abstract class Page {
      */
     public function __construct()
     {
+        $this->position = null;
         $this->function = [$this, 'loadView'];
     }
 

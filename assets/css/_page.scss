@@ -2,6 +2,19 @@
 * Page Setting
 */
 #section-setting {
+  #form-result {
+    display:none;
+    padding:10px 0;
+    font-weight:bold;
+    &.form-result-false{
+      display: block;
+      color: $alizarin;
+    }
+    &.form-result-true{
+      display: block;
+      color: $nephritis;
+    }
+  }
   .btn-submit {
     float:right;
     background: $alizarin;
@@ -16,9 +29,6 @@
 #section-contact {
   padding: 5px 20px;
   .field-ajax { display:none; }
-  input, .select2-container {
-    width:90% !important;
-  }
   .field-info {
     font-style:italic;
     color: #808080;
