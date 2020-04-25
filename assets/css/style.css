@@ -11,6 +11,12 @@
   padding: 8px 25px;
   border-radius: 5px; }
 
+#form-message {
+  display: none;
+  padding: 10px 0;
+  font-weight: bold;
+  color: #e74c3c; }
+
 .switch {
   position: relative;
   display: inline-block;
@@ -162,6 +168,45 @@ input:checked + .slider:before {
 /**
 * Page Setting
 */
+#section-setting select {
+  width: 90%;
+  max-width: 90%; }
+#section-setting .grid {
+  max-width: 550px;
+  margin: 0 auto;
+  margin: 0; }
+  #section-setting .grid .row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%; }
+  #section-setting .grid .col-1 {
+    flex-basis: 8.3333333333%; }
+  #section-setting .grid .col-2 {
+    flex-basis: 16.6666666667%; }
+  #section-setting .grid .col-3 {
+    flex-basis: 25%; }
+  #section-setting .grid .col-4 {
+    flex-basis: 33.3333333333%; }
+  #section-setting .grid .col-5 {
+    flex-basis: 41.6666666667%; }
+  #section-setting .grid .col-6 {
+    flex-basis: 50%; }
+  #section-setting .grid .col-7 {
+    flex-basis: 58.3333333333%; }
+  #section-setting .grid .col-8 {
+    flex-basis: 66.6666666667%; }
+  #section-setting .grid .col-9 {
+    flex-basis: 75%; }
+  #section-setting .grid .col-10 {
+    flex-basis: 83.3333333333%; }
+  #section-setting .grid .col-11 {
+    flex-basis: 91.6666666667%; }
+  #section-setting .grid .col-12 {
+    flex-basis: 100%; }
+  #section-setting .grid .row {
+    width: 90%; }
+  #section-setting .grid input {
+    width: 99% !important; }
 #section-setting #form-result {
   display: none;
   padding: 10px 0;
@@ -178,6 +223,19 @@ input:checked + .slider:before {
   color: #fff;
   margin-right: 10%; }
 
+#section-docs .row {
+  max-width: 700px;
+  margin-bottom: 50px; }
+  #section-docs .row ul, #section-docs .row li, #section-docs .row a, #section-docs .row p {
+    font-size: 15px; }
+  #section-docs .row h3 {
+    font-size: 1.4em; }
+  #section-docs .row h4 {
+    font-size: 1.2em; }
+#section-docs ul {
+  list-style: circle;
+  margin-left: 15px; }
+
 /**
 * Page Contact
 */
@@ -188,11 +246,6 @@ input:checked + .slider:before {
   #section-contact .field-info {
     font-style: italic;
     color: #808080; }
-  #section-contact #form-message {
-    display: none;
-    padding: 10px 0;
-    font-weight: bold;
-    color: #e74c3c; }
   #section-contact #form-result {
     display: none;
     padding: 10px 0;

@@ -31,7 +31,7 @@ class EmailTemplate extends Model {
         $this->args['has_archive'] = false;
         $this->args['show_in_menu'] = false;
         $this->args['labels'] = ['name' => 'Email Template'];
-        $this->args['supports'] = ['title', 'thumbnail'];
+        $this->args['supports'] = ['title'];
 
         /** @backend - Meta_fields : Based on plugin config templates */
         $templates = $plugin->getConfig()->templates;

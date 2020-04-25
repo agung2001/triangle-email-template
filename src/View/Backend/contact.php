@@ -6,7 +6,7 @@
         <tbody>
             <tr>
                 <th scope="row">
-                    <h3>Email Config</h3>
+                    <h3>Configuration</h3>
                 </th>
             </tr>
 
@@ -48,7 +48,7 @@
 
             <tr>
                 <th scope="row">
-                    <h3>Email Info</h3>
+                    <h3>Information</h3>
                 </th>
             </tr>
 

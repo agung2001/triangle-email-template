@@ -62,25 +62,6 @@
     }
 
     /**
-     * Load page action
-     * */
-    jQuery(document).on("click", "#publishing-action", render);
-    function render(){
-        jQuery.ajax({
-            method: 'POST',
-            url: 'admin-ajax.php',
-            dataType : "json",
-            data: {
-                'action'    : 'triangle-emailtemplate-render',
-                'template_header' : jQuery('#template_header').val()
-            },
-            success: function(data){
-                console.log(data);
-            }
-        });
-    }
-
-    /**
      * Trigger Template Elements
      * */
     jQuery(document).on("change", "#template-elements", trigger_template_elements);

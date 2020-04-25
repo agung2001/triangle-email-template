@@ -17,8 +17,6 @@ use Triangle\Wordpress\MenuPage;
 use Triangle\Wordpress\SubmenuPage;
 use Triangle\Wordpress\Service;
 
-use Parsedown;
-
 class Page extends Base {
 
     /**
@@ -38,17 +36,17 @@ class Page extends Base {
         $action->setCallback('page_contact');
         $this->hooks[] = $action;
 
+        /** @backend - Add template submenu link for template cpt */
+        $action = clone $action;
+        $action->setHook('admin_menu');
+        $action->setCallback('link_email_template');
+        $this->hooks[] = $action;
+
         /** @backend - Add custom admin page under settings */
         $action = new Action();
         $action->setComponent($this);
         $action->setHook('admin_menu');
         $action->setCallback('page_setting');
-        $this->hooks[] = $action;
-
-        /** @backend - Add template submenu link for template cpt */
-        $action = clone $action;
-        $action->setHook('admin_menu');
-        $action->setCallback('link_email_template');
         $this->hooks[] = $action;
     }
 
@@ -60,7 +58,7 @@ class Page extends Base {
     public function page_contact(){
         /** Handle submission */
         $menuSlug = strtolower(TRIANGLE_NAME);
-        if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle-contact'){
+        if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle'){
             $this->loadController('EmailTemplate');
             $result = $this->EmailTemplate->send($_POST);
             $result = ($result) ? 'true' : 'false';
@@ -79,7 +77,7 @@ class Page extends Base {
 
         /** Set Main Page */
         $page = new MenuPage();
-        $page->setPageTitle(TRIANGLE_NAME . ' Setting');
+        $page->setPageTitle(TRIANGLE_NAME);
         $page->setMenuTitle(TRIANGLE_NAME);
         $page->setCapability('manage_options');
         $page->setMenuSlug($menuSlug);
@@ -91,7 +89,6 @@ class Page extends Base {
         /** Set Page */
         $page = new SubmenuPage();
         $page->setParentSlug(strtolower(TRIANGLE_NAME));
-        $page->setPageTitle('Contact User');
         $page->setMenuTitle('Contact');
         $page->setCapability('manage_options');
         $page->setFunction([$this, 'loadContent']);
@@ -108,7 +105,7 @@ class Page extends Base {
     public function page_setting(){
         /** Handle submission */
         $menuSlug = strtolower(TRIANGLE_NAME) . '-setting';
-        if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle'){
+        if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle-setting'){
             $this->loadController('Backend');
             $result = $this->Backend->saveSettings($_POST);
             $result = ($result) ? 'true' : 'false';
@@ -119,13 +116,14 @@ class Page extends Base {
         $view->setTemplate('default');
         $view->setOptions(['shortcode' => false]);
         $view->addData(compact('menuSlug'));
-        $view->addData(['title' => 'Triangle']);
         $view->addData(['background' => 'bg-alizarin']);
         $view->addData(['result' => isset($result) ? $result : '']);
         $view->addData(['options' => [
             /** SMTP */
             'triangle_smtp' => Service::get_option('triangle_smtp'),
+            'triangle_smtp_encryption' => Service::get_option('triangle_smtp_encryption'),
             'triangle_smtp_host' => Service::get_option('triangle_smtp_host'),
+            'triangle_smtp_port' => Service::get_option('triangle_smtp_port'),
             'triangle_smtp_auth' => Service::get_option('triangle_smtp_auth'),
             'triangle_smtp_tls' => Service::get_option('triangle_smtp_tls'),
             'triangle_smtp_username' => Service::get_option('triangle_smtp_username'),
@@ -135,13 +133,13 @@ class Page extends Base {
         ]]);
         $view->setSections([
             'Backend.setting.setting' => ['name' => 'Setting', 'active' => true],
-            'Backend.setting.about' => ['name' => 'About']
+            'Backend.setting.docs' => ['name' => 'Docs'],
         ]);
 
         /** Set Page */
         $page = new SubmenuPage();
         $page->setParentSlug(strtolower(TRIANGLE_NAME));
-        $page->setPageTitle(TRIANGLE_NAME . ' Setting');
+        $page->setPageTitle(TRIANGLE_NAME);
         $page->setMenuTitle('Setting');
         $page->setCapability('manage_options');
         $page->setMenuSlug($menuSlug);

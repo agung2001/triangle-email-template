@@ -5,7 +5,7 @@
     init();
     function init(){
         /** Email send status */
-        let html = `<i class="fas fas-sad-tear"></i> Email crashed, please turn off conflicting plugin and try again!`;
+        let html = `<i class="far fas-sad-tear"></i> Email crashed, please turn off conflicting plugin and try again!`;
         jQuery('.form-result-false').html(html);
         jQuery('.form-result-true').html('Email successfully send!');
         animate('.form-result-false','animated FadeIn').show();
@@ -38,7 +38,7 @@
     }
 
     /**
-     * Validate contact form before submission
+     * Validate form before submission
      * */
     jQuery('#contact-form').submit(function(e){
         let validation = validate_form({

@@ -59,22 +59,22 @@ function validate_form(specs, states){
         return message + extras;
     }
     /** Validation process */
-    states.forEach((state) => {
+    states.some((state) => {
         /** Validate required fields */
-        if(specs.required.indexOf(state.name)>-1 && !state.value) {
+        if (specs.required.indexOf(state.name) > -1 && !state.value) {
             validation.status = false;
-            validation.message = (specs.messages[state.name]) ? specs.messages[state.name] :
+            validation.message = (specs.messages && specs.messages[state.name]) ? specs.messages[state.name] :
                 setupMessage(state.name, ' field is required!');
-            return false;
+            return true;
         }
         /** Validate fields type */
-        else if(specs.types[state.name]){
-            if(specs.types[state.name]=='email' && !isEmail(state.value)){
+        else if (specs.types && specs.types[state.name]) {
+            if (specs.types[state.name] == 'email' && !isEmail(state.value)) {
                 validation.status = false;
                 validation.message = (specs.messages[state.name]) ? specs.messages[state.name] :
                     setupMessage(state.name, ` field is not valid! Please input valid email address!`);
             }
-            if(!validation.status) return false;
+            if (!validation.status) return true;
         }
     });
     return validation;

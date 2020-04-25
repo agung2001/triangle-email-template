@@ -3,7 +3,6 @@
   "description"	    : "Triangle framework plugin for wordpress",
   "license"		    : "GPL-3.0",
   "require"         : {
-    "erusev/parsedown" : "*",
     "tijsverkoyen/css-to-inline-styles": "^2.2"
   },
   "autoload"		: {

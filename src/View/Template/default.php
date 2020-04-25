@@ -1,6 +1,6 @@
 <div class="wrap">
 
-    <?php if(isset($title)): ?>
+    <?php if($this->Page): ?>
         <h1><?= $this->Page->getPageTitle() ?></h1>
     <?php endif; ?>
 
