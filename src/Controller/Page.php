@@ -59,10 +59,9 @@ class Page extends Base {
         /** Handle submission */
         $menuSlug = strtolower(TRIANGLE_NAME);
         if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle'){
-            exit;
-//            $this->loadController('EmailTemplate');
-//            $result = $this->EmailTemplate->send($_POST);
-//            $result = ($result) ? 'true' : 'false';
+            $this->loadController('EmailTemplate');
+            $result = $this->EmailTemplate->send($_POST);
+            $result = ($result) ? 'true' : 'false';
         }
 
         /** Set View */

@@ -94,7 +94,7 @@ class Backend extends Base {
         /** Plugin configuration */
         $view = new View();
         $view->setTemplate('blank');
-        $view->setSections(['Backend.script']);
+        $view->setSections(['Backend.script' => []]);
         $view->setOptions(['shortcode' => false]);
         $view->build();
     }

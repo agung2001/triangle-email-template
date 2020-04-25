@@ -9,23 +9,23 @@
             <?= (isset($nav)) ? $this->loadContent($nav) : '' ?>
 
             <ul class="nav-tab-wrapper">
-                <?php foreach($this->sections as $path => $section): ?>
+                <?php foreach($this->sections as $path => $option): ?>
                     <?php
-                        $slug = str_replace(' ','',strtolower($section['name']));
-                        $active = isset($section['active']) ? 'nav-tab-active' : '';
+                    $slug = str_replace(' ','',strtolower($option['name']));
+                    $active = isset($option['active']) ? 'current' : '';
                     ?>
                     <li class="nav-tab <?= $active ?>" data-tab="section-<?= $slug ?>">
-                        <?= $section['name'] ?>
+                        <?= $option['name'] ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
         </div>
 
         <div class="content">
-            <?php foreach($this->sections as $path => $section): ?>
+            <?php foreach($this->sections as $path => $option): ?>
                 <?php
-                    $slug = str_replace(' ','',strtolower($section['name']));
-                    $active = isset($section['active']) ? 'current' : '';
+                    $slug = str_replace(' ','',strtolower($option['name']));
+                    $active = isset($option['active']) ? 'current' : '';
                 ?>
                 <div id="section-<?= $slug ?>" class="tab-content <?= $active ?>">
                     <?= $this->loadContent($path) ?>

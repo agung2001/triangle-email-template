@@ -28,8 +28,8 @@
             },
             success: function(data){
                 setTimeout(function(){
-                    animate('.form-result-true','animated FadeOut').hide();
-                },5000)
+                    animate('.form-result-true','animated fadeOut').hide();
+                },5000);
                 jQuery('#field-users').val('');
                 load_field_templates(data);
                 load_field_users(data);
@@ -57,14 +57,21 @@
      * Load template field
      * */
     function load_field_templates(data){
-        animate('#field-template-container', 'animated fadeIn').show();
         animate('#loading-field-template', 'animated fadeOut').hide();
         /** Load options */
-        jQuery('#select-field-template').select2({
-            data: data.templates.map((template) => {
-                return {id: template.ID, text: template.post_title};
-            })
-        });
+        if(data.templates.length) {
+            jQuery('#select-field-template').select2({
+                data: data.templates.map((template) => {
+                    return {id: template.ID, text: template.post_title};
+                })
+            });
+        } else {
+            let html = `You don't have any template, please <a href="edit.php?post_type=emailtemplate">create one</a>! <br>`;
+                html += `or if is not in the lists, try to build the template <br>by clicking build button inside the template!`;
+                html = `<b class="text-alizarin">${html}</b>`;
+            jQuery('#field-template-container').html(html);
+        }
+        animate('#field-template-container', 'animated fadeIn').show();
     }
 
     /**

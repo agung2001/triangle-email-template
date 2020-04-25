@@ -2,6 +2,9 @@
      * Init page
      * */
     jQuery('.select2').select2();
+    setTimeout(function(){
+        animate('#form-result','animated fadeOut').hide();
+    },3000);
 
     /**
      * Validate form before submission

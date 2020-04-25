@@ -75,6 +75,9 @@ input:checked + .slider:before {
 .bg-alizarin {
   background: #e74c3c; }
 
+.text-alizarin {
+  color: #e74c3c; }
+
 /**
 * Modify Template - Container
 * @backend
