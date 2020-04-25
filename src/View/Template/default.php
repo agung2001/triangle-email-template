@@ -11,8 +11,8 @@
             <ul class="nav-tab-wrapper">
                 <?php foreach($this->sections as $path => $option): ?>
                     <?php
-                    $slug = str_replace(' ','',strtolower($option['name']));
-                    $active = isset($option['active']) ? 'current' : '';
+                        $slug = str_replace(' ','',strtolower($option['name']));
+                        $active = isset($option['active']) ? 'nav-tab-active' : '';
                     ?>
                     <li class="nav-tab <?= $active ?>" data-tab="section-<?= $slug ?>">
                         <?= $option['name'] ?>

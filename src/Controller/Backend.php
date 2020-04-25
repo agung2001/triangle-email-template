@@ -87,15 +87,16 @@ class Backend extends Base {
      */
     private function backend_load_plugin_assets(){
         /** Styles and Scripts */
-        $style = (TRIANGLE_PRODUCTION) ? 'style.min.css' : 'style.css';
-        Service::wp_enqueue_style('triangle_css', $style );
-        Service::wp_enqueue_script('triangle_js_footer', 'backend/plugin.js', '', '', true);
+        $min = (TRIANGLE_PRODUCTION) ? '.min' : '';
+        Service::wp_enqueue_style('triangle_css', "style$min.css" );
+        Service::wp_enqueue_script('triangle_js_footer', "backend/plugin$min.js", '', '', true);
 
         /** Plugin configuration */
         $view = new View();
         $view->setTemplate('blank');
         $view->setSections(['Backend.script' => []]);
         $view->setOptions(['shortcode' => false]);
+        $view->setData(['screen' => $this->Helper->getScreen()]);
         $view->build();
     }
 
@@ -104,7 +105,7 @@ class Backend extends Base {
      * @return  void
      */
     private function backend_load_plugin_scripts(){
-        $screen = unserialize(TRIANGLE_SCREEN);
+        $screen = $this->Helper->getScreen();
         if($screen->base=='users') Service::wp_enqueue_script('triangle_user_js', 'backend/user.js');
         if($screen->base=='toplevel_page_triangle') Service::wp_enqueue_script('triangle_contact_js', 'backend/contact.js', '', '', true);
         if($screen->base=='triangle_page_triangle-setting') Service::wp_enqueue_script('triangle_contact_js', 'backend/setting.js', '', '', true);

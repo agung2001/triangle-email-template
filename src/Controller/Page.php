@@ -28,7 +28,6 @@ class Page extends Base {
     public function __construct($plugin){
         parent::__construct($plugin);
 
-
         /** @backend - Add contact page to send an email */
         $action = new Action();
         $action->setComponent($this);
@@ -43,8 +42,7 @@ class Page extends Base {
         $this->hooks[] = $action;
 
         /** @backend - Add custom admin page under settings */
-        $action = new Action();
-        $action->setComponent($this);
+        $action = clone $action;
         $action->setHook('admin_menu');
         $action->setCallback('page_setting');
         $this->hooks[] = $action;

@@ -282,9 +282,12 @@ input:checked + .slider:before {
 * Page Email Template
 * @backend @edit
 */
+#template-rendered-url {
+  display: none; }
+
 #section-codeeditor {
   padding: 10px; }
-  #section-codeeditor .container, #section-codeeditor .element_fields, #section-codeeditor #template-src-url {
+  #section-codeeditor .container, #section-codeeditor .element_fields {
     display: none; }
   #section-codeeditor #template-elements, #section-codeeditor .select2-container {
     width: 100% !important; }

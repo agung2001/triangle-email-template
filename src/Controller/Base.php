@@ -22,7 +22,7 @@ class Base extends Controller {
      * @var     array   $types       Lists of post_type where the library are loaded
      */
     protected function backend_load_plugin_libraries($screens = [], $types = []){
-        $screen = unserialize(TRIANGLE_SCREEN);
+        $screen = $this->Helper->getScreen();
         if(in_array($screen->base,$screens) || (isset($screen->post->post_type) && in_array($screen->post->post_type,$types)) ){
             /** Font Awesome */
             Service::wp_enqueue_style('fontawesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css');

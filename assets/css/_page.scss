@@ -104,9 +104,10 @@
 * Page Email Template
 * @backend @edit
 */
+#template-rendered-url { display:none; }
 #section-codeeditor {
   padding: 10px;
-  .container, .element_fields, #template-src-url {
+  .container, .element_fields,  {
     display:none;
   }
   #template-elements, .select2-container {

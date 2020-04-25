@@ -65,7 +65,9 @@ class EmailTemplate extends Model {
      * @var     bool    $update     Whether this is an existing post being updated or not.
      */
     public function save_emailtemplate($post_id, $post, $update){
-        if ($post->post_type=='emailtemplate'){
+        $pagenow = $this->Helper->getScreen()->pagenow;
+        if (!empty($_POST) && $post->post_type=='emailtemplate' && in_array($pagenow, ['post.php', 'post-new.php'])){
+            if($post->post_status=='trash') return;
             $templates = $this->Plugin->getConfig()->templates;
             $templates = $this->Helper->getTemplatesFromConfig($templates);
             /** Save meta field */

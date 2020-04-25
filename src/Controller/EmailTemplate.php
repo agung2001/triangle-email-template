@@ -44,6 +44,23 @@ class EmailTemplate extends Base {
         $action->setCallback('edit_emailtemplate');
         $action->setAcceptedArgs(0);
         $this->hooks[] = $action;
+
+//        $action = new Action();
+//        $action->setComponent($this);
+//        $action->setHook('save_post');
+//        $action->setCallback('save_emailtemplate');
+//        $action->setAcceptedArgs(3);
+//        $this->hooks[] = $action;
+    }
+
+    public function save_emailtemplate(){
+        if(!empty($_POST)){
+
+            global $post;
+            echo '<pre>';
+            var_dump($post);
+            exit;
+        }
     }
 
     /**

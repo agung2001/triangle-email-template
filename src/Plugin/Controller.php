@@ -12,6 +12,8 @@ namespace Triangle\Controller;
  */
 
 use Triangle\Helper;
+use Triangle\Wordpress\Action;
+use Triangle\Wordpress\Service;
 
 class Controller {
 

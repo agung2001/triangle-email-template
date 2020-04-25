@@ -93,9 +93,10 @@ class Service {
      * Wordpress get screen
      */
     public static function getScreen(){
-        global $post;
+        global $post, $pagenow;
         $screen = get_current_screen();
         $screen->post = $post;
+        $screen->pagenow = $pagenow;
         return $screen;
     }
 

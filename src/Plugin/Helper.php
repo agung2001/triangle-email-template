@@ -126,4 +126,11 @@ class Helper {
         return $clean;
     }
 
+    /**
+     * Wordpress get screen
+     */
+    public function getScreen(){
+        return Service::getScreen();
+    }
+
 }

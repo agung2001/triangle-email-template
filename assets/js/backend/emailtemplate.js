@@ -43,11 +43,11 @@
                 animate('.loading-page', 'animated fadeOut').hide();
                 animate('.container', 'animated fadeIn').show();
                 jQuery('#template-elements').select2({data: data.templates});
-                jQuery('#publishing-action').append(`<input name="save" type="submit" class="button button-primary button-large" value="Build">`);
                 /** Load Page Data */
                 if(data.rendered) {
-                    jQuery('#template-src-url').attr('href', data.rendered);
-                    animate('#template-src-url', 'animated fadeIn').show();
+                    console.log(data.rendered);
+                    jQuery('#template-rendered-url').attr('href', data.rendered);
+                    animate('#template-rendered-url', 'animated fadeIn').show();
                 }
                 data.templates.map((template) => {
                     template.children.map((children) => {

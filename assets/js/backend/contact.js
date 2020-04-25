@@ -67,7 +67,7 @@
             });
         } else {
             let html = `You don't have any template, please <a href="edit.php?post_type=emailtemplate">create one</a>! <br>`;
-                html += `or if is not in the lists, try to build the template <br>by clicking build button inside the template!`;
+                html += `or if is not in the lists, try to rebuild the template <br>by updating it inside the template!`;
                 html = `<b class="text-alizarin">${html}</b>`;
             jQuery('#field-template-container').html(html);
         }
