@@ -7,9 +7,7 @@
     {
       "text": "Element",
       "children": [
-        {"id": "header", "text": "Header", "mode" : "ace/mode/html"},
-        {"id": "content", "text": "Content", "mode" : "ace/mode/html"},
-        {"id": "footer", "text": "Footer", "mode" : "ace/mode/html"}
+        {"id": "html", "text": "Html", "mode" : "ace/mode/html"}
       ]
     },
     {

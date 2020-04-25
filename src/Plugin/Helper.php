@@ -96,7 +96,8 @@ class Helper {
         $dir = $path['upload_dir']['basedir'] . '/EmailTemplate/' . $slug;
         if(is_dir($dir)){
             /** Get Contents */
-            ob_start(); echo file_get_contents($dir . '/' . $slug . '.html');
+            ob_start();
+                echo file_get_contents($dir . '/' . $slug . '.html');
             $html = Service::do_shortcode(ob_get_clean());
             $css = file_get_contents($dir . '/' . $slug . '.css');
             /** Standarize */

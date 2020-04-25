@@ -19,7 +19,7 @@ class Service {
      * @var     bool        $ignore_html    When true, shortcodes inside HTML elements will be skipped.
      */
     public static function do_shortcode($content, $ignore_html = false){
-        do_shortcode($content, $ignore_html);
+        return do_shortcode($content, $ignore_html);
     }
 
     /**

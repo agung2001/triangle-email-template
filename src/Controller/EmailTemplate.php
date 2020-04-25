@@ -70,7 +70,7 @@ class EmailTemplate extends Base {
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
             /** Emailtemplate Code Editor */
             $view = new View();
-            $view->setTemplate('default');
+            $view->setTemplate('box');
             $view->setSections(['EmailTemplate.edit-codeeditor' => ['name' => 'Code editor', 'active' => true]]);
             $view->setOptions(['shortcode' => false]);
             $view->addData(compact('screen'));
