@@ -171,6 +171,8 @@ input:checked + .slider:before {
 /**
 * Page Setting
 */
+#section-setting .clear {
+  margin: 50px 0; }
 #section-setting select {
   width: 90%;
   max-width: 90%; }

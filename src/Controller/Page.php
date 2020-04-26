@@ -117,6 +117,13 @@ class Page extends Base {
         $view->addData(['background' => 'bg-alizarin']);
         $view->addData(['result' => isset($result) ? $result : '']);
         $view->addData(['options' => [
+            /** Animation */
+            'triangle_animation' => Service::get_option('triangle_animation'),
+            'triangle_animation_tab' => Service::get_option('triangle_animation_tab'),
+            'triangle_animation_content' => Service::get_option('triangle_animation_content'),
+            /** Builder */
+            'triangle_builder_absolute' => Service::get_option('triangle_builder_absolute'),
+            'triangle_builder_inliner' => Service::get_option('triangle_builder_inliner'),
             /** SMTP */
             'triangle_smtp' => Service::get_option('triangle_smtp'),
             'triangle_smtp_encryption' => Service::get_option('triangle_smtp_encryption'),
@@ -126,8 +133,6 @@ class Page extends Base {
             'triangle_smtp_tls' => Service::get_option('triangle_smtp_tls'),
             'triangle_smtp_username' => Service::get_option('triangle_smtp_username'),
             'triangle_smtp_password' => Service::get_option('triangle_smtp_password'),
-            /** Animation */
-            'triangle_animation' => Service::get_option('triangle_animation'),
         ]]);
         $view->setSections([
             'Backend.setting.setting' => ['name' => 'Setting', 'active' => true],

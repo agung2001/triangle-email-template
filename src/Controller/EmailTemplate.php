@@ -11,6 +11,7 @@ namespace Triangle\Controller;
  * @subpackage Triangle/Controller
  */
 
+use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 use Triangle\View;
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Email;
@@ -44,23 +45,6 @@ class EmailTemplate extends Base {
         $action->setCallback('edit_emailtemplate');
         $action->setAcceptedArgs(0);
         $this->hooks[] = $action;
-
-//        $action = new Action();
-//        $action->setComponent($this);
-//        $action->setHook('save_post');
-//        $action->setCallback('save_emailtemplate');
-//        $action->setAcceptedArgs(3);
-//        $this->hooks[] = $action;
-    }
-
-    public function save_emailtemplate(){
-        if(!empty($_POST)){
-
-            global $post;
-            echo '<pre>';
-            var_dump($post);
-            exit;
-        }
     }
 
     /**
@@ -123,6 +107,79 @@ class EmailTemplate extends Base {
         $email->setSubject($params['field_email_subject']);
         $email->setMessage($template);
         return $email->send();
+    }
+
+    /**
+     * Build Email Template, write html and css file into /EmailTemplate dir
+     * @var     string  $slug   EmailTemplate slug = post name slug
+     * @var     string  $html   Html content template
+     * @var     string  $css    CSS content template
+     * @return  void
+     */
+    public function buildEmailTemplate($slug, $html, $css) {
+        $path = unserialize(TRIANGLE_PATH);
+        $dir = $path['upload_dir']['basedir'] . '/EmailTemplate/' . $slug;
+        if(!is_dir($dir)) mkdir($dir, 0755, true);
+        if($html) file_put_contents($dir . '/' . $slug . '.html', stripslashes($html));
+        if($css) file_put_contents($dir . '/' . $slug . '.css', stripslashes($css));
+        if(file_exists($dir . '/standard.html')) unlink($dir . '/standard.html');
+    }
+
+    /**
+     * Standardize Email Template - InlineCSS
+     * @var     string  $slug   EmailTemplate slug = post name slug
+     */
+    public function standardizeEmailTemplate($slug){
+        $path = unserialize(TRIANGLE_PATH);
+        $dir = $path['upload_dir']['basedir'] . '/EmailTemplate/' . $slug;
+        if(is_dir($dir)){
+            /** Get Contents */
+            ob_start();
+            echo file_get_contents($dir . '/' . $slug . '.html');
+            $html = Service::do_shortcode(ob_get_clean());
+            $html = (Service::get_option('triangle_builder_absolute')!='none') ? $this->builderAbsolutePath($slug, $html) : $html;
+            if(Service::get_option('triangle_builder_inliner')!='none') {
+                $css = file_get_contents($dir . '/' . $slug . '.css');
+                if ($css) $html = $this->builderinlineCSS(new CssToInlineStyles(), $html, $css, 10);
+                if ($html) file_put_contents($dir . '/standard.html', $html);
+            } else {
+                file_put_contents($dir . '/standard.html', $html);
+            }
+        } else return false;
+    }
+
+    /**
+     * Inline css file into html body
+     * @var     string  $html       HTML Template Content
+     * @var     string  $css        Style Template Content
+     * @var     int     $counter    Counter repeater
+     */
+    private function builderAbsolutePath($slug, $html){
+        $path = unserialize(TRIANGLE_PATH)['upload_dir'];
+        $doc = new \DOMDocument();
+        @$doc->loadHTML($html);
+        $tags = $doc->getElementsByTagName('img');
+        foreach ($tags as $tag) {
+            $tag->setAttribute('src', $path['baseurl'] . "/EmailTemplate/$slug/" . $tag->getAttribute('src'));
+        }
+        return $doc->saveHTML();
+    }
+
+    /**
+     * Inline css file into html body
+     * @var     string  $html       HTML Template Content
+     * @var     string  $css        Style Template Content
+     * @var     int     $counter    Counter repeater
+     */
+    private function builderinlineCSS($tool, $html, $css, $counter){
+        ob_start();
+            echo $tool->convert( $html, $css );
+        $clean = ob_get_clean();
+        if(strlen($clean)==1 && $counter>0) {
+            sleep(2); $counter--;
+            $clean = $this->inspectorinlineCSS($tool, $html, $css, $counter);
+        }
+        return $clean;
     }
 
 }

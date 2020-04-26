@@ -2,8 +2,8 @@
 /*
 * Plugin Name:       Triangle
 * Plugin URI:        https://agungsundoro.blogspot.com
-* Description:       Email Template, Newsletter, Campaign
-* Version:           2.0.0
+* Description:       Create custom professional looking email template for invoices, newsletter and notifications.
+* Version:           1.0.1
 * Author:            Agung Sundoro
 * Author URI:        https://agungsundoro.blogspot.com
 * License:           GPL-3.0

@@ -6,6 +6,107 @@
         <tbody>
             <tr>
                 <th scope="row">
+                    <h3>Animation</h3>
+                </th>
+            </tr>
+
+            <!-- Animation -->
+            <tr>
+                <th scope="row"><label for="field_option_animation">Enable Option</label></th>
+                <td>
+                    <div id="field-template-container" class="field-container">
+                        <label class="switch">
+                            <input type="checkbox" name="field_option_animation" <?= ($options['triangle_animation']) ? 'checked' : '' ?>>
+                            <span class="slider round"></span>
+                        </label>
+                        <p class="field-info">
+                            You can turn on/off the animation by switching the toggle button. To see animation reference you can go to <code><a href="https://daneden.github.io/animate.css/" target="_blank">Animate.css</a></code>.
+                        </p>
+                    </div>
+                </td>
+            </tr>
+            <!-- Section Tab -->
+            <tr>
+                <th scope="row"><label for="field_option_animation_tab">Section Tab</label></th>
+                <td>
+                    <div class="field-container">
+                        <select name="field_option_animation_tab" id="field_option_animation_tab" class="select2">
+                            <?= $this->loadContent('Element.option_animations', [
+                                'value' => $options['triangle_animation_tab']
+                            ]) ?>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <!-- Section Tab -->
+            <tr>
+                <th scope="row"><label for="field_option_animation_content">Section Content</label></th>
+                <td>
+                    <div class="field-container">
+                        <select name="field_option_animation_content" id="field_option_animation_content" class="select2">
+                            <?= $this->loadContent('Element.option_animations', [
+                                'value' => $options['triangle_animation_content']
+                            ]) ?>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row"></th>
+            </tr>
+
+            <tr>
+                <th scope="row">
+                    <h3>Builder</h3>
+                </th>
+            </tr>
+
+            <!-- Absolute Path -->
+            <tr>
+                <th scope="row"><label for="field_option_animation">Absolute Path</label></th>
+                <td>
+                    <div id="field-template-container" class="field-container">
+                        <label class="switch">
+                            <input type="checkbox" name="field_option_animation" <?= ($options['triangle_builder_absolute']) ? 'checked' : '' ?>>
+                            <span class="slider round"></span>
+                        </label>
+                        <p class="field-info">
+                            Auto convert your relative path to absolute path within your html script.
+                        </p>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- Inliner -->
+            <tr>
+                <th scope="row"><label for="field_option_builder_inliner">CSSInliner</label></th>
+                <td>
+                    <div id="field-template-container" class="field-container">
+                        <?php
+                            $value = $options['triangle_builder_inliner'];
+                            $opts = [ 'none' => 'None', 'tijsverkoyen' => 'Tijsverkoyen'];
+                        ?>
+                        <select name="field_option_builder_inliner" id="field_option_builder_inliner" class="select2">
+                            <?php foreach($opts as $key => $opt): ?>
+                                <option value="<?= $key ?>" <?= ($key==$value) ? 'selected' : '' ?>>
+                                    <?= $opt ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <p class="field-info">
+                            If you disable this option, <code>style</code> option within the editor will be hidden and you will need to write the css style into the html script. For more info you can go to <code>Docs</code> tab to see the reference.
+                        </p>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row"></th>
+            </tr>
+
+            <tr>
+                <th scope="row">
                     <h3>SMTP</h3>
                 </th>
             </tr>
@@ -26,16 +127,15 @@
                     </div>
                 </td>
             </tr>
-            <!--Encryption-->
+            <!--Auth-->
             <tr>
-                <th scope="row"><label for="field_option_smtp_encryption">Encryption</label></th>
+                <th scope="row"><label for="field_option_smtp_auth">Auth</label></th>
                 <td>
                     <div class="field-container">
-                        <select name="field_option_smtp_encryption" id="field_option_smtp_encryption" class="select2">
-                            <option value="none">None</option>
-                            <option value="tls">TLS</option>
-                            <option value="ssl">SSL</option>
-                        </select>
+                        <label class="switch">
+                            <input type="checkbox" name="field_option_smtp_auth" <?= ($options['triangle_smtp_auth']) ? 'checked' : '' ?>>
+                            <span class="slider round"></span>
+                        </label>
                     </div>
                 </td>
             </tr>
@@ -73,15 +173,22 @@
                     </div>
                 </td>
             </tr>
-            <!--Auth-->
+            <!--Encryption-->
             <tr>
-                <th scope="row"><label for="field_option_smtp_auth">Auth</label></th>
+                <th scope="row"><label for="field_option_smtp_encryption">Encryption</label></th>
                 <td>
                     <div class="field-container">
-                        <label class="switch">
-                            <input type="checkbox" name="field_option_smtp_auth" <?= ($options['triangle_smtp_auth']) ? 'checked' : '' ?>>
-                            <span class="slider round"></span>
-                        </label>
+                        <?php
+                        $value = $options['triangle_smtp_encryption'];
+                        $opts = [ 'none' => 'None', 'tls' => 'TLS', 'ssl' => 'SSL'];
+                        ?>
+                        <select name="field_option_smtp_encryption" id="field_option_smtp_encryption" class="select2">
+                            <?php foreach($opts as $key => $opt): ?>
+                                <option value="<?= $key ?>" <?= ($key==$value) ? 'selected' : '' ?>>
+                                    <?= $opt ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                 </td>
             </tr>
@@ -95,26 +202,6 @@
                             <span class="slider round"></span>
                         </label>
                         <p class="field-info"> By default TLS encryption is automatically used if the server supports it, which is recommended. In some cases, due to server misconfigurations, this can cause issues and may need to be disabled.  </p>
-                    </div>
-                </td>
-            </tr>
-
-            <tr>
-                <th scope="row">
-                    <h3>User Interface (UI)</h3>
-                </th>
-            </tr>
-
-            <!-- Animation -->
-            <tr>
-                <th scope="row"><label for="field_option_animation">Animation</label></th>
-                <td>
-                    <div id="field-template-container" class="field-container">
-                        <label class="switch">
-                            <input type="checkbox" name="field_option_animation" <?= ($options['triangle_animation']) ? 'checked' : '' ?>>
-                            <span class="slider round"></span>
-                        </label>
-                        <p class="field-info"> Turn off/on </p>
                     </div>
                 </td>
             </tr>

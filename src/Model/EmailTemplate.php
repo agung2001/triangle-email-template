@@ -13,6 +13,7 @@ namespace Triangle\Model;
 
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Meta;
+use Triangle\Wordpress\Service;
 
 class EmailTemplate extends Model {
 
@@ -77,14 +78,16 @@ class EmailTemplate extends Model {
             foreach($metas as $meta){
                 $name = $meta->getKey();
                 $configName = str_replace('template_','',$name);
+                if(Service::get_option('triangle_builder_inliner')=='none' && $templates[$configName]->mode=='ace/mode/css') continue; /** Builder options */
                 if($templates[$configName]->mode=='ace/mode/html') $html .= $_POST[$name];
                 elseif($templates[$configName]->mode=='ace/mode/css') $css .= $_POST[$name];
                 $meta->setValue($_POST[$name]);
                 $results[] = $meta->update_post_meta();
             }
             /** Build template */
-            $this->Helper->buildEmailTemplate($post->post_name, $html, $css);
-            $this->Helper->standardizeEmailTemplate($post->post_name);
+            $this->loadController('EmailTemplate');
+            $this->EmailTemplate->buildEmailTemplate($post->post_name, $html, $css);
+            $this->EmailTemplate->standardizeEmailTemplate($post->post_name);
         }
     }
 

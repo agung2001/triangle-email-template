@@ -86,18 +86,21 @@ class Backend extends Base {
      * @return  void
      */
     private function backend_load_plugin_assets(){
-        /** Styles and Scripts */
-        $min = (TRIANGLE_PRODUCTION) ? '.min' : '';
-        Service::wp_enqueue_style('triangle_css', "style$min.css" );
-        Service::wp_enqueue_script('triangle_js_footer', "backend/plugin$min.js", '', '', true);
-
         /** Plugin configuration */
         $view = new View();
         $view->setTemplate('blank');
         $view->setSections(['Backend.script' => []]);
         $view->setOptions(['shortcode' => false]);
-        $view->setData(['screen' => $this->Helper->getScreen()]);
+        $view->addData(['screen' => $this->Helper->getScreen()]);
+        $view->addData(['options' => [
+            'animation_tab' => Service::get_option('triangle_animation_tab'),
+            'animation_content' => Service::get_option('triangle_animation_content'),
+        ]]);
         $view->build();
+        /** Styles and Scripts */
+        $min = (TRIANGLE_PRODUCTION) ? '.min' : '';
+        Service::wp_enqueue_style('triangle_css', "style$min.css" );
+        Service::wp_enqueue_script('triangle_js_footer', "backend/plugin$min.js", '', '', true);
     }
 
     /**

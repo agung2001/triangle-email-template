@@ -41,11 +41,11 @@
             success: function(data){
                 /** Load Page Elements */
                 animate('.loading-page', 'animated fadeOut').hide();
-                animate('.container', 'animated fadeIn').show();
+                animate('.container', `animated ${window.trianglePlugin.options.animation_content}`).show();
+                if(data.options.inliner=='none') data.templates.splice(1,1); /** Builder Options */
                 jQuery('#template-elements').select2({data: data.templates});
                 /** Load Page Data */
                 if(data.rendered) {
-                    console.log(data.rendered);
                     jQuery('#template-rendered-url').attr('href', data.rendered);
                     animate('#template-rendered-url', 'animated fadeIn').show();
                 }

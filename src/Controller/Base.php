@@ -36,6 +36,7 @@ class Base extends Controller {
             Service::wp_enqueue_script('acejs', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.11/ace.min.js','','',true);
             Service::wp_enqueue_script('acejs_mode_html', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.11/mode-html.min.js','','',true);
             Service::wp_enqueue_script('acejs_emmet', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.11/ext-emmet.min.js','','',true);
+            Service::wp_enqueue_script('acejs_search', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.11/ext-searchbox.min.js','','',true);
         }
     }
 

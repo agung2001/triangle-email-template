@@ -3,15 +3,16 @@
  * @about-page
  * */
 jQuery('ul.nav-tab-wrapper li').on('click', function(){
+    console.log(window.trianglePlugin);
     /** Animate */
-    let animation = 'animated heartBeat';
+    let animation = `animated ${window.trianglePlugin.options.animation_tab}`;
     animate(this, animation);
     /** Show Content */
     var tab_id = jQuery(this).attr('data-tab');
     jQuery('ul.nav-tab-wrapper li').removeClass('nav-tab-active');
     jQuery('.tab-content').removeClass('current');
     jQuery(this).addClass('nav-tab-active');
-    jQuery("#"+tab_id).addClass(`current animated fadeIn`);
+    jQuery("#"+tab_id).addClass(`current animated ${window.trianglePlugin.options.animation_content}`);
 });
 
 /**
