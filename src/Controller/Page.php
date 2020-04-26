@@ -123,6 +123,8 @@ class Page extends Base {
             'triangle_animation_content' => Service::get_option('triangle_animation_content'),
             /** Builder */
             'triangle_builder_absolute' => Service::get_option('triangle_builder_absolute'),
+            'triangle_builder_absolute_in_editor' => Service::get_option('triangle_builder_absolute_in_editor'),
+            'triangle_builder_absolute_when_build' => Service::get_option('triangle_builder_absolute_when_build'),
             'triangle_builder_inliner' => Service::get_option('triangle_builder_inliner'),
             /** SMTP */
             'triangle_smtp' => Service::get_option('triangle_smtp'),

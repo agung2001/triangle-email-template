@@ -30,6 +30,13 @@
       color: $nephritis;
     }
   }
+  #field_option_absolute_location  {
+    display:inline;
+    li {
+      margin-left:20px;
+      display:inline;
+    }
+  }
   .btn-submit {
     float:right;
     background: $alizarin;
@@ -110,9 +117,10 @@
 #template-rendered-url { display:none; }
 #section-codeeditor {
   padding: 10px;
-  .container, .element_fields,  {
+  .container, .element_fields {
     display:none;
   }
+  #juice-builder-elements { display:none !important; }
   #template-elements, .select2-container {
     width:100% !important;
   }
@@ -123,5 +131,11 @@
     textarea {
       min-height:400px;
     }
+  }
+}
+#section-preview {
+  #juice_preview {
+    width:100% !important;
+    min-height:750px !important;
   }
 }

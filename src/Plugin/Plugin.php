@@ -70,6 +70,12 @@ class Plugin {
     protected $config;
 
     /**
+     * @access   protected
+     * @var      object    $helper  Helper object for controller
+     */
+    protected $Helper;
+
+    /**
      * Define the core functionality of the plugin.
      *
      * @param   array   $path     Wordpress plugin path
@@ -84,6 +90,7 @@ class Plugin {
         $this->models = [];
         $this->path = Service::getPath($config->path);
         $this->config = $config;
+        $this->Helper = new Helper();
     }
 
     /**
@@ -94,7 +101,7 @@ class Plugin {
      * @return  void
      */
     public function run(){
-        Helper::defineConst($this);
+        $this->Helper->defineConst($this);
         $this->loadModels();
         $this->loadHooks('Controller');
         $this->loadHooks('Api');
@@ -105,7 +112,7 @@ class Plugin {
      * @return  void
      */
     public function loadModels(){
-        $models = Helper::getDirFiles($this->path['plugin_path'] . 'src/Model');
+        $models = $this->Helper->getDirFiles($this->path['plugin_path'] . 'src/Model');
         $allow = ['.', '..','.DS_Store','index.php'];
         foreach($models as $model){
             if(in_array(basename($model), $allow)) continue;
@@ -128,7 +135,7 @@ class Plugin {
      * @pattern bridge
      */
     private function loadHooks($dir){
-        $controllers = Helper::getDirFiles($this->path['plugin_path'] . 'src/' . $dir);
+        $controllers = $this->Helper->getDirFiles($this->path['plugin_path'] . 'src/' . $dir);
         $allow = ['.', '..','.DS_Store','index.php'];
         foreach($controllers as $controller){
             if(in_array(basename($controller), $allow)) continue;

@@ -133,7 +133,15 @@ class Backend extends Base {
         $options = $params;
 
         /** Set Default Values for checkbox */
-        $checkboxes = [ 'triangle_smtp', 'triangle_smtp_auth', 'triangle_smtp_tls', 'triangle_animation'];
+        $checkboxes = [
+            'triangle_smtp',
+            'triangle_smtp_auth',
+            'triangle_smtp_tls',
+            'triangle_animation',
+            'triangle_builder_absolute',
+            'triangle_builder_absolute_in_editor',
+            'triangle_builder_absolute_when_build',
+        ];
         $checkboxes = array_flip($checkboxes);
         foreach($checkboxes as &$check) $check = false;
         $options = array_merge($checkboxes, $options);

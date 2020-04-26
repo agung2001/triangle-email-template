@@ -38,7 +38,7 @@
                     </div>
                 </td>
             </tr>
-            <!-- Section Tab -->
+            <!-- Section Content -->
             <tr>
                 <th scope="row"><label for="field_option_animation_content">Section Content</label></th>
                 <td>
@@ -62,22 +62,6 @@
                 </th>
             </tr>
 
-            <!-- Absolute Path -->
-            <tr>
-                <th scope="row"><label for="field_option_animation">Absolute Path</label></th>
-                <td>
-                    <div id="field-template-container" class="field-container">
-                        <label class="switch">
-                            <input type="checkbox" name="field_option_animation" <?= ($options['triangle_builder_absolute']) ? 'checked' : '' ?>>
-                            <span class="slider round"></span>
-                        </label>
-                        <p class="field-info">
-                            Auto convert your relative path to absolute path within your html script.
-                        </p>
-                    </div>
-                </td>
-            </tr>
-
             <!-- Inliner -->
             <tr>
                 <th scope="row"><label for="field_option_builder_inliner">CSSInliner</label></th>
@@ -85,7 +69,7 @@
                     <div id="field-template-container" class="field-container">
                         <?php
                             $value = $options['triangle_builder_inliner'];
-                            $opts = [ 'none' => 'None', 'tijsverkoyen' => 'Tijsverkoyen'];
+                            $opts = [ 'none' => 'None', 'juice' => 'Automattic/Juice','tijsverkoyen' => 'Tijsverkoyen/CssToInlineStyles'];
                         ?>
                         <select name="field_option_builder_inliner" id="field_option_builder_inliner" class="select2">
                             <?php foreach($opts as $key => $opt): ?>

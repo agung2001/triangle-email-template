@@ -20,7 +20,7 @@ class Helper {
      * @param   object   $plugin     Wordpress plugin object
      * @return void
      */
-    public static function defineConst($plugin){
+    public function defineConst($plugin){
         define('TRIANGLE_NAME', $plugin->getName());
         define('TRIANGLE_VERSION', $plugin->getVersion());
         define('TRIANGLE_PRODUCTION', $plugin->isProduction());
@@ -32,7 +32,7 @@ class Helper {
      * @var     string  $dir   plugin hooks directory (Api, Controller)
      * @pattern bridge
      */
-    public static function getDirFiles($dir, &$results = array()) {
+    public function getDirFiles($dir, &$results = array()) {
         $files = scandir($dir);
         foreach ($files as $key => $value) {
             $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
@@ -43,6 +43,28 @@ class Helper {
             }
         }
         return $results;
+    }
+
+    /**
+     * Delete directories and files
+     * @return void
+     */
+    public function deleteDir($dirPath) {
+        if (! is_dir($dirPath)) {
+            throw new InvalidArgumentException("$dirPath must be a directory");
+        }
+        if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+            $dirPath .= '/';
+        }
+        $files = glob($dirPath . '*', GLOB_MARK);
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                self::deleteDir($file);
+            } else {
+                unlink($file);
+            }
+        }
+        rmdir($dirPath);
     }
 
     /**
@@ -72,7 +94,8 @@ class Helper {
     }
 
     /**
-     * Wordpress get screen
+     * Get screen generated within Service.php class
+     * @return array Lists of wordpress path, screen, posts, and pagenow
      */
     public function getScreen(){
         return Service::getScreen();

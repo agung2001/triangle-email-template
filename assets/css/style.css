@@ -1,6 +1,6 @@
 .field-container {
   max-width: 550px !important; }
-  .field-container input, .field-container .select2-container {
+  .field-container input[type=text], .field-container .select2-container {
     width: 90% !important; }
 
 .btn-submit {
@@ -222,6 +222,11 @@ input:checked + .slider:before {
   #section-setting #form-result.form-result-true {
     display: block;
     color: #27ae60; }
+#section-setting #field_option_absolute_location {
+  display: inline; }
+  #section-setting #field_option_absolute_location li {
+    margin-left: 20px;
+    display: inline; }
 #section-setting .btn-submit {
   float: right;
   background: #e74c3c;
@@ -291,6 +296,8 @@ input:checked + .slider:before {
   padding: 10px; }
   #section-codeeditor .container, #section-codeeditor .element_fields {
     display: none; }
+  #section-codeeditor #juice-builder-elements {
+    display: none !important; }
   #section-codeeditor #template-elements, #section-codeeditor .select2-container {
     width: 100% !important; }
   #section-codeeditor #template-editor {
@@ -299,5 +306,9 @@ input:checked + .slider:before {
     min-height: 800px; }
     #section-codeeditor #template-editor textarea {
       min-height: 400px; }
+
+#section-preview #juice_preview {
+  width: 100% !important;
+  min-height: 750px !important; }
 
 /*# sourceMappingURL=style.css.map */

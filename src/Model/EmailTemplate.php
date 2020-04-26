@@ -14,6 +14,7 @@ namespace Triangle\Model;
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Meta;
 use Triangle\Wordpress\Service;
+use Triangle\Wordpress\Type;
 
 class EmailTemplate extends Model {
 
@@ -53,6 +54,13 @@ class EmailTemplate extends Model {
         $action->setCallback('save_emailtemplate');
         $action->setAcceptedArgs(3);
         $this->hooks[] = $action;
+
+        /** @backend - Hooks - Emailtemplate save post hook */
+        $action = clone $action;
+        $action->setHook('before_delete_post');
+        $action->setCallback('delete_emailtemplate');
+        $action->setAcceptedArgs(1);
+        $this->hooks[] = $action;
     }
 
     /**
@@ -68,26 +76,45 @@ class EmailTemplate extends Model {
     public function save_emailtemplate($post_id, $post, $update){
         $pagenow = $this->Helper->getScreen()->pagenow;
         if (!empty($_POST) && $post->post_type=='emailtemplate' && in_array($pagenow, ['post.php', 'post-new.php'])){
-            if($post->post_status=='trash') return;
+            /** Load Options */
+            $this->loadController('EmailTemplate');
+            $this->ID = $post_id;
             $templates = $this->Plugin->getConfig()->templates;
             $templates = $this->Helper->getTemplatesFromConfig($templates);
+            $options = [
+                'builder_inliner' => Service::get_option('triangle_builder_inliner'),
+            ];
             /** Save meta field */
-            $this->ID = $post_id;
-            $metas = $this->metas;
             $html = ''; $css = '';
-            foreach($metas as $meta){
-                $name = $meta->getKey();
-                $configName = str_replace('template_','',$name);
-                if(Service::get_option('triangle_builder_inliner')=='none' && $templates[$configName]->mode=='ace/mode/css') continue; /** Builder options */
-                if($templates[$configName]->mode=='ace/mode/html') $html .= $_POST[$name];
-                elseif($templates[$configName]->mode=='ace/mode/css') $css .= $_POST[$name];
-                $meta->setValue($_POST[$name]);
+            foreach($this->metas as $meta){
+                $key = $meta->getKey();
+                $name = str_replace('template_','',$meta->getKey());
+                if(!isset($_POST[$key])) continue;
+                if($templates[$name]->mode=='ace/mode/html') $html .= $_POST[$key];
+                elseif($templates[$name]->mode=='ace/mode/css') $css .= $_POST[$key];
+                $meta->setValue($_POST[$key]);
                 $results[] = $meta->update_post_meta();
             }
             /** Build template */
-            $this->loadController('EmailTemplate');
+            if($options['builder_inliner']=='juice') $html = html_entity_decode($_POST['juice_output']);
             $this->EmailTemplate->buildEmailTemplate($post->post_name, $html, $css);
             $this->EmailTemplate->standardizeEmailTemplate($post->post_name);
+        }
+    }
+
+    /**
+     * Delete emailtemplate hook
+     * @backend - @emailtemplate
+     * @return  void
+     * @var     int     $post_id    Post ID
+     */
+    public function delete_emailtemplate($post_id){
+        $post = Type::get_post($post_id);
+        if($post->post_type==$this->name){
+            $slug = str_replace('__trashed','',strtolower($post->post_name));
+            $path = unserialize(TRIANGLE_PATH);
+            $dir = $path['upload_dir']['basedir'] . '/EmailTemplate/' . $slug;
+            if(is_dir($dir)) $this->Helper->deleteDir($dir);
         }
     }
 

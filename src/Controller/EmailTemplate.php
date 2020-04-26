@@ -12,6 +12,8 @@ namespace Triangle\Controller;
  */
 
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
+use Pelago\Emogrifier\CssInliner;
+
 use Triangle\View;
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Email;
@@ -56,8 +58,10 @@ class EmailTemplate extends Base {
         $screen = Service::getScreen();
         $this->backend_load_plugin_libraries([],[$this->EmailTemplate->getName()]);
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()) {
-            Service::wp_enqueue_style('triangle_emailtemplate_css', 'backend/emailtemplate.css');
-            Service::wp_enqueue_script('triangle_emailtemplate_js', 'backend/emailtemplate.js', [], false, true);
+            if($screen->pagenow=='post.php'){
+                Service::wp_enqueue_script('triangle_emailtemplate_js', 'backend/emailtemplate/edit.js', [], false, true);
+                if(Service::get_option('triangle_builder_inliner')=='juice') Service::wp_enqueue_script('juice_js', 'backend/juice.build.js', [], false, true);
+            }
         }
     }
 
@@ -69,14 +73,25 @@ class EmailTemplate extends Base {
     public function edit_emailtemplate(){
         $screen = Service::getScreen();
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
+            $option_builder_inliner = Service::get_option('triangle_builder_inliner');
+
+            /** Configure Sections */
+            $sections = ['EmailTemplate.edit-codeeditor' => ['name' => 'Code editor', 'active' => true]];
+            if($option_builder_inliner=='juice') $sections['EmailTemplate.edit-preview'] = ['name' => 'Preview'];
+
             /** Emailtemplate Code Editor */
             $view = new View();
             $view->setTemplate('box');
-            $view->setSections(['EmailTemplate.edit-codeeditor' => ['name' => 'Code editor', 'active' => true]]);
+            $view->setSections($sections);
             $view->setOptions(['shortcode' => false]);
             $view->addData(compact('screen'));
-            $view->addData(['background' => 'bg-wetasphalt']);
-            $view->addData(['nav' => 'EmailTemplate.edit-nav']);
+            $view->addData([
+                /** Section Options */
+                'background' => 'bg-wetasphalt',
+                'nav' => 'EmailTemplate.edit-nav',
+                /** Setting Options */
+                'options' => [ 'triangle_builder_inliner' => $option_builder_inliner ],
+            ]);
             $view->build();
         }
     }
@@ -135,13 +150,13 @@ class EmailTemplate extends Base {
         if(is_dir($dir)){
             /** Get Contents */
             ob_start();
-            echo file_get_contents($dir . '/' . $slug . '.html');
+                echo file_get_contents($dir . '/' . $slug . '.html');
             $html = Service::do_shortcode(ob_get_clean());
-            $html = (Service::get_option('triangle_builder_absolute')!='none') ? $this->builderAbsolutePath($slug, $html) : $html;
-            if(Service::get_option('triangle_builder_inliner')!='none') {
-                $css = file_get_contents($dir . '/' . $slug . '.css');
-                if ($css) $html = $this->builderinlineCSS(new CssToInlineStyles(), $html, $css, 10);
+            $css = file_get_contents($dir . '/' . $slug . '.css');
+            if(Service::get_option('triangle_builder_inliner')=='tijsverkoyen') {
+                if ($css) $html = $this->builderinlineCSS(NULL, $html, $css, 30);
                 if ($html) file_put_contents($dir . '/standard.html', $html);
+                else { die('Execution timeout! Please try again!'); }
             } else {
                 file_put_contents($dir . '/standard.html', $html);
             }
@@ -154,30 +169,14 @@ class EmailTemplate extends Base {
      * @var     string  $css        Style Template Content
      * @var     int     $counter    Counter repeater
      */
-    private function builderAbsolutePath($slug, $html){
-        $path = unserialize(TRIANGLE_PATH)['upload_dir'];
-        $doc = new \DOMDocument();
-        @$doc->loadHTML($html);
-        $tags = $doc->getElementsByTagName('img');
-        foreach ($tags as $tag) {
-            $tag->setAttribute('src', $path['baseurl'] . "/EmailTemplate/$slug/" . $tag->getAttribute('src'));
-        }
-        return $doc->saveHTML();
-    }
-
-    /**
-     * Inline css file into html body
-     * @var     string  $html       HTML Template Content
-     * @var     string  $css        Style Template Content
-     * @var     int     $counter    Counter repeater
-     */
-    private function builderinlineCSS($tool, $html, $css, $counter){
+    public function builderinlineCSS($tool, $html, $css, $counter){
         ob_start();
+            $tool = ($tool==NULL) ? new CssToInlineStyles() : $tool;
             echo $tool->convert( $html, $css );
         $clean = ob_get_clean();
         if(strlen($clean)==1 && $counter>0) {
             sleep(2); $counter--;
-            $clean = $this->inspectorinlineCSS($tool, $html, $css, $counter);
+            $clean = $this->builderinlineCSS($tool, $html, $css, $counter);
         }
         return $clean;
     }

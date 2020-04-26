@@ -11,8 +11,6 @@ namespace Triangle;
  * @subpackage Triangle\Includes
  */
 
-use Triangle\Helper;
-
 class View {
 
     /**
