@@ -1,6 +1,6 @@
 <?php
 /*
-* Plugin Name:       Triangle
+* Plugin Name:       Triangle - Email Template Builder
 * Plugin URI:        https://agungsundoro.blogspot.com
 * Description:       Create custom professional looking email template for invoices, newsletter and notifications.
 * Version:           1.0.1

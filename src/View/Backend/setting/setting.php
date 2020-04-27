@@ -79,7 +79,7 @@
                             <?php endforeach; ?>
                         </select>
                         <p class="field-info">
-                            If you disable this option, <code>style</code> option within the editor will be hidden and you will need to write the css style into the html script. For more info you can go to <code>Docs</code> tab to see the reference.
+                            For more info you can go to <code>Docs</code> tab to see the reference.
                         </p>
                     </div>
                 </td>
