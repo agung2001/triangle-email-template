@@ -2,17 +2,14 @@
   "name"			: "triangle/framework",
   "description"	    : "Triangle framework plugin for wordpress",
   "license"		    : "GPL-3.0",
-  "require"         : {
-    "erusev/parsedown" : "*",
-    "pelago/emogrifier": "^1.2"
-  },
   "autoload"		: {
     "classmap":[
-      "api",
-      "includes",
-      "controller",
-      "model",
-      "view"
+      "src/Api",
+      "src/Controller",
+      "src/Model",
+      "src/Plugin",
+      "src/View",
+      "src/Wordpress"
     ]
   }
 }

@@ -1,0 +1,14 @@
+{
+  "name" : "Triangle",
+  "version" : "1.0.1",
+  "production" : false,
+  "enableHooks" : ["action", "filter", "shortcode"],
+  "templates": [
+    {
+      "text": "Element",
+      "children": [
+        {"id": "html", "text": "Html", "mode" : "ace/mode/html"}
+      ]
+    }
+  ]
+}

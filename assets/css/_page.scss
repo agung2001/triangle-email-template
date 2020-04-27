@@ -1,0 +1,142 @@
+/**
+* Page Setting
+*/
+#section-setting {
+  .clear {
+    margin: 50px 0;
+  }
+  select {
+    width:90%;
+    max-width:90%;
+  }
+  .grid {
+    @include grid(550, 12);
+    margin: 0;
+    .row { width:90%; }
+    input {
+      width:99% !important;
+    }
+  }
+  #form-result {
+    display:none;
+    padding:10px 0;
+    font-weight:bold;
+    &.form-result-false{
+      display: block;
+      color: $alizarin;
+    }
+    &.form-result-true{
+      display: block;
+      color: $nephritis;
+    }
+  }
+  #field_option_absolute_location  {
+    display:inline;
+    li {
+      margin-left:20px;
+      display:inline;
+    }
+  }
+  .btn-submit {
+    float:right;
+    background: $alizarin;
+    color:#fff;
+    margin-right:10%;
+  }
+}
+#section-docs {
+  .row {
+    max-width:700px;
+    margin-bottom: 50px;
+    ul, li, a, p {
+      font-size:15px;
+    }
+    h3 { font-size: 1.4em; }
+    h4 { font-size: 1.2em; }
+  }
+  ul {
+    list-style: circle;
+    margin-left:15px;
+  }
+}
+
+/**
+* Page Contact
+*/
+#section-contact {
+  padding: 5px 20px;
+  .field-ajax { display:none; }
+  .field-info {
+    font-style:italic;
+    color: #808080;
+  }
+  #form-result {
+    display:none;
+    padding:10px 0;
+    font-weight:bold;
+    &.form-result-false{
+      color: $alizarin;
+    }
+    &.form-result-true{
+      color: $nephritis;
+    }
+  }
+  #field-user-container {
+    .select2-container {
+      margin-top:-7px;
+    }
+    #add-user-to-lists {
+      cursor: pointer;
+      color:#000;
+      text-decoration: none;
+      font-size:20px;
+    }
+  }
+  .badges {
+    display:inline-block;
+    background: $silver;
+    padding:5px 10px;
+    margin:2px;
+    i {
+      cursor: pointer;
+      margin-right: 5px;
+    }
+  }
+  .btn-submit {
+    float:right;
+    background: $carrot;
+    color:#fff;
+    margin-right:10%;
+  }
+}
+
+/**
+* Page Email Template
+* @backend @edit
+*/
+#template-rendered-url { display:none; }
+#section-codeeditor {
+  padding: 10px;
+  .container, .element_fields {
+    display:none;
+  }
+  #juice-builder-elements { display:none !important; }
+  #template-elements, .select2-container {
+    width:100% !important;
+    display:none;
+  }
+  #template-editor {
+    width:100%;
+    margin-top:2px;
+    min-height:800px;
+    textarea {
+      min-height:400px;
+    }
+  }
+}
+#section-preview {
+  #juice_preview {
+    width:100% !important;
+    min-height:750px !important;
+  }
+}

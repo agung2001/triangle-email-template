@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/assets/js/ace/emmet-core/emmet.min.js" />
+        <item url="file://$PROJECT_DIR$/assets/js/backend/plugin_footer.min.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/assets/js/ace/emmet-core/emmet.min.js" />
+      <root url="file://$PROJECT_DIR$/assets/js/backend/plugin_footer.min.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>
