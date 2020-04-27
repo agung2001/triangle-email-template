@@ -69,7 +69,7 @@
                     <div id="field-template-container" class="field-container">
                         <?php
                             $value = $options['triangle_builder_inliner'];
-                            $opts = [ 'none' => 'None', 'juice' => 'Automattic/Juice','tijsverkoyen' => 'Tijsverkoyen/CssToInlineStyles'];
+                            $opts = [ 'none' => 'None', 'juice' => 'Automattic/Juice'];
                         ?>
                         <select name="field_option_builder_inliner" id="field_option_builder_inliner" class="select2">
                             <?php foreach($opts as $key => $opt): ?>

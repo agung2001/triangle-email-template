@@ -15,7 +15,7 @@
     </p>
 
     <ul>
-        <li><a href="https://github.com/tijsverkoyen/CssToInlineStyles">[tijsverkoyen/CssToInlineStyles]</a> - PHP CssToInlineStyles is a class to convert HTML into HTML with inline styles.</li>
+        <li><a href="https://github.com/Automattic/juice/">[Automattic/juice]</a> - Juice inlines CSS stylesheets into your HTML source.</li>
     </ul>
 </div>
 

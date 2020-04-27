@@ -1,6 +1,6 @@
 .field-container {
   max-width: 550px !important; }
-  .field-container input[type=text], .field-container .select2-container {
+  .field-container input[type=text], .field-container input[type=password], .field-container .select2-container {
     width: 90% !important; }
 
 .btn-submit {
@@ -299,10 +299,11 @@ input:checked + .slider:before {
   #section-codeeditor #juice-builder-elements {
     display: none !important; }
   #section-codeeditor #template-elements, #section-codeeditor .select2-container {
-    width: 100% !important; }
+    width: 100% !important;
+    display: none; }
   #section-codeeditor #template-editor {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 2px;
     min-height: 800px; }
     #section-codeeditor #template-editor textarea {
       min-height: 400px; }

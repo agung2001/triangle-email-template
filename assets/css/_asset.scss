@@ -10,7 +10,7 @@ $silver: #bdc3c7;
 // Assets
 .field-container {
   max-width: 550px !important;
-  input[type=text], .select2-container {
+  input[type=text], input[type=password], .select2-container {
     width:90% !important;
   }
 }

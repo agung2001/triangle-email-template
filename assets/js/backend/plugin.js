@@ -3,7 +3,6 @@
  * @about-page
  * */
 jQuery('ul.nav-tab-wrapper li').on('click', function(){
-    console.log(window.trianglePlugin);
     /** Animate */
     let animation = `animated ${window.trianglePlugin.options.animation_tab}`;
     animate(this, animation);

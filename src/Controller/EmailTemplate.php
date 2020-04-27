@@ -11,9 +11,6 @@ namespace Triangle\Controller;
  * @subpackage Triangle/Controller
  */
 
-use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
-use Pelago\Emogrifier\CssInliner;
-
 use Triangle\View;
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Email;
@@ -58,7 +55,7 @@ class EmailTemplate extends Base {
         $screen = Service::getScreen();
         $this->backend_load_plugin_libraries([],[$this->EmailTemplate->getName()]);
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()) {
-            if($screen->pagenow=='post.php'){
+            if($screen->pagenow=='post.php' || $screen->pagenow=='post-new.php'){
                 Service::wp_enqueue_script('triangle_emailtemplate_js', 'backend/emailtemplate/edit.js', [], false, true);
                 if(Service::get_option('triangle_builder_inliner')=='juice') Service::wp_enqueue_script('juice_js', 'backend/juice.build.js', [], false, true);
             }
@@ -153,32 +150,8 @@ class EmailTemplate extends Base {
                 echo file_get_contents($dir . '/' . $slug . '.html');
             $html = Service::do_shortcode(ob_get_clean());
             $css = file_get_contents($dir . '/' . $slug . '.css');
-            if(Service::get_option('triangle_builder_inliner')=='tijsverkoyen') {
-                if ($css) $html = $this->builderinlineCSS(NULL, $html, $css, 30);
-                if ($html) file_put_contents($dir . '/standard.html', $html);
-                else { die('Execution timeout! Please try again!'); }
-            } else {
-                file_put_contents($dir . '/standard.html', $html);
-            }
+            file_put_contents($dir . '/standard.html', $html);
         } else return false;
-    }
-
-    /**
-     * Inline css file into html body
-     * @var     string  $html       HTML Template Content
-     * @var     string  $css        Style Template Content
-     * @var     int     $counter    Counter repeater
-     */
-    public function builderinlineCSS($tool, $html, $css, $counter){
-        ob_start();
-            $tool = ($tool==NULL) ? new CssToInlineStyles() : $tool;
-            echo $tool->convert( $html, $css );
-        $clean = ob_get_clean();
-        if(strlen($clean)==1 && $counter>0) {
-            sleep(2); $counter--;
-            $clean = $this->builderinlineCSS($tool, $html, $css, $counter);
-        }
-        return $clean;
     }
 
 }

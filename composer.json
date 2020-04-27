@@ -2,9 +2,6 @@
   "name"			: "triangle/framework",
   "description"	    : "Triangle framework plugin for wordpress",
   "license"		    : "GPL-3.0",
-  "require"         : {
-    "tijsverkoyen/css-to-inline-styles": "^2.2"
-  },
   "autoload"		: {
     "classmap":[
       "src/Api",
