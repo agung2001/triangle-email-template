@@ -88,7 +88,6 @@ class Plugin {
         $this->enableHooks = $config->enableHooks;
         $this->controllers = [];
         $this->models = [];
-        $this->path = Service::getPath($config->path);
         $this->config = $config;
         $this->Helper = new Helper();
     }
@@ -101,6 +100,7 @@ class Plugin {
      * @return  void
      */
     public function run(){
+        $this->path = Service::getPath($this->config->path);
         $this->Helper->defineConst($this);
         $this->loadModels();
         $this->loadHooks('Controller');

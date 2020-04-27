@@ -9,12 +9,6 @@
       "children": [
         {"id": "html", "text": "Html", "mode" : "ace/mode/html"}
       ]
-    },
-    {
-      "text": "Style",
-      "children": [
-        {"id": "style", "text": "Style", "mode" : "ace/mode/css"}
-      ]
     }
   ]
 }

@@ -27,10 +27,21 @@ class Helper {
     }
 
     /**
+     * Get lists of directories
+     * @return  void
+     * @var     string  $path   Directory path
+     */
+    public function getDir($path, $directories = []) {
+        foreach(glob($path.'/*', GLOB_ONLYDIR) as $dir) {
+            $directories[] = basename($dir);
+        }
+        return $directories;
+    }
+
+    /**
      * Get files within directory
      * @return  void
      * @var     string  $dir   plugin hooks directory (Api, Controller)
-     * @pattern bridge
      */
     public function getDirFiles($dir, &$results = array()) {
         $files = scandir($dir);
@@ -65,6 +76,26 @@ class Helper {
             }
         }
         rmdir($dirPath);
+    }
+
+    /**
+     * Copy directories contents (Files and Dir) to another directories
+     * @return void
+     */
+    public function copyDir($src,$dst) {
+        $dir = opendir($src);
+        @mkdir($dst);
+        while(false !== ( $file = readdir($dir)) ) {
+            if (( $file != '.' ) && ( $file != '..' )) {
+                if ( is_dir($src . '/' . $file) ) {
+                    $this->copyDir($src . '/' . $file,$dst . '/' . $file);
+                }
+                else {
+                    copy($src . '/' . $file,$dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
     }
 
     /**

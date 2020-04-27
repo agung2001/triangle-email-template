@@ -58,6 +58,15 @@ class Type extends Model {
     }
 
     /**
+     * Insert new post
+     * @return int      The post ID on success
+     */
+    public function insert_post(){
+        if($this->name) $this->args['post_type'] = $this->name;
+        return wp_insert_post($this->args);
+    }
+
+    /**
      * Method to model
      * @return void
      */

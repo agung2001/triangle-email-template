@@ -44,6 +44,17 @@ function Triangle() {
     $config->path = __FILE__;
     $plugin = new Triangle\Plugin($config);
     $plugin->run();
-
 }
 add_action('init', 'Triangle');
+
+/**
+ * Lifecycle Hooks
+ * @activate
+ */
+function activate(){
+    $config = file_get_contents(dirname(__FILE__) . '/config.json');
+    $config = json_decode($config);
+    $config->path = __FILE__;
+    new Triangle\Lifecycle\Activate($config);
+}
+register_activation_hook( __FILE__, 'activate');
