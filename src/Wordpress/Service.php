@@ -120,7 +120,6 @@ class Service {
             'upload_dir' => wp_upload_dir()
         ];
         $path['view_path'] = $path['plugin_path'] . 'src/View/';
-        define('TRIANGLE_PATH', serialize($path));
         return $path;
     }
 

@@ -73,7 +73,8 @@ class Activate {
      * Setup theme data
      * @return void
      */
-    private function setupThemeData($theme, $path){
+    private function setupThemeData($theme, $src){
+        $path = Service::getPath($this->config->path);
         $EmailTemplate = new EmailTemplate($this->Plugin);
         $EmailTemplate->setArgs([
             'name'        => $theme,
@@ -92,13 +93,13 @@ class Activate {
             $templates = $this->Plugin->getConfig()->templates;
             $templates = $this->Helper->getTemplatesFromConfig($templates);
             $results = [];
-            foreach($EmailTemplate->getMetas() as $meta){
-                $key = $meta->getKey();
-                $name = str_replace('template_', '', $key);
-                $mode = explode('/',$templates[$name]->mode)[2];
-                $filePath = $path . '/' . $theme . '.' . $mode;
+            foreach($EmailTemplate->getMetas() as $key => $meta){
+                $filePath = $src . '/' . $theme . '.html';
                 if(file_exists($filePath)){
-                    $value = file_get_contents($filePath);
+                    $value = $this->Helper->convertImagesRelativetoAbsolutePath(
+                        $path['upload_dir']['baseurl'] . '/EmailTemplate/' . $theme . '/',
+                        file_get_contents($filePath)
+                    );
                     $meta->setValue($value);
                     $results[] = $meta->update_post_meta();
                 }

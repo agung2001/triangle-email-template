@@ -101,6 +101,7 @@ class Plugin {
      */
     public function run(){
         $this->path = Service::getPath($this->config->path);
+        define('TRIANGLE_PATH', serialize($this->path));
         $this->Helper->defineConst($this);
         $this->loadModels();
         $this->loadHooks('Controller');

@@ -11,12 +11,11 @@ namespace Triangle;
  * @subpackage Triangle\Includes
  */
 
-use Triangle\Wordpress\Service;
-
 class Helper {
 
     /**
      * Debug script
+     * @return void
      */
     public function debug($data){
         echo '<pre>';
@@ -98,25 +97,23 @@ class Helper {
             if (( $file != '.' ) && ( $file != '..' )) {
                 if ( is_dir($src . '/' . $file) ) {
                     $this->copyDir($src . '/' . $file,$dst . '/' . $file);
-                }
-                else {
-                    copy($src . '/' . $file,$dst . '/' . $file);
-                }
+                } else { copy($src . '/' . $file,$dst . '/' . $file); }
             }
         }
         closedir($dir);
     }
 
     /**
-     * Get standard.html content from EmailTemplate dir
-     * @var     string  $slug   EmailTemplate slug = post name slug
+     * Convert html relative path into absolute path
+     * @var     string  $path   Wordpress base path
+     * @var     string  $html   Html string
      * @return  void
      */
-    public function getStandardEmailTemplate($slug){
-        $path = unserialize(TRIANGLE_PATH);
-        $dir = $path['upload_dir']['basedir'] . '/EmailTemplate/' . $slug;
-        ob_start(); echo file_get_contents($dir . '/' . 'standard.html');
-        return ob_get_clean();
+    public function convertImagesRelativetoAbsolutePath($path, $html){
+        $pattern = "/<img([^>]*) " .
+            "src=\"([^http|ftp|https][^\"]*)\"/";
+        $replace = "<img\${1} src=\"" . $path . "\${2}\"";
+        return preg_replace($pattern, $replace, $html);
     }
 
     /**
