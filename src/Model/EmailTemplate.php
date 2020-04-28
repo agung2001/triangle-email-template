@@ -47,6 +47,13 @@ class EmailTemplate extends Model {
             }
         }
 
+        /** @backend - Meta_fields : Extra key for standard */
+        $key  = 'template_standard';
+        $meta = new Meta();
+        $meta->setType($this);
+        $meta->setKey($key);
+        $this->metas[$key] = $meta;
+
         /** @backend - Hooks - Emailtemplate save post hook */
         $action = new Action();
         $action->setComponent($this);
@@ -79,13 +86,9 @@ class EmailTemplate extends Model {
             /** Load Options */
             $this->loadController('EmailTemplate');
             $this->ID = $post_id;
-            $templates = $this->Plugin->getConfig()->templates;
-            $templates = $this->Helper->getTemplatesFromConfig($templates);
-            $options = ['builder_inliner' => Service::get_option('triangle_builder_inliner')];
 
             /** Validate Params */
-            $default = ['template_html'];
-            if($options['builder_inliner']=='juice') $default[] = 'juice_output';
+            $default = ['template_html', 'juice_output'];
             if(!$this->EmailTemplate->validateParams($_POST, $default)) die('Parameters did not match the specs!');
 
             /** Sanitize Params */
@@ -94,19 +97,13 @@ class EmailTemplate extends Model {
             $params = $this->EmailTemplate->sanitizeParams($_POST, $default);
 
             /** Save meta field */
-            $html = '';
-            foreach($this->metas as $meta){
-                $key = $meta->getKey();
-                $name = str_replace('template_','',$meta->getKey());
+            $params['template_standard'] = $params['juice_output'];
+            foreach($this->metas as $key => $meta){
                 if(!isset($params[$key])) continue;
-                $html .= ($templates[$name]->mode=='ace/mode/html') ? html_entity_decode($params[$key]) : '';
-                $meta->setValue($params[$key]);
+                $value = html_entity_decode($params[$key]);
+                $meta->setValue($value);
                 $results[] = $meta->update_post_meta();
             }
-            /** Build template */
-            if($options['builder_inliner']=='juice') $html = html_entity_decode($params['juice_output']);
-            $this->EmailTemplate->buildEmailTemplate($post->post_name, $html, '');
-            $this->EmailTemplate->standardizeEmailTemplate($post->post_name);
         }
     }
 

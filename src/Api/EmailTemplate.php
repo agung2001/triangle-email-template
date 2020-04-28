@@ -50,16 +50,20 @@ class EmailTemplate extends Api {
         /** Validate Params */
         $default = ['typeArgs', 'userArgs'];
         if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
+
         /** Load Data */
         $this->loadModel('EmailTemplate');
         $data = array();
+
         /** Get Template Data */
         $this->EmailTemplate->setArgs($_POST['typeArgs']);
-        $data['templates'] = $this->EmailTemplate->get_posts();
-        foreach($data['templates'] as $index => $template){
-            if(!$this->get_rendered_src_url($template->post_name))
-                unset($data['templates'][$index]);
+        $data['templates'] = [];
+        foreach($this->EmailTemplate->get_posts() as $template){
+            $this->EmailTemplate->setID($template->ID);
+            $meta = $this->EmailTemplate->getMetas()['template_standard']->get_post_meta();
+            if($meta) $data['templates'][] = $template;
         }
+
         /** Get User Data */;
         $data['users'] = User::get_users($_POST['userArgs']);
         $data['currentUser'] = User::get_current_user();
@@ -77,26 +81,14 @@ class EmailTemplate extends Api {
         /** Validate Params */
         $default = ['args' => ['post_id', 'post_name']];
         if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
+
         /** Load Data */
+        $this->loadModel('EmailTemplate');
         $data = array();
+        $this->EmailTemplate->setID($_POST['args']['post_id']);
         $data['templates'] = $this->get_template_elements_value($_POST['args']['post_id']);
         $data['options'] = ['inliner' => Service::get_option('triangle_builder_inliner')];
         wp_send_json((object) $data);
-    }
-
-    /**
-     * Get rendered email template src url : standard.html
-     * @page_edit
-     * @var         string      Post name slug
-     * @return      string      Url where the rendered file located
-     */
-    private function get_rendered_src_url($slug){
-        $path = unserialize(TRIANGLE_PATH)['upload_dir'];
-        $path = [
-            'basedir' => $path['basedir'] . '/EmailTemplate/' . $slug . '/standard.html',
-            'baseurl' => $path['baseurl'] . '/EmailTemplate/' . $slug . '/standard.html'
-        ];
-        return (file_exists($path['basedir'])) ? $path['baseurl'] : false;
     }
 
     /**

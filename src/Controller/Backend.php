@@ -100,7 +100,7 @@ class Backend extends Base {
         /** Styles and Scripts */
         $min = (TRIANGLE_PRODUCTION) ? '.min' : '';
         Service::wp_enqueue_style('triangle_css', "style$min.css" );
-        Service::wp_enqueue_script('triangle_js_footer', "backend/plugin$min.js", '', '', true);
+        Service::wp_enqueue_script('triangle_js_footer', "backend/plugin$min.js",'', '', true);
     }
 
     /**
@@ -110,8 +110,8 @@ class Backend extends Base {
     private function backend_load_plugin_scripts(){
         $screen = Service::getScreen();
         if($screen->base=='users') Service::wp_enqueue_script('triangle_user_js', 'backend/user.js');
-        if($screen->base=='toplevel_page_triangle') Service::wp_enqueue_script('triangle_contact_js', 'backend/contact.js', '', '', true);
-        if($screen->base=='triangle_page_triangle-setting') Service::wp_enqueue_script('triangle_contact_js', 'backend/setting.js', '', '', true);
+        if($screen->base=='toplevel_page_triangle') Service::wp_enqueue_script('triangle_contact_js', 'backend/contact/contact.js', '', '', true);
+        if($screen->base=='triangle_page_triangle-setting') Service::wp_enqueue_script('triangle_setting_js', 'backend/setting.js', '', '', true);
     }
 
     /**

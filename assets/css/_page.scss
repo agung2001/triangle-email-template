@@ -70,17 +70,6 @@
     font-style:italic;
     color: #808080;
   }
-  #form-result {
-    display:none;
-    padding:10px 0;
-    font-weight:bold;
-    &.form-result-false{
-      color: $alizarin;
-    }
-    &.form-result-true{
-      color: $nephritis;
-    }
-  }
   #field-user-container {
     .select2-container {
       margin-top:-7px;
@@ -111,12 +100,18 @@
     margin-right:10%;
   }
 }
+#section-send {
+  #email-send-status {
+    display:none;
+    margin:200px;
+    text-align:center;
+  }
+}
 
 /**
 * Page Email Template
 * @backend @edit
 */
-#template-rendered-url { display:none; }
 #section-codeeditor {
   padding: 10px;
   .container, .element_fields {

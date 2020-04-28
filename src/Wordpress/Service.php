@@ -72,6 +72,17 @@ class Service {
     }
 
     /**
+     * Wordpress shortcode_atts
+     * @var     array   $pairs              Entire list of supported attributes and their defaults.
+     * @var     array   $atts               User defined attributes in shortcode tag.
+     * @var     string   $shortcode         The name of the shortcode, provided for context to enable filtering
+     * @return array    Combined and filtered attribute list.
+     */
+    public static function shortcode_atts($pairs, $atts, $shortcode = ''){
+        return shortcode_atts($pairs, $atts, $shortcode);
+    }
+
+    /**
      * Wordpress esc function
      * @return mixed    Return sanitized values
      */

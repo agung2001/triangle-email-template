@@ -1,7 +1,6 @@
 <form method="POST" id="contact-form">
     <table class="form-table" role="presentation">
         <input type="hidden" name="field_menu_slug" value="<?= $this->esc('attr',$menuSlug) ?>">
-        <div id="form-result" class="form-result-<?= $this->esc('attr',$result) ?>"></div>
         <div id="form-message"></div>
         <tbody>
             <tr>

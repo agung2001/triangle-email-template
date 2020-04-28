@@ -61,21 +61,36 @@ class Page extends Base {
         /** Handle submission */
         $menuSlug = strtolower(TRIANGLE_NAME);
         if($params['field_menu_slug']=='triangle'){
-            $this->loadController('EmailTemplate');
-            $result = $this->EmailTemplate->send();
-            $result = ($result) ? 'true' : 'false';
+            /** Validate Params */
+            $default = ['field_template', 'field_users', 'field_from_name', 'field_from_email', 'field_email_subject'];
+            if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
+            /** Sanitize Params */
+            $default = array_flip($default);
+            foreach($default as &$value) $value = 'text';
+            $params = $this->sanitizeParams($_POST, $default);
+            /** Set View */
+            $view = new View();
+            $view->setTemplate('default');
+            $view->setOptions(['shortcode' => true]);
+            $view->setSections(['Backend.contact.send' => ['name' => 'Send', 'active' => true]]);
+            $view->addData([
+                'title' => 'Send',
+                'background' => 'bg-carrot',
+                'params' => $params
+            ]);
+        } else {
+            /** Set View */
+            $view = new View();
+            $view->setTemplate('default');
+            $view->setSections(['Backend.contact.contact' => ['name' => 'Contact', 'active' => true]]);
+            $view->setOptions(['shortcode' => true]);
+            $view->addData([
+                'menuSlug' => $menuSlug,
+                'title' => 'Contact User',
+                'background' => 'bg-carrot',
+                'user_id' => $params['user_id'],
+            ]);
         }
-
-        /** Set View */
-        $view = new View();
-        $view->setTemplate('default');
-        $view->setOptions(['shortcode' => false]);
-        $view->setSections(['Backend.contact' => ['name' => 'Contact', 'active' => true]]);
-        $view->addData(['user_id' => $params['user_id']]);
-        $view->addData(['result' => isset($result) ? $result : '']);
-        $view->addData(['title' => 'Contact User']);
-        $view->addData(['background' => 'bg-carrot']);
-        $view->addData(compact('menuSlug'));
 
         /** Set Main Page */
         $page = new MenuPage();
