@@ -82,13 +82,10 @@ class EmailTemplate extends Base {
             $view->setTemplate('box');
             $view->setSections($sections);
             $view->setOptions(['shortcode' => false]);
-            $view->addData(compact('screen'));
             $view->addData([
-                /** Section Options */
-                'background' => 'bg-wetasphalt',
-                'nav' => 'EmailTemplate.edit-nav',
-                /** Setting Options */
-                'options' => [ 'triangle_builder_inliner' => $options['builder_inliner'] ],
+                'screen'        => $screen,
+                'background'    => 'bg-wetasphalt',
+                'options'       => [ 'triangle_builder_inliner' => $options['builder_inliner'] ],
             ]);
             $view->build();
         }

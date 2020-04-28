@@ -69,10 +69,6 @@
         animate('.loading-page', 'animated fadeOut').hide();
         animate('.container', `animated ${window.trianglePlugin.options.animation_content}`).show();
         jQuery('#template-elements').select2({data: data.templates});
-        if(data.rendered) {
-            jQuery('#template-rendered-url').attr('href', data.rendered);
-            animate('#template-rendered-url', 'animated fadeIn').show();
-        }
         let htmlPreview;
         data.templates.map((template) => {
             template.children.map((children) => {

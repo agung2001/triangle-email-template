@@ -267,10 +267,12 @@ input:checked + .slider:before {
   #section-contact #field-user-container .select2-container {
     margin-top: -7px; }
   #section-contact #field-user-container #add-user-to-lists {
+    background: #bdc3c7;
     cursor: pointer;
     color: #000;
     text-decoration: none;
-    font-size: 20px; }
+    font-size: 20px;
+    padding: 0px 5px 2px 5px; }
   #section-contact .badges {
     display: inline-block;
     background: #bdc3c7;

@@ -120,29 +120,31 @@ class Page extends Base {
         $view = new View();
         $view->setTemplate('default');
         $view->setOptions(['shortcode' => false]);
-        $view->addData(compact('menuSlug'));
-        $view->addData(['background' => 'bg-alizarin']);
-        $view->addData(['result' => isset($result) ? $result : '']);
-        $view->addData(['options' => [
-            /** Animation */
-            'triangle_animation' => Service::get_option('triangle_animation'),
-            'triangle_animation_tab' => Service::get_option('triangle_animation_tab'),
-            'triangle_animation_content' => Service::get_option('triangle_animation_content'),
-            /** Builder */
-            'triangle_builder_inliner' => Service::get_option('triangle_builder_inliner'),
-            /** SMTP */
-            'triangle_smtp' => Service::get_option('triangle_smtp'),
-            'triangle_smtp_encryption' => Service::get_option('triangle_smtp_encryption'),
-            'triangle_smtp_host' => Service::get_option('triangle_smtp_host'),
-            'triangle_smtp_port' => Service::get_option('triangle_smtp_port'),
-            'triangle_smtp_auth' => Service::get_option('triangle_smtp_auth'),
-            'triangle_smtp_tls' => Service::get_option('triangle_smtp_tls'),
-            'triangle_smtp_username' => Service::get_option('triangle_smtp_username'),
-            'triangle_smtp_password' => md5(Service::get_option('triangle_smtp_password')),
-        ]]);
+        $view->addData([
+            'menuSlug'      => $menuSlug,
+            'background'    => 'bg-alizarin',
+            'result'        => isset($result) ? $result : '',
+            'options'       => [
+                // Animation
+                'triangle_animation' => Service::get_option('triangle_animation'),
+                'triangle_animation_tab' => Service::get_option('triangle_animation_tab'),
+                'triangle_animation_content' => Service::get_option('triangle_animation_content'),
+                // Builder
+                'triangle_builder_inliner' => Service::get_option('triangle_builder_inliner'),
+                // SMTP
+                'triangle_smtp' => Service::get_option('triangle_smtp'),
+                'triangle_smtp_encryption' => Service::get_option('triangle_smtp_encryption'),
+                'triangle_smtp_host' => Service::get_option('triangle_smtp_host'),
+                'triangle_smtp_port' => Service::get_option('triangle_smtp_port'),
+                'triangle_smtp_auth' => Service::get_option('triangle_smtp_auth'),
+                'triangle_smtp_tls' => Service::get_option('triangle_smtp_tls'),
+                'triangle_smtp_username' => Service::get_option('triangle_smtp_username'),
+                'triangle_smtp_password' => md5(Service::get_option('triangle_smtp_password')),
+            ]
+        ]);
         $view->setSections([
             'Backend.setting.setting' => ['name' => 'Setting', 'active' => true],
-            'Backend.setting.docs' => ['name' => 'Docs'],
+            'Backend.setting.docs' => ['name' => 'Docs']
         ]);
 
         /** Set Page */

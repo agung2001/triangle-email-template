@@ -9,7 +9,7 @@
 </div>
 
 <div class="row">
-    <h3><i class="fas fa-box"></i> Builder</h3>
+    <h3>Builder</h3>
     <p>
         Email clients are unpredictable. Even today many clients strip styles that are not inlined, so it is important to inline your CSS before sending. Triangle using custom libraries to inline your CSS script with your HTML.  Don't risk your transactional emails or marketing campaigns falling apart.
     </p>
@@ -20,14 +20,14 @@
 </div>
 
 <div class="row">
-    <h3><i class="fas fa-dot-circle"></i> 3rd Party Plugins</h3>
+    <h3>3rd Party Plugins</h3>
     <p>
         Triangle also supports SMTP configuration which will make your setting up email route easier. You can also using 3rd party plugin like <code>WP MAIL SMTP</code> for your email route.
     </p>
 </div>
 
 <div class="row">
-    <h3><i class="fas fa-paint-brush"></i> Authors</h3>
+    <h3>Authors</h3>
     <p>
         The plugin is still in an early stage of development so we are expecting your feedback and rating so then we can improve the plugins even more. We are very excited about the plugin and hope you do as well. There are lots of features coming so stay tuned and also thank you for your very supports.
     </p>

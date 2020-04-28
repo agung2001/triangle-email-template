@@ -24,8 +24,6 @@ class Base extends Controller {
     protected function backend_load_plugin_libraries($screens = [], $types = []){
         $screen = Service::getScreen();
         if(in_array($screen->base,$screens) || (isset($screen->post->post_type) && in_array($screen->post->post_type,$types)) ){
-            /** Font Awesome */
-            Service::wp_enqueue_style('fontawesome', 'fontawesome.min.css');
             /** Animate.css */
             if(Service::get_option('triangle_animation')) Service::wp_enqueue_style('animatecss', 'animate.min.css');
             /** jQuery Select2 */
