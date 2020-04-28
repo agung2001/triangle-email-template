@@ -16,6 +16,15 @@ use Triangle\Wordpress\Service;
 class Helper {
 
     /**
+     * Debug script
+     */
+    public function debug($data){
+        echo '<pre>';
+        var_dump($data);
+        exit;
+    }
+
+    /**
      * Define const which will be used within the plugin
      * @param   object   $plugin     Wordpress plugin object
      * @return void
@@ -122,14 +131,6 @@ class Helper {
             }
         }
         return $templates;
-    }
-
-    /**
-     * Get screen generated within Service.php class
-     * @return array Lists of wordpress path, screen, posts, and pagenow
-     */
-    public function getScreen(){
-        return Service::getScreen();
     }
 
 }

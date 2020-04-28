@@ -15,6 +15,7 @@
         if(smtp){
             validation = validate_form({
                 required: ['field_option_smtp_encryption', 'field_option_smtp_host', 'field_option_smtp_port', 'field_option_smtp_username', 'field_option_smtp_password'],
+                types: {'field_option_smtp_port': 'number'},
             }, jQuery(this).serializeArray())
         }
         if(!validation.status){

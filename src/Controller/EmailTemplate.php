@@ -70,11 +70,12 @@ class EmailTemplate extends Base {
     public function edit_emailtemplate(){
         $screen = Service::getScreen();
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
-            $option_builder_inliner = Service::get_option('triangle_builder_inliner');
+            /** Get Options */
+            $options = ['builder_inliner' => Service::get_option('triangle_builder_inliner')];
 
             /** Configure Sections */
             $sections = ['EmailTemplate.edit-codeeditor' => ['name' => 'Code editor', 'active' => true]];
-            if($option_builder_inliner=='juice') $sections['EmailTemplate.edit-preview'] = ['name' => 'Preview'];
+            if($options['builder_inliner']=='juice') $sections['EmailTemplate.edit-preview'] = ['name' => 'Preview'];
 
             /** Emailtemplate Code Editor */
             $view = new View();
@@ -87,7 +88,7 @@ class EmailTemplate extends Base {
                 'background' => 'bg-wetasphalt',
                 'nav' => 'EmailTemplate.edit-nav',
                 /** Setting Options */
-                'options' => [ 'triangle_builder_inliner' => $option_builder_inliner ],
+                'options' => [ 'triangle_builder_inliner' => $options['builder_inliner'] ],
             ]);
             $view->build();
         }
@@ -98,10 +99,15 @@ class EmailTemplate extends Base {
      * @backend - @emailtemplate from [@contactPage]
      * @return  void
      */
-    public function send($params){
+    public function send(){
         /** Validate Params */
         $default = ['field_template', 'field_users', 'field_from_name', 'field_from_email', 'field_email_subject'];
-        if($this->validateParams($_POST, $default)) die('Parameters is not match the specs!');
+        if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
+
+        /** Sanitize Params */
+        $default = array_flip($default);
+        foreach($default as &$value) $value = 'text';
+        $params = $this->sanitizeParams($_POST, $default);
 
         /** Prepare Data */
         $this->loadModel('EmailTemplate');

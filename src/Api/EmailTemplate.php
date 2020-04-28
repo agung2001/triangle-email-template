@@ -49,7 +49,7 @@ class EmailTemplate extends Api {
     public function page_contact(){
         /** Validate Params */
         $default = ['typeArgs', 'userArgs'];
-        if($this->validateParams($_POST, $default)) die('Parameters is not match the specs!');
+        if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
         /** Load Data */
         $this->loadModel('EmailTemplate');
         $data = array();
@@ -76,7 +76,7 @@ class EmailTemplate extends Api {
     public function page_edit(){
         /** Validate Params */
         $default = ['args' => ['post_id', 'post_name']];
-        if($this->validateParams($_POST, $default)) die('Parameters is not match the specs!');
+        if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
         /** Load Data */
         $data = array();
         $data['rendered'] = $this->get_rendered_src_url($_POST['args']['post_name']);

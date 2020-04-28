@@ -72,6 +72,30 @@ class Service {
     }
 
     /**
+     * Wordpress esc function
+     * @return mixed    Return sanitized values
+     */
+    public static function esc($type, $value, $args = []){
+        if($type=='html')  return esc_html($value);
+        elseif($type=='url')  return esc_url($value);
+        elseif($type=='attr')  return esc_attr($value);
+    }
+
+    /**
+     * Wordpress sanitize script
+     * @return mixed    Return sanitized values
+     */
+    public static function sanitize($type, $value, $args = []){
+        if($type=='key')  return sanitize_key($value);
+        elseif($type=='filename')  return sanitize_file_name($value);
+        elseif($type=='text' || $type=='int')  return sanitize_text_field($value);
+        elseif($type=='email')  return sanitize_email($value);
+        elseif($type=='html'){
+            return preg_replace('#<script(.*?)>(.*?)</script>#is', '', $value);
+        }
+    }
+
+    /**
      * Wordpress path function
      */
     public static function getPath($path){

@@ -54,11 +54,15 @@ class Page extends Base {
      * @return  void
      */
     public function page_contact(){
+        /** Sanitize Params */
+        $params = $this->sanitizeParams($_POST, ['field_menu_slug' => 'key']);
+        $params = array_merge($params, $this->sanitizeParams($_GET, ['user_id' => 'text']));
+
         /** Handle submission */
         $menuSlug = strtolower(TRIANGLE_NAME);
-        if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle'){
+        if($params['field_menu_slug']=='triangle'){
             $this->loadController('EmailTemplate');
-            $result = $this->EmailTemplate->send($_POST);
+            $result = $this->EmailTemplate->send();
             $result = ($result) ? 'true' : 'false';
         }
 
@@ -67,7 +71,7 @@ class Page extends Base {
         $view->setTemplate('default');
         $view->setOptions(['shortcode' => false]);
         $view->setSections(['Backend.contact' => ['name' => 'Contact', 'active' => true]]);
-        $view->addData(['user_id' => (isset($_GET['user_id'])) ? $_GET['user_id'] : '']);
+        $view->addData(['user_id' => $params['user_id']]);
         $view->addData(['result' => isset($result) ? $result : '']);
         $view->addData(['title' => 'Contact User']);
         $view->addData(['background' => 'bg-carrot']);
@@ -101,11 +105,14 @@ class Page extends Base {
      * @return  void
      */
     public function page_setting(){
+        /** Sanitize Params */
+        $params = $this->sanitizeParams($_POST, ['field_menu_slug' => 'key']);
+
         /** Handle submission */
         $menuSlug = strtolower(TRIANGLE_NAME) . '-setting';
-        if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle-setting'){
+        if($params['field_menu_slug']=='triangle-setting'){
             $this->loadController('Backend');
-            $result = $this->Backend->saveSettings($_POST);
+            $result = $this->Backend->saveSettings();
             $result = ($result) ? 'true' : 'false';
         }
 
@@ -131,7 +138,7 @@ class Page extends Base {
             'triangle_smtp_auth' => Service::get_option('triangle_smtp_auth'),
             'triangle_smtp_tls' => Service::get_option('triangle_smtp_tls'),
             'triangle_smtp_username' => Service::get_option('triangle_smtp_username'),
-            'triangle_smtp_password' => Service::get_option('triangle_smtp_password'),
+            'triangle_smtp_password' => md5(Service::get_option('triangle_smtp_password')),
         ]]);
         $view->setSections([
             'Backend.setting.setting' => ['name' => 'Setting', 'active' => true],

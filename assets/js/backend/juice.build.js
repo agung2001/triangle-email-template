@@ -2424,8 +2424,7 @@
         }
 
     },{"../utils":16,"lodash":94}],10:[function(require,module,exports){
-// https://github.com/jquery/jquery/blob/2.1.3/src/manipulation/var/rcheckableType.js
-// https://github.com/jquery/jquery/blob/2.1.3/src/serialize.js
+//
         var _ = require('lodash'),
             submittableSelector = 'input,select,textarea,keygen',
             rCRLF = /\r?\n/g,
@@ -4065,7 +4064,6 @@
             getAttributeValue = DomUtils.getAttributeValue,
             falseFunc = require("boolbase").falseFunc;
 
-//https://github.com/slevithan/XRegExp/blob/master/src/xregexp.js#L469
         var reChars = /[-[\]{}()*+?.,\\^$|#\s]/g;
 
         /*

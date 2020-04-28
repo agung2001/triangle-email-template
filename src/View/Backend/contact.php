@@ -19,7 +19,7 @@
                     ]) ?>
                     <div id="field-template-container" class="field-container field-ajax">
                         <select name="field_template" id="select-field-template"></select>
-                        <p class="field-info"> Choose email template </p>
+                        <p class="field-info">Choose email template</p>
                     </div>
                 </td>
             </tr>

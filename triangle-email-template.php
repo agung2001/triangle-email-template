@@ -51,10 +51,10 @@ add_action('init', 'Triangle');
  * Lifecycle Hooks
  * @activate
  */
-function activate(){
+function Triangle_activate(){
     $config = file_get_contents(dirname(__FILE__) . '/config.json');
     $config = json_decode($config);
     $config->path = __FILE__;
     new Triangle\Lifecycle\Activate($config);
 }
-register_activation_hook( __FILE__, 'activate');
+register_activation_hook( __FILE__, 'Triangle_activate');
