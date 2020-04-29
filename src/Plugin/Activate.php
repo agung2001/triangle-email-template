@@ -63,6 +63,10 @@ class Activate {
             if(!is_dir($dst)) {
                 mkdir($dst, 0755, true);
                 $this->Helper->copyDir($src,$dst);
+                /** Remove files */
+                if(file_exists($dst . '/' . $theme . '.css')) unlink($dst . '/' . $theme . '.css');
+                if(file_exists($dst . '/' . $theme . '.html')) unlink($dst . '/' . $theme . '.html');
+                if(file_exists($dst . '/standard.html')) unlink($dst . '/standard.html');
             }
             /** Setup Theme Data */
             $this->setupThemeData($theme, $src);
