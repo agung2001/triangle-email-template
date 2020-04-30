@@ -256,21 +256,15 @@ input:checked + .slider:before {
   #section-contact .field-info {
     font-style: italic;
     color: #808080; }
-  #section-contact #form-result {
-    display: none;
-    padding: 10px 0;
-    font-weight: bold; }
-    #section-contact #form-result.form-result-false {
-      color: #e74c3c; }
-    #section-contact #form-result.form-result-true {
-      color: #27ae60; }
   #section-contact #field-user-container .select2-container {
     margin-top: -7px; }
   #section-contact #field-user-container #add-user-to-lists {
+    background: #bdc3c7;
     cursor: pointer;
     color: #000;
     text-decoration: none;
-    font-size: 20px; }
+    font-size: 20px;
+    padding: 0px 5px 2px 5px; }
   #section-contact .badges {
     display: inline-block;
     background: #bdc3c7;
@@ -285,13 +279,15 @@ input:checked + .slider:before {
     color: #fff;
     margin-right: 10%; }
 
+#section-send #email-send-status {
+  display: none;
+  margin: 200px;
+  text-align: center; }
+
 /**
 * Page Email Template
 * @backend @edit
 */
-#template-rendered-url {
-  display: none; }
-
 #section-codeeditor {
   padding: 10px; }
   #section-codeeditor .container, #section-codeeditor .element_fields {

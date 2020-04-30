@@ -1,6 +1,6 @@
 {
   "name" : "Triangle",
-  "version" : "1.0.1",
+  "version" : "1.0.4",
   "production" : false,
   "enableHooks" : ["action", "filter", "shortcode"],
   "templates": [

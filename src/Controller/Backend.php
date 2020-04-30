@@ -91,7 +91,7 @@ class Backend extends Base {
         $view->setTemplate('blank');
         $view->setSections(['Backend.script' => []]);
         $view->setOptions(['shortcode' => false]);
-        $view->addData(['screen' => $this->Helper->getScreen()]);
+        $view->addData(['screen' => Service::getScreen()]);
         $view->addData(['options' => [
             'animation_tab' => Service::get_option('triangle_animation_tab'),
             'animation_content' => Service::get_option('triangle_animation_content'),
@@ -100,7 +100,7 @@ class Backend extends Base {
         /** Styles and Scripts */
         $min = (TRIANGLE_PRODUCTION) ? '.min' : '';
         Service::wp_enqueue_style('triangle_css', "style$min.css" );
-        Service::wp_enqueue_script('triangle_js_footer', "backend/plugin$min.js", '', '', true);
+        Service::wp_enqueue_script('triangle_js_footer', "backend/plugin$min.js",'', '', true);
     }
 
     /**
@@ -108,10 +108,10 @@ class Backend extends Base {
      * @return  void
      */
     private function backend_load_plugin_scripts(){
-        $screen = $this->Helper->getScreen();
+        $screen = Service::getScreen();
         if($screen->base=='users') Service::wp_enqueue_script('triangle_user_js', 'backend/user.js');
-        if($screen->base=='toplevel_page_triangle') Service::wp_enqueue_script('triangle_contact_js', 'backend/contact.js', '', '', true);
-        if($screen->base=='triangle_page_triangle-setting') Service::wp_enqueue_script('triangle_contact_js', 'backend/setting.js', '', '', true);
+        if($screen->base=='toplevel_page_triangle') Service::wp_enqueue_script('triangle_contact_js', 'backend/contact/contact.js', '', '', true);
+        if($screen->base=='triangle_page_triangle-setting') Service::wp_enqueue_script('triangle_setting_js', 'backend/setting.js', '', '', true);
     }
 
     /**
@@ -129,34 +129,36 @@ class Backend extends Base {
      * @backend - @pageSetting
      * @return  bool
      */
-    public function saveSettings($params){
-        $options = $params;
-
-        /** Set Default Values for checkbox */
-        $checkboxes = [
-            'triangle_smtp',
-            'triangle_smtp_auth',
-            'triangle_smtp_tls',
-            'triangle_animation',
-            'triangle_builder_absolute',
-            'triangle_builder_absolute_in_editor',
-            'triangle_builder_absolute_when_build',
+    public function saveSettings(){
+        /** Sanitize Params */
+        $fields = [
+            'field_option_animation' => 'text',
+            'field_option_animation_tab' => 'text',
+            'field_option_animation_content' => 'text',
+            'field_option_builder_inliner' => 'text',
+            'field_option_smtp' => 'text',
+            'field_option_smtp_auth' => 'text',
+            'field_option_smtp_host' => 'text',
+            'field_option_smtp_port' => 'text',
+            'field_option_smtp_username' => 'text',
+            'field_option_smtp_password' => 'text',
+            'field_option_smtp_encryption' => 'text',
+            'field_option_smtp_tls' => 'text',
         ];
-        $checkboxes = array_flip($checkboxes);
-        foreach($checkboxes as &$check) $check = false;
-        $options = array_merge($checkboxes, $options);
+        $options = $this->sanitizeParams($_POST, $fields);
 
-        /** Transform field key to triangle */
+        /** SMTP password resuse if unchange */
+        $password = Service::get_option('triangle_smtp_password');
+        $options['field_option_smtp_password'] = ($options['field_option_smtp_password']==md5($password)) ?
+            $password : $options['field_option_smtp_password'];
+
+        /** Transform & save field key */
         unset($options['field_menu_slug']);
         foreach($options as $key => $value){
             unset($options[$key]);
             $key = str_replace('field_option','triangle',$key);
+            Service::update_option($key, $value);
             $options[$key] = $value;
-        }
-
-        /** Save settings */
-        foreach($options as $key => $option){
-            Service::update_option($key, $option);
         }
         return $options;
     }

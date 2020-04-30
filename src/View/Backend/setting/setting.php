@@ -1,6 +1,6 @@
 <form method="POST" id="setting-form">
-    <input type="hidden" name="field_menu_slug" value="<?= $menuSlug ?>">
-    <div id="form-result" class="form-result-<?= $result ?>">Options saved successfully!</div>
+    <input type="hidden" name="field_menu_slug" value="<?= $this->esc('attr', $menuSlug) ?>">
+    <div id="form-result" class="form-result-<?= $this->esc('attr',$result) ?>">Options saved successfully!</div>
     <div id="form-message"></div>
     <table class="form-table" role="presentation">
         <tbody>
@@ -32,7 +32,7 @@
                     <div class="field-container">
                         <select name="field_option_animation_tab" id="field_option_animation_tab" class="select2">
                             <?= $this->loadContent('Element.option_animations', [
-                                'value' => $options['triangle_animation_tab']
+                                'value' =>  $this->esc('attr', $options['triangle_animation_tab'])
                             ]) ?>
                         </select>
                     </div>
@@ -45,7 +45,7 @@
                     <div class="field-container">
                         <select name="field_option_animation_content" id="field_option_animation_content" class="select2">
                             <?= $this->loadContent('Element.option_animations', [
-                                'value' => $options['triangle_animation_content']
+                                'value' => $this->esc('attr',$options['triangle_animation_content'])
                             ]) ?>
                         </select>
                     </div>
@@ -68,7 +68,7 @@
                 <td>
                     <div id="field-template-container" class="field-container">
                         <?php
-                            $value = $options['triangle_builder_inliner'];
+                            $value = $this->esc('attr', $options['triangle_builder_inliner']);
                             $opts = [ 'none' => 'None', 'juice' => 'Automattic/Juice'];
                         ?>
                         <select name="field_option_builder_inliner" id="field_option_builder_inliner" class="select2">
@@ -130,10 +130,10 @@
                     <div class="field-container grid">
                         <div class="row">
                             <div class="col-9">
-                                <input type="text" name="field_option_smtp_host" value="<?= ($options['triangle_smtp_host']) ? $options['triangle_smtp_host'] : '' ?>" placeholder="mail.host.com">
+                                <input type="text" name="field_option_smtp_host" value="<?= ($options['triangle_smtp_host']) ? $this->esc('attr', $options['triangle_smtp_host']) : '' ?>" placeholder="mail.host.com">
                             </div>
                             <div class="col-3">
-                                <input type="text" name="field_option_smtp_port" value="<?= ($options['triangle_smtp_port']) ? $options['triangle_smtp_port'] : '' ?>" placeholder="25 | 465 | 587">
+                                <input type="number" name="field_option_smtp_port" value="<?= ($options['triangle_smtp_port']) ? $this->esc('attr', $options['triangle_smtp_port']) : '' ?>" placeholder="25 | 465 | 587">
                             </div>
                         </div>
                     </div>
@@ -144,7 +144,7 @@
                 <th scope="row"><label for="field_option_smtp_username">Username</label></th>
                 <td>
                     <div class="field-container">
-                        <input type="text" name="field_option_smtp_username" value="<?= ($options['triangle_smtp_username']) ? $options['triangle_smtp_username'] : '' ?>" placeholder="Username">
+                        <input type="text" name="field_option_smtp_username" value="<?= ($options['triangle_smtp_username']) ? $this->esc('attr', $options['triangle_smtp_username']) : '' ?>" placeholder="Username">
                     </div>
                 </td>
             </tr>
@@ -153,7 +153,7 @@
                 <th scope="row"><label for="field_option_smtp_password">Password</label></th>
                 <td>
                     <div class="field-container">
-                        <input type="password" name="field_option_smtp_password" value="<?= ($options['triangle_smtp_password']) ? $options['triangle_smtp_password'] : '' ?>" placeholder="Password">
+                        <input type="password" name="field_option_smtp_password" value="<?= ($options['triangle_smtp_password']) ? $this->esc('attr', $options['triangle_smtp_password']) : '' ?>" placeholder="Password">
                     </div>
                 </td>
             </tr>
@@ -163,7 +163,7 @@
                 <td>
                     <div class="field-container">
                         <?php
-                        $value = $options['triangle_smtp_encryption'];
+                        $value = $this->esc('attr',$options['triangle_smtp_encryption']);
                         $opts = [ 'none' => 'None', 'tls' => 'TLS', 'ssl' => 'SSL'];
                         ?>
                         <select name="field_option_smtp_encryption" id="field_option_smtp_encryption" class="select2">

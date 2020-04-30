@@ -3,7 +3,7 @@
 * Plugin Name:       Triangle - Email Template Builder
 * Plugin URI:        https://agungsundoro.blogspot.com
 * Description:       Create custom professional looking email template for invoices, newsletter and notifications.
-* Version:           1.0.1
+* Version:           1.0.4
 * Author:            Agung Sundoro
 * Author URI:        https://agungsundoro.blogspot.com
 * License:           GPL-3.0
@@ -51,10 +51,10 @@ add_action('init', 'Triangle');
  * Lifecycle Hooks
  * @activate
  */
-function activate(){
+function Triangle_activate(){
     $config = file_get_contents(dirname(__FILE__) . '/config.json');
     $config = json_decode($config);
     $config->path = __FILE__;
     new Triangle\Lifecycle\Activate($config);
 }
-register_activation_hook( __FILE__, 'activate');
+register_activation_hook( __FILE__, 'Triangle_activate');

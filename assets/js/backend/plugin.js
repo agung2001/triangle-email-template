@@ -81,6 +81,10 @@ function validate_form(specs, states){
                 validation.status = false;
                 validation.message = (specs.messages && specs.messages[spec]) ? specs.messages[spec] :
                     setupMessage(spec, ` field is not valid! Please input valid email address!`);
+            } else if (specs.types[spec] == 'integer' && !Number.isInteger(specs.types[spec])) {
+                validation.status = false;
+                validation.message = (specs.messages && specs.messages[spec]) ? specs.messages[spec] :
+                    setupMessage(spec, ` field is not valid! Please input valid integer number!`);
             }
             if (!validation.status) return true;
         }

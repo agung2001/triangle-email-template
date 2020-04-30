@@ -47,6 +47,13 @@ class EmailTemplate extends Model {
             }
         }
 
+        /** @backend - Meta_fields : Extra key for standard */
+        $key  = 'template_standard';
+        $meta = new Meta();
+        $meta->setType($this);
+        $meta->setKey($key);
+        $this->metas[$key] = $meta;
+
         /** @backend - Hooks - Emailtemplate save post hook */
         $action = new Action();
         $action->setComponent($this);
@@ -74,31 +81,29 @@ class EmailTemplate extends Model {
      * @var     bool    $update     Whether this is an existing post being updated or not.
      */
     public function save_emailtemplate($post_id, $post, $update){
-        $pagenow = $this->Helper->getScreen()->pagenow;
+        $pagenow = Service::getScreen()->pagenow;
         if (!empty($_POST) && $post->post_type=='emailtemplate' && in_array($pagenow, ['post.php', 'post-new.php'])){
             /** Load Options */
             $this->loadController('EmailTemplate');
             $this->ID = $post_id;
-            $templates = $this->Plugin->getConfig()->templates;
-            $templates = $this->Helper->getTemplatesFromConfig($templates);
-            $options = [
-                'builder_inliner' => Service::get_option('triangle_builder_inliner'),
-            ];
+
+            /** Validate Params */
+            $default = ['template_html', 'juice_output'];
+            if(!$this->EmailTemplate->validateParams($_POST, $default)) die('Parameters did not match the specs!');
+
+            /** Sanitize Params */
+            $default = array_flip($default);
+            foreach($default as &$value) $value = 'html';
+            $params = $this->EmailTemplate->sanitizeParams($_POST, $default);
+
             /** Save meta field */
-            $html = ''; $css = '';
-            foreach($this->metas as $meta){
-                $key = $meta->getKey();
-                $name = str_replace('template_','',$meta->getKey());
-                if(!isset($_POST[$key])) continue;
-                if($templates[$name]->mode=='ace/mode/html') $html .= $_POST[$key];
-                elseif($templates[$name]->mode=='ace/mode/css') $css .= $_POST[$key];
-                $meta->setValue($_POST[$key]);
+            $params['template_standard'] = $params['juice_output'];
+            foreach($this->metas as $key => $meta){
+                if(!isset($params[$key])) continue;
+                $value = html_entity_decode($params[$key]);
+                $meta->setValue($value);
                 $results[] = $meta->update_post_meta();
             }
-            /** Build template */
-            if($options['builder_inliner']=='juice') $html = html_entity_decode($_POST['juice_output']);
-            $this->EmailTemplate->buildEmailTemplate($post->post_name, $html, $css);
-            $this->EmailTemplate->standardizeEmailTemplate($post->post_name);
         }
     }
 

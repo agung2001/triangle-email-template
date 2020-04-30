@@ -11,6 +11,8 @@ namespace Triangle;
  * @subpackage Triangle\Includes
  */
 
+use Triangle\Wordpress\Service;
+
 class View {
 
     /**
@@ -80,6 +82,14 @@ class View {
         $content = ob_get_clean();
         if(isset($this->options['shortcode']) && $this->options['shortcode']) $content = do_shortcode($content);
         return $content;
+    }
+
+    /**
+     * Escape function generated within Service.php class
+     * @return mixed    Return escape value
+     */
+    public function esc($type, $value, $args = []){
+        return Service::esc($type, $value, $args);
     }
 
     /**
