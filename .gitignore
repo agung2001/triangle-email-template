@@ -5,6 +5,9 @@ composer.lock
 *.DS_Store
 .DS_Store
 
+# IDEs
+.idea
+
 # SASS
 assets/css/.sass-cache
 assets/css/style.css.map
