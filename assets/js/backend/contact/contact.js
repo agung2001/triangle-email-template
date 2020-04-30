@@ -4,12 +4,6 @@
      * */
     init();
     function init(){
-        /** Email send status */
-        let html = `<i class="far fas-sad-tear"></i> Email crashed, please turn off conflicting plugin and try again!`;
-        jQuery('.form-result-false').html(html);
-        jQuery('.form-result-true').html('Email successfully send!');
-        animate('.form-result-false','animated FadeIn').show();
-        animate('.form-result-true','animated FadeIn').show();
         /** Request data */
         jQuery.ajax({
             method: 'POST',
@@ -27,9 +21,6 @@
                 },
             },
             success: function(data){
-                setTimeout(function(){
-                    animate('.form-result-true','animated fadeOut').hide();
-                },5000);
                 jQuery('#field-users').val('');
                 load_field_templates(data);
                 load_field_users(data);
@@ -87,7 +78,7 @@
         /** Set default user */
         if(data.defaultUser){
             jQuery('#field-users').val(data.defaultUser.data.ID);
-            jQuery('#user-lists').append(`<span class="badges"><i class="fas fa-times" data-user="${data.defaultUser.data.ID}"></i>${data.defaultUser.data.user_email}</span>`);
+            jQuery('#user-lists').append(`<span class="badges"><i data-user="${data.defaultUser.data.ID}">X</i>${data.defaultUser.data.user_email}</span>`);
         }
         /** Load options */
         jQuery('#select-user-lists').select2({
@@ -107,7 +98,7 @@
             selected = jQuery('#select-user-lists').val(),
             selectedText = jQuery('#select-user-lists').text().replace(/\s/g,'');
             selectedText = selectedText.split('-')[1];
-            selectedText = `<span class="badges"><i class="fas fa-times" data-user="${selected}"></i>${selectedText}</span>`;
+            selectedText = `<span class="badges"><i data-user="${selected}">X</i>${selectedText}</span>`;
         /** Validate selected user */
         let users = lists.split(',');
             users = users.filter((user) => {

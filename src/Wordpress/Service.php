@@ -72,6 +72,41 @@ class Service {
     }
 
     /**
+     * Wordpress shortcode_atts
+     * @var     array   $pairs              Entire list of supported attributes and their defaults.
+     * @var     array   $atts               User defined attributes in shortcode tag.
+     * @var     string   $shortcode         The name of the shortcode, provided for context to enable filtering
+     * @return array    Combined and filtered attribute list.
+     */
+    public static function shortcode_atts($pairs, $atts, $shortcode = ''){
+        return shortcode_atts($pairs, $atts, $shortcode);
+    }
+
+    /**
+     * Wordpress esc function
+     * @return mixed    Return sanitized values
+     */
+    public static function esc($type, $value, $args = []){
+        if($type=='html')  return esc_html($value);
+        elseif($type=='url')  return esc_url($value);
+        elseif($type=='attr')  return esc_attr($value);
+    }
+
+    /**
+     * Wordpress sanitize script
+     * @return mixed    Return sanitized values
+     */
+    public static function sanitize($type, $value, $args = []){
+        if($type=='key')  return sanitize_key($value);
+        elseif($type=='filename')  return sanitize_file_name($value);
+        elseif($type=='text' || $type=='int')  return sanitize_text_field($value);
+        elseif($type=='email')  return sanitize_email($value);
+        elseif($type=='html'){
+            return preg_replace('#<script(.*?)>(.*?)</script>#is', '', $value);
+        }
+    }
+
+    /**
      * Wordpress path function
      */
     public static function getPath($path){
@@ -85,7 +120,6 @@ class Service {
             'upload_dir' => wp_upload_dir()
         ];
         $path['view_path'] = $path['plugin_path'] . 'src/View/';
-        define('TRIANGLE_PATH', serialize($path));
         return $path;
     }
 

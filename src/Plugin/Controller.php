@@ -12,6 +12,7 @@ namespace Triangle\Controller;
  */
 
 use Triangle\Helper;
+use Triangle\Wordpress\Service;
 
 class Controller {
 
@@ -61,14 +62,31 @@ class Controller {
 
     /**
      * Validate $_POST Params
+     * @var     array   $_POST      $_POST parameters
+     * @var     array   $default    Default value config
      * @return  bool    Validation result
      */
-    private function validateParams($params, $default, $validated = true){
+    public function validateParams($params, $default, $validated = true){
         foreach($default as $index => $key){
             if(!isset($params[$key]) && !is_array($key)){ $validated = false; break; }
             if(is_array($key)) $validated = $this->validateParams($params[$index], $key, $validated);
         }
         return $validated;
+    }
+
+    /**
+     * Sanitize $_POST Params
+     * @var     array   Field sanitize params
+     * @var     array   $post      $_POST parameters
+     * @var     array   $get       $_GET parameters
+     * @return  bool    Validation result
+     */
+    public function sanitizeParams($params, $default, $results = []){
+        foreach($default as $key => $type){
+            $results[$key] = (isset($params[$key])) ? $params[$key] : '';
+            $results[$key] = Service::sanitize($type, $results[$key]);
+        }
+        return $results;
     }
 
     /**

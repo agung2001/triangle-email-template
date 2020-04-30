@@ -1,7 +1,6 @@
 <form method="POST" id="contact-form">
     <table class="form-table" role="presentation">
-        <input type="hidden" name="field_menu_slug" value="<?= $menuSlug ?>">
-        <div id="form-result" class="form-result-<?= $result ?>"></div>
+        <input type="hidden" name="field_menu_slug" value="<?= $this->esc('attr',$menuSlug) ?>">
         <div id="form-message"></div>
         <tbody>
             <tr>
@@ -19,7 +18,7 @@
                     ]) ?>
                     <div id="field-template-container" class="field-container field-ajax">
                         <select name="field_template" id="select-field-template"></select>
-                        <p class="field-info"> Choose email template </p>
+                        <p class="field-info">Choose email template</p>
                     </div>
                 </td>
             </tr>
@@ -34,11 +33,11 @@
                     <div id="field-user-container" class="field-container field-ajax">
                         <!-- UI -->
                         <select name="user" id="select-user-lists"></select>
-                        <a id="add-user-to-lists"><i class="fas fa-plus-circle"></i></a>
+                        <a id="add-user-to-lists">+</a>
                         <p class="field-info"> Select user to be contacted </p>
                         <!-- Values -->
                         <div class="field-ajax">
-                            <input type="text" id="default-user" value="<?= $user_id ?>">
+                            <input type="text" id="default-user" value="<?= $this->esc('attr',$user_id) ?>">
                             <input type="text" name="field_users" id="field-users">
                         </div>
                         <div id="user-lists"></div>

@@ -54,24 +54,43 @@ class Page extends Base {
      * @return  void
      */
     public function page_contact(){
+        /** Sanitize Params */
+        $params = $this->sanitizeParams($_POST, ['field_menu_slug' => 'key']);
+        $params = array_merge($params, $this->sanitizeParams($_GET, ['user_id' => 'text']));
+
         /** Handle submission */
         $menuSlug = strtolower(TRIANGLE_NAME);
-        if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle'){
-            $this->loadController('EmailTemplate');
-            $result = $this->EmailTemplate->send($_POST);
-            $result = ($result) ? 'true' : 'false';
+        if($params['field_menu_slug']=='triangle'){
+            /** Validate Params */
+            $default = ['field_template', 'field_users', 'field_from_name', 'field_from_email', 'field_email_subject'];
+            if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
+            /** Sanitize Params */
+            $default = array_flip($default);
+            foreach($default as &$value) $value = 'text';
+            $params = $this->sanitizeParams($_POST, $default);
+            /** Set View */
+            $view = new View();
+            $view->setTemplate('default');
+            $view->setOptions(['shortcode' => true]);
+            $view->setSections(['Backend.contact.send' => ['name' => 'Send', 'active' => true]]);
+            $view->addData([
+                'title' => 'Send',
+                'background' => 'bg-carrot',
+                'params' => $params
+            ]);
+        } else {
+            /** Set View */
+            $view = new View();
+            $view->setTemplate('default');
+            $view->setSections(['Backend.contact.contact' => ['name' => 'Contact', 'active' => true]]);
+            $view->setOptions(['shortcode' => true]);
+            $view->addData([
+                'menuSlug' => $menuSlug,
+                'title' => 'Contact User',
+                'background' => 'bg-carrot',
+                'user_id' => $params['user_id'],
+            ]);
         }
-
-        /** Set View */
-        $view = new View();
-        $view->setTemplate('default');
-        $view->setOptions(['shortcode' => false]);
-        $view->setSections(['Backend.contact' => ['name' => 'Contact', 'active' => true]]);
-        $view->addData(['user_id' => (isset($_GET['user_id'])) ? $_GET['user_id'] : '']);
-        $view->addData(['result' => isset($result) ? $result : '']);
-        $view->addData(['title' => 'Contact User']);
-        $view->addData(['background' => 'bg-carrot']);
-        $view->addData(compact('menuSlug'));
 
         /** Set Main Page */
         $page = new MenuPage();
@@ -101,11 +120,14 @@ class Page extends Base {
      * @return  void
      */
     public function page_setting(){
+        /** Sanitize Params */
+        $params = $this->sanitizeParams($_POST, ['field_menu_slug' => 'key']);
+
         /** Handle submission */
         $menuSlug = strtolower(TRIANGLE_NAME) . '-setting';
-        if(isset($_POST['field_menu_slug']) && $_POST['field_menu_slug']=='triangle-setting'){
+        if($params['field_menu_slug']=='triangle-setting'){
             $this->loadController('Backend');
-            $result = $this->Backend->saveSettings($_POST);
+            $result = $this->Backend->saveSettings();
             $result = ($result) ? 'true' : 'false';
         }
 
@@ -113,29 +135,31 @@ class Page extends Base {
         $view = new View();
         $view->setTemplate('default');
         $view->setOptions(['shortcode' => false]);
-        $view->addData(compact('menuSlug'));
-        $view->addData(['background' => 'bg-alizarin']);
-        $view->addData(['result' => isset($result) ? $result : '']);
-        $view->addData(['options' => [
-            /** Animation */
-            'triangle_animation' => Service::get_option('triangle_animation'),
-            'triangle_animation_tab' => Service::get_option('triangle_animation_tab'),
-            'triangle_animation_content' => Service::get_option('triangle_animation_content'),
-            /** Builder */
-            'triangle_builder_inliner' => Service::get_option('triangle_builder_inliner'),
-            /** SMTP */
-            'triangle_smtp' => Service::get_option('triangle_smtp'),
-            'triangle_smtp_encryption' => Service::get_option('triangle_smtp_encryption'),
-            'triangle_smtp_host' => Service::get_option('triangle_smtp_host'),
-            'triangle_smtp_port' => Service::get_option('triangle_smtp_port'),
-            'triangle_smtp_auth' => Service::get_option('triangle_smtp_auth'),
-            'triangle_smtp_tls' => Service::get_option('triangle_smtp_tls'),
-            'triangle_smtp_username' => Service::get_option('triangle_smtp_username'),
-            'triangle_smtp_password' => Service::get_option('triangle_smtp_password'),
-        ]]);
+        $view->addData([
+            'menuSlug'      => $menuSlug,
+            'background'    => 'bg-alizarin',
+            'result'        => isset($result) ? $result : '',
+            'options'       => [
+                // Animation
+                'triangle_animation' => Service::get_option('triangle_animation'),
+                'triangle_animation_tab' => Service::get_option('triangle_animation_tab'),
+                'triangle_animation_content' => Service::get_option('triangle_animation_content'),
+                // Builder
+                'triangle_builder_inliner' => Service::get_option('triangle_builder_inliner'),
+                // SMTP
+                'triangle_smtp' => Service::get_option('triangle_smtp'),
+                'triangle_smtp_encryption' => Service::get_option('triangle_smtp_encryption'),
+                'triangle_smtp_host' => Service::get_option('triangle_smtp_host'),
+                'triangle_smtp_port' => Service::get_option('triangle_smtp_port'),
+                'triangle_smtp_auth' => Service::get_option('triangle_smtp_auth'),
+                'triangle_smtp_tls' => Service::get_option('triangle_smtp_tls'),
+                'triangle_smtp_username' => Service::get_option('triangle_smtp_username'),
+                'triangle_smtp_password' => md5(Service::get_option('triangle_smtp_password')),
+            ]
+        ]);
         $view->setSections([
             'Backend.setting.setting' => ['name' => 'Setting', 'active' => true],
-            'Backend.setting.docs' => ['name' => 'Docs'],
+            'Backend.setting.docs' => ['name' => 'Docs']
         ]);
 
         /** Set Page */
