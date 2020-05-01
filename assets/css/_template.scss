@@ -2,6 +2,8 @@
 * Modify Template - Container
 * @backend
 */
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
 .triangle-container {
   background: #fcfcfc;
   border-radius: 5px;
@@ -44,12 +46,16 @@
       &.current { display:block; }
       .clear-row { margin:10px 0; }
       .grid {
-        @include grid(100%, 12);
+        @import "bootstrap/grid";
+        margin-top:10px;
+        padding: 0 10px;
         p {
           width:100%;
           margin:8px 0;
         }
-        margin-top:10px;
+        div[class^="col-"] {
+          padding:0;
+        }
         .section-title {
           font-size:1em;
           border-top: 1px solid #e0e0e0;
@@ -57,21 +63,17 @@
         }
         .section-fields {
           margin:30px 0;
-          max-width: 80%;
           label { font-weight:bold; }
           input, select {
-            width:99%;
-            max-width:99%;
+            width:99.99%;
+            max-width:99.99%;
           }
         }
-        .section-content {
-          max-width: 80%;
-        }
         .section-submit {
-          max-width: 80%;
           margin: 30px 0;
         }
       }
+
     }
   }
 }

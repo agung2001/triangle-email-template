@@ -8,10 +8,10 @@
             <h3>Configuration</h3>
         </div>
         <div class="row section-fields">
-            <div class="col-2">
+            <div class="col-sm-2">
                 <label for="field_template">Template</label>
             </div>
-            <div class="col-7">
+            <div class="col-sm-5">
                 <?= $this->loadContent('Element.loading-field', [
                     'id' => 'loading-field-template'
                 ]) ?>
@@ -22,28 +22,30 @@
             </div>
         </div>
         <div class="row section-fields">
-            <div class="col-2">
+            <div class="col-sm-2">
                 <label for="field_users">User</label>
             </div>
-            <div class="col-7">
+            <div class="col-sm-5">
                 <?= $this->loadContent('Element.loading-field', [
                     'id' => 'loading-field-user'
                 ]) ?>
                 <div id="field-user-container" class="field-ajax">
                     <!-- UI -->
-                    <div class="row">
-                        <div class="col-11">
+                    <div class="col-sm-12">
+                        <div class="col-sm-11">
                             <select name="user" id="select-user-lists"></select>
                         </div>
-                        <div class="col-1" style="margin-top:5px;">
+                        <div class="col-sm-1" style="margin:5px 0;">
                             <a id="add-user-to-lists">+</a>
                         </div>
                     </div>
-                    <p class="field-info"> Select user to be contacted </p>
-                    <!-- Values -->
-                    <input type="hidden" id="default-user" value="<?= $this->esc('attr',$user_id) ?>">
-                    <input type="hidden" name="field_users" id="field-users">
-                    <div id="user-lists"></div>
+                    <div class="col-sm-12">
+                        <p class="field-info"> Select user to be contacted </p>
+                        <!-- Values -->
+                        <input type="hidden" id="default-user" value="<?= $this->esc('attr',$user_id) ?>">
+                        <input type="hidden" name="field_users" id="field-users">
+                        <div id="user-lists"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,33 +55,33 @@
             <h3>Information</h3>
         </div>
         <div class="row section-fields">
-            <div class="col-2">
+            <div class="col-sm-2">
                 <label for="field_from_name">From Name</label>
             </div>
-            <div class="col-7">
+            <div class="col-sm-5">
                 <input type="text" name="field_from_name" id="field-from-name" placeholder="Your Name...">
             </div>
         </div>
         <div class="row section-fields">
-            <div class="col-2">
+            <div class="col-sm-2">
                 <label for="field_from_email">From Email</label>
             </div>
-            <div class="col-7">
+            <div class="col-sm-5">
                 <input type="text" name="field_from_email" id="field-from-email" placeholder="Your Email Address...">
             </div>
         </div>
         <div class="row section-fields">
-            <div class="col-2">
+            <div class="col-sm-2">
                 <label for="field_email_subject">Email Subject</label>
             </div>
-            <div class="col-7">
+            <div class="col-sm-5">
                 <input type="text" name="field_email_subject" id="field-email-subject" placeholder="Email Subject...">
             </div>
         </div>
         <div class="row section-fields">
-            <div class="col-2">
+            <div class="col-sm-2">
             </div>
-            <div class="col-1">
+            <div class="col-sm-1">
                 <button typpe="submit" class="btn-submit">SEND</button>
             </div>
         </div>
