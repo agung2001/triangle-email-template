@@ -7,6 +7,11 @@ The plugin will then automatically combine your HTML and CSS script into a stand
 You can use the plugin for cases like, sending custom invoice, getting in touch with your customers, sending a notification about payments, etc.
 You can also modify the pre-built templates to match your needs.
 
+## Setup and installation 
+* Setup `./build.sh production`
+* Download the plugin and upload to your wordpress /plugins directory installation
+* Activate the plugin
+
 ## Vendor and Library
 * [Automattic/Juice](https://github.com/Automattic/juice) - Given HTML, juice will inline your CSS properties into the style attribute.
 * [ColorlibHQ/email-templates](https://github.com/ColorlibHQ/email-templates) - Free Email Templates by Colorlib.
