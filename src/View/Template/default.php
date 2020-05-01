@@ -27,7 +27,7 @@
                     $slug = str_replace(' ','',strtolower($option['name']));
                     $active = isset($option['active']) ? 'current' : '';
                 ?>
-                <div id="section-<?= $slug ?>" class="tab-content <?= $active ?>">
+                <div id="section-<?= $slug ?>" class="tab-content triangle-sections <?= $active ?>">
                     <?= $this->loadContent($path) ?>
                 </div>
             <?php endforeach; ?>

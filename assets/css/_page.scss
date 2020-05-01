@@ -2,21 +2,6 @@
 * Page Setting
 */
 #section-setting {
-  .clear {
-    margin: 50px 0;
-  }
-  select {
-    width:90%;
-    max-width:90%;
-  }
-  .grid {
-    @include grid(550, 12);
-    margin: 0;
-    .row { width:90%; }
-    input {
-      width:99% !important;
-    }
-  }
   #form-result {
     display:none;
     padding:10px 0;
@@ -38,25 +23,8 @@
     }
   }
   .btn-submit {
-    float:right;
     background: $alizarin;
     color:#fff;
-    margin-right:10%;
-  }
-}
-#section-docs {
-  .row {
-    max-width:700px;
-    margin-bottom: 50px;
-    ul, li, a, p {
-      font-size:15px;
-    }
-    h3 { font-size: 1.4em; }
-    h4 { font-size: 1.2em; }
-  }
-  ul {
-    list-style: circle;
-    margin-left:15px;
   }
 }
 
@@ -64,24 +32,13 @@
 * Page Contact
 */
 #section-contact {
-  padding: 5px 20px;
-  .field-ajax { display:none; }
-  .field-info {
-    font-style:italic;
-    color: #808080;
-  }
-  #field-user-container {
-    .select2-container {
-      margin-top:-7px;
-    }
-    #add-user-to-lists {
-      background: $silver;
-      cursor: pointer;
-      color:#000;
-      text-decoration: none;
-      font-size:20px;
-      padding: 0px 5px 2px 5px;
-    }
+  #add-user-to-lists {
+    cursor:pointer;
+    border:none;
+    background: $nephritis;
+    color:#fff;
+    padding: 8px 25px;
+    border-radius:5px;
   }
   .badges {
     display:inline-block;
@@ -94,10 +51,8 @@
     }
   }
   .btn-submit {
-    float:right;
     background: $carrot;
     color:#fff;
-    margin-right:10%;
   }
 }
 #section-send {

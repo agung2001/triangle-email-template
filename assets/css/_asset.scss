@@ -8,20 +8,6 @@ $concrete: #95a5a6;
 $silver: #bdc3c7;
 
 // Assets
-.field-container {
-  max-width: 550px !important;
-  input[type=text], input[type=password], .select2-container {
-    width:90% !important;
-  }
-}
-.btn-submit {
-  cursor:pointer;
-  border:none;
-  background: $concrete;
-  color:#000;
-  padding: 8px 25px;
-  border-radius:5px;
-}
 #form-message {
   display:none;
   padding:10px 0;
@@ -84,3 +70,13 @@ input:checked + .slider:before {
 
 // Text
 .text-alizarin { color:$alizarin; }
+
+// Btn
+.btn-submit {
+  cursor:pointer;
+  border:none;
+  background: $concrete;
+  color:#000;
+  padding: 8px 25px;
+  border-radius:5px;
+}

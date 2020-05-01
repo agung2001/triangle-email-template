@@ -1,5 +1,5 @@
 /**
- * Global Plugin Script
+ * Handle section tab
  * @about-page
  * */
 jQuery('ul.nav-tab-wrapper li').on('click', function(){

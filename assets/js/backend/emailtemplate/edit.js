@@ -55,10 +55,8 @@
         let hideStyle = ['none', 'juice'];
         if(hideStyle.includes(data.options.inliner)) data.templates.splice(1,1);
         /** Builder_Juice */
-        if(data.options.inliner=='juice'){
-            data.juice = { id: 'juice', text: 'Juice', mode: 'ace/mode/html', value: '' };
-            window.juiceInput = jQuery('#juice_input');
-        }
+        data.juice = { id: 'juice', text: 'Juice', mode: 'ace/mode/html', value: '' };
+        window.juiceInput = jQuery('#juice_input');
         return data;
     }
 
@@ -73,16 +71,14 @@
         data.templates.map((template) => {
             template.children.map((children) => {
                 let html = `<textarea name="template_${children.id}" id="template_${children.id}" class="element_fields" cols="10">${children.value}</textarea>`;
-                htmlPreview = children.value;
+                htmlPreview = children.value[0];
                 jQuery('#template-fields').append(html);
                 elements[children.id] = children;
             });
         });
-        if(data.options.inliner=='juice') {
-            jQuery('#juice_input').val(htmlPreview);
-            jQuery('#juice_output').val(htmlPreview);
-            jQuery('#juice_preview').contents().find('html').html(htmlPreview);
-        }
+        jQuery('#juice_input').val(htmlPreview);
+        jQuery('#juice_output').val(htmlPreview);
+        jQuery('#juice_preview').contents().find('html').html(htmlPreview);
     }
 
     /**

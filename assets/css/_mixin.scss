@@ -2,7 +2,11 @@
 // $grid__bp-md = Grid size
 // $grid__cols = n Element of column
 @mixin grid($grid__bp-md, $grid__cols){
-  max-width: $grid__bp-md * 1px;
+  @if unit($grid__bp-md) == 'px' {
+    max-width: $grid__bp-md * 1px;
+  } @else {
+    max-width: $grid__bp-md;
+  }
   margin: 0 auto;
   .row {
     display: flex;

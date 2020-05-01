@@ -59,7 +59,7 @@ class Activate {
         foreach($themes as $theme){
             /** Copy Directories */
             $src = $path['plugin_path'] . 'assets/demo/' . $theme;
-            $dst = $path['upload_dir']['basedir'] . '/EmailTemplate/' . $theme;
+            $dst = $path['upload_dir']['basedir'] . '/emailtemplate/' . $theme;
             if(!is_dir($dst)) {
                 mkdir($dst, 0755, true);
                 $this->Helper->copyDir($src,$dst);
@@ -101,7 +101,7 @@ class Activate {
                 $filePath = $src . '/' . $theme . '.html';
                 if(file_exists($filePath)){
                     $value = $this->Helper->convertImagesRelativetoAbsolutePath(
-                        $path['upload_dir']['baseurl'] . '/EmailTemplate/' . $theme . '/',
+                        $path['upload_dir']['baseurl'] . '/emailtemplate/' . $theme . '/',
                         file_get_contents($filePath)
                     );
                     $meta->setValue($value);

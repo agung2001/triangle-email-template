@@ -12,6 +12,7 @@ if [ "production" == "$1" ]
       # Sass cache
       rm -rf assets/css/.sass-cache
       rm -rf style.css.map
+      rm -rf assets/css/*.scss
 
       # Git
       rm -rf .git

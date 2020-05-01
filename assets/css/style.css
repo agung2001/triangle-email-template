@@ -1,16 +1,3 @@
-.field-container {
-  max-width: 550px !important; }
-  .field-container input[type=text], .field-container input[type=password], .field-container .select2-container {
-    width: 90% !important; }
-
-.btn-submit {
-  cursor: pointer;
-  border: none;
-  background: #95a5a6;
-  color: #000;
-  padding: 8px 25px;
-  border-radius: 5px; }
-
 #form-message {
   display: none;
   padding: 10px 0;
@@ -78,6 +65,14 @@ input:checked + .slider:before {
 .text-alizarin {
   color: #e74c3c; }
 
+.btn-submit {
+  cursor: pointer;
+  border: none;
+  background: #95a5a6;
+  color: #000;
+  padding: 8px 25px;
+  border-radius: 5px; }
+
 /**
 * Modify Template - Container
 * @backend
@@ -117,8 +112,60 @@ input:checked + .slider:before {
     padding: 10px 20px; }
     .triangle-container .content .tab-content.current {
       display: block; }
-  .triangle-container .content .form-table th {
-    padding: 5px 5px 20px 0; }
+    .triangle-container .content .tab-content .clear-row {
+      margin: 10px 0; }
+    .triangle-container .content .tab-content .grid {
+      max-width: 100%;
+      margin: 0 auto;
+      margin-top: 10px; }
+      .triangle-container .content .tab-content .grid .row {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%; }
+      .triangle-container .content .tab-content .grid .col-1 {
+        flex-basis: 8.3333333333%; }
+      .triangle-container .content .tab-content .grid .col-2 {
+        flex-basis: 16.6666666667%; }
+      .triangle-container .content .tab-content .grid .col-3 {
+        flex-basis: 25%; }
+      .triangle-container .content .tab-content .grid .col-4 {
+        flex-basis: 33.3333333333%; }
+      .triangle-container .content .tab-content .grid .col-5 {
+        flex-basis: 41.6666666667%; }
+      .triangle-container .content .tab-content .grid .col-6 {
+        flex-basis: 50%; }
+      .triangle-container .content .tab-content .grid .col-7 {
+        flex-basis: 58.3333333333%; }
+      .triangle-container .content .tab-content .grid .col-8 {
+        flex-basis: 66.6666666667%; }
+      .triangle-container .content .tab-content .grid .col-9 {
+        flex-basis: 75%; }
+      .triangle-container .content .tab-content .grid .col-10 {
+        flex-basis: 83.3333333333%; }
+      .triangle-container .content .tab-content .grid .col-11 {
+        flex-basis: 91.6666666667%; }
+      .triangle-container .content .tab-content .grid .col-12 {
+        flex-basis: 100%; }
+      .triangle-container .content .tab-content .grid p {
+        width: 100%;
+        margin: 8px 0; }
+      .triangle-container .content .tab-content .grid .section-title {
+        font-size: 1em;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0; }
+      .triangle-container .content .tab-content .grid .section-fields {
+        margin: 30px 0;
+        max-width: 80%; }
+        .triangle-container .content .tab-content .grid .section-fields label {
+          font-weight: bold; }
+        .triangle-container .content .tab-content .grid .section-fields input, .triangle-container .content .tab-content .grid .section-fields select {
+          width: 99%;
+          max-width: 99%; }
+      .triangle-container .content .tab-content .grid .section-content {
+        max-width: 80%; }
+      .triangle-container .content .tab-content .grid .section-submit {
+        max-width: 80%;
+        margin: 30px 0; }
 
 /**
 * Modify Template - Loading
@@ -131,37 +178,16 @@ input:checked + .slider:before {
     width: 150px; }
 
 .triangle-loading-field {
-  max-width: 400px;
+  max-width: 200;
   margin: 0 auto;
-  display: block;
   margin: 0; }
   .triangle-loading-field .row {
     display: flex;
     flex-wrap: wrap;
     width: 100%; }
   .triangle-loading-field .col-1 {
-    flex-basis: 8.3333333333%; }
-  .triangle-loading-field .col-2 {
-    flex-basis: 16.6666666667%; }
-  .triangle-loading-field .col-3 {
-    flex-basis: 25%; }
-  .triangle-loading-field .col-4 {
-    flex-basis: 33.3333333333%; }
-  .triangle-loading-field .col-5 {
-    flex-basis: 41.6666666667%; }
-  .triangle-loading-field .col-6 {
     flex-basis: 50%; }
-  .triangle-loading-field .col-7 {
-    flex-basis: 58.3333333333%; }
-  .triangle-loading-field .col-8 {
-    flex-basis: 66.6666666667%; }
-  .triangle-loading-field .col-9 {
-    flex-basis: 75%; }
-  .triangle-loading-field .col-10 {
-    flex-basis: 83.3333333333%; }
-  .triangle-loading-field .col-11 {
-    flex-basis: 91.6666666667%; }
-  .triangle-loading-field .col-12 {
+  .triangle-loading-field .col-2 {
     flex-basis: 100%; }
   .triangle-loading-field .loading-label {
     margin: 8px 10px; }
@@ -171,47 +197,6 @@ input:checked + .slider:before {
 /**
 * Page Setting
 */
-#section-setting .clear {
-  margin: 50px 0; }
-#section-setting select {
-  width: 90%;
-  max-width: 90%; }
-#section-setting .grid {
-  max-width: 550px;
-  margin: 0 auto;
-  margin: 0; }
-  #section-setting .grid .row {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%; }
-  #section-setting .grid .col-1 {
-    flex-basis: 8.3333333333%; }
-  #section-setting .grid .col-2 {
-    flex-basis: 16.6666666667%; }
-  #section-setting .grid .col-3 {
-    flex-basis: 25%; }
-  #section-setting .grid .col-4 {
-    flex-basis: 33.3333333333%; }
-  #section-setting .grid .col-5 {
-    flex-basis: 41.6666666667%; }
-  #section-setting .grid .col-6 {
-    flex-basis: 50%; }
-  #section-setting .grid .col-7 {
-    flex-basis: 58.3333333333%; }
-  #section-setting .grid .col-8 {
-    flex-basis: 66.6666666667%; }
-  #section-setting .grid .col-9 {
-    flex-basis: 75%; }
-  #section-setting .grid .col-10 {
-    flex-basis: 83.3333333333%; }
-  #section-setting .grid .col-11 {
-    flex-basis: 91.6666666667%; }
-  #section-setting .grid .col-12 {
-    flex-basis: 100%; }
-  #section-setting .grid .row {
-    width: 90%; }
-  #section-setting .grid input {
-    width: 99% !important; }
 #section-setting #form-result {
   display: none;
   padding: 10px 0;
@@ -228,56 +213,30 @@ input:checked + .slider:before {
     margin-left: 20px;
     display: inline; }
 #section-setting .btn-submit {
-  float: right;
   background: #e74c3c;
-  color: #fff;
-  margin-right: 10%; }
-
-#section-docs .row {
-  max-width: 700px;
-  margin-bottom: 50px; }
-  #section-docs .row ul, #section-docs .row li, #section-docs .row a, #section-docs .row p {
-    font-size: 15px; }
-  #section-docs .row h3 {
-    font-size: 1.4em; }
-  #section-docs .row h4 {
-    font-size: 1.2em; }
-#section-docs ul {
-  list-style: circle;
-  margin-left: 15px; }
+  color: #fff; }
 
 /**
 * Page Contact
 */
-#section-contact {
-  padding: 5px 20px; }
-  #section-contact .field-ajax {
-    display: none; }
-  #section-contact .field-info {
-    font-style: italic;
-    color: #808080; }
-  #section-contact #field-user-container .select2-container {
-    margin-top: -7px; }
-  #section-contact #field-user-container #add-user-to-lists {
-    background: #bdc3c7;
+#section-contact #add-user-to-lists {
+  cursor: pointer;
+  border: none;
+  background: #27ae60;
+  color: #fff;
+  padding: 8px 25px;
+  border-radius: 5px; }
+#section-contact .badges {
+  display: inline-block;
+  background: #bdc3c7;
+  padding: 5px 10px;
+  margin: 2px; }
+  #section-contact .badges i {
     cursor: pointer;
-    color: #000;
-    text-decoration: none;
-    font-size: 20px;
-    padding: 0px 5px 2px 5px; }
-  #section-contact .badges {
-    display: inline-block;
-    background: #bdc3c7;
-    padding: 5px 10px;
-    margin: 2px; }
-    #section-contact .badges i {
-      cursor: pointer;
-      margin-right: 5px; }
-  #section-contact .btn-submit {
-    float: right;
-    background: #e67e22;
-    color: #fff;
-    margin-right: 10%; }
+    margin-right: 5px; }
+#section-contact .btn-submit {
+  background: #e67e22;
+  color: #fff; }
 
 #section-send #email-send-status {
   display: none;
