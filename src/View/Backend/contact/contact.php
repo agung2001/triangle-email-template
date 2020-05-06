@@ -3,23 +3,9 @@
     <div id="form-message"></div>
 
     <div class="grid">
-        <!-- Configuration -->
+        <!-- Recipient -->
         <div class="row section-title">
-            <h3>Configuration</h3>
-        </div>
-        <div class="row section-fields">
-            <div class="col-sm-2">
-                <label for="field_template">Template</label>
-            </div>
-            <div class="col-sm-5">
-                <?= $this->loadContent('Element.loading-field', [
-                    'id' => 'loading-field-template'
-                ]) ?>
-                <div id="field-template-container" class="field-ajax">
-                    <select name="field_template" id="select-field-template"></select>
-                    <p class="field-info">Choose email template</p>
-                </div>
-            </div>
+            <h3>Recipient</h3>
         </div>
         <div class="row section-fields">
             <div class="col-sm-2">
@@ -46,6 +32,20 @@
                         <input type="hidden" name="field_users" id="field-users">
                         <div id="user-lists"></div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="row section-fields">
+            <div class="col-sm-2">
+                <label for="field_template">Template</label>
+            </div>
+            <div class="col-sm-5">
+                <?= $this->loadContent('Element.loading-field', [
+                    'id' => 'loading-field-template'
+                ]) ?>
+                <div id="field-template-container" class="field-ajax">
+                    <select name="field_template" id="select-field-template"></select>
+                    <p class="field-info">Choose email template</p>
                 </div>
             </div>
         </div>

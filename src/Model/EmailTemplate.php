@@ -13,7 +13,6 @@ namespace Triangle\Model;
 
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Meta;
-use Triangle\Wordpress\Service;
 use Triangle\Wordpress\Type;
 
 class EmailTemplate extends Model {
@@ -29,7 +28,7 @@ class EmailTemplate extends Model {
         parent::__construct($plugin);
 
         /** @backend - Post_type : emailtemplate */
-        $this->args['publicly_queryable'] = false;
+        $this->args['publicly_queryable'] = true;
         $this->args['has_archive'] = false;
         $this->args['show_in_menu'] = false;
         $this->args['labels'] = ['name' => 'Email Template'];
@@ -81,7 +80,7 @@ class EmailTemplate extends Model {
      * @var     bool    $update     Whether this is an existing post being updated or not.
      */
     public function save_emailtemplate($post_id, $post, $update){
-        $pagenow = Service::getScreen()->pagenow;
+        $pagenow = $this->Service->Page->getScreen()->pagenow;
         if (!empty($_POST) && $post->post_type=='emailtemplate' && in_array($pagenow, ['post.php', 'post-new.php'])){
             /** Load Options */
             $this->loadController('EmailTemplate');

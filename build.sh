@@ -9,10 +9,11 @@ if [ "production" == "$1" ]
       rm -rf composer.lock
       rm -rf composer.json
 
-      # Sass cache
+      # Sass
       rm -rf assets/css/.sass-cache
       rm -rf style.css.map
       rm -rf assets/css/*.scss
+      rm -rf assets/css/bootstrap
 
       # Git
       rm -rf .git

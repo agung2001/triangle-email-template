@@ -14,7 +14,7 @@ namespace Triangle\Controller;
 use Triangle\View;
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Email;
-use Triangle\Wordpress\Service;
+use Triangle\Wordpress\Filter;
 use Triangle\Wordpress\Shortcode;
 use Triangle\Wordpress\User;
 
@@ -45,6 +45,21 @@ class EmailTemplate extends Base {
         $action->setAcceptedArgs(0);
         $this->hooks[] = $action;
 
+        /** @frontend - Hooks - Change default single_emailtemplate */
+        $filter = new Filter();
+        $filter->setComponent($this);
+        $filter->setHook('single_template');
+        $filter->setCallback('cpt_single_template');
+        $filter->setAcceptedArgs(1);
+        $this->hooks[] = $filter;
+
+        /** @frontend - Hooks - Modify content for builder */
+        $filter = clone $filter;
+        $filter->setHook('the_content');
+        $filter->setCallback('cpt_single_template_content');
+        $filter->setAcceptedArgs(1);
+        $this->hooks[] = $filter;
+
         /** @backend @emailTemplate - Setup editor script */
         $shortcode = new Shortcode();
         $shortcode->setComponent($this);
@@ -55,17 +70,53 @@ class EmailTemplate extends Base {
     }
 
     /**
+     * Create custom single template for Emailtemplate post type
+     * @var     string  $template   Path to the template. See locate_template().
+     * @var     string  $type       Sanitized filename without extension.
+     * @var     array   $templates  A list of template candidates, in descending order of priority.
+     * @return  array   Template
+     */
+    public function cpt_single_template($single){
+        global $post;
+        $path = unserialize(TRIANGLE_PATH);
+        $this->loadModel('EmailTemplate');
+        if ( $post->post_type == $this->EmailTemplate->getName() ) {
+            $templatePath = $path['view_path'] . 'EmailTemplate/template/single-emailtemplate.php';
+            return ( file_exists( $templatePath ) ) ? $templatePath : $single;
+        }
+        return $single;
+    }
+
+    public function cpt_single_template_content($content){
+        global $post;
+        $this->loadModel('EmailTemplate');
+        if( is_single() && $post->post_type == $this->EmailTemplate->getName() ) {
+            $post->template = get_post_meta($post->ID, 'template_html', true);
+            ob_start();
+                $view = new View($this->Plugin);
+                $view->setTemplate('frontend.emailtemplate');
+                $view->addData(compact('post'));
+                $view->setSections([
+                    'EmailTemplate.frontend.builder' => ['name' => 'Builder', 'active' => true]
+                ]);
+                $view->build();
+            $content .= ob_get_clean();
+        }
+        return $content;
+    }
+
+    /**
      * Eneque scripts @backend
      * @return  void
      * @var     array   $hook_suffix     The current admin page
      */
     public function backend_enequeue($hook_suffix){
-        $screen = Service::getScreen();
+        $screen = $this->Service->Page->getScreen();
         $this->backend_load_plugin_libraries([],[$this->EmailTemplate->getName()]);
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()) {
             if($screen->pagenow=='post.php' || $screen->pagenow=='post-new.php'){
-                Service::wp_enqueue_script('triangle_emailtemplate_js', 'backend/emailtemplate/edit.js', [], false, true);
-                Service::wp_enqueue_script('juice_js', 'backend/juice.build.js', [], false, true);
+                $this->Service->Asset->wp_enqueue_script('triangle_emailtemplate_js', 'backend/emailtemplate/edit.js', [], false, true);
+                $this->Service->Asset->wp_enqueue_script('juice_js', 'backend/juice.build.js', [], false, true);
             }
         }
     }
@@ -76,20 +127,21 @@ class EmailTemplate extends Base {
      * @return  void
      */
     public function edit_emailtemplate(){
-        $screen = Service::getScreen();
+        $screen = $this->Service->Page->getScreen();
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
-            $view = new View();
-            $view->setTemplate('box');
+            $view = new View($this->Plugin);
+            $view->setTemplate('backend.box');
             $view->setOptions(['shortcode' => false]);
             $view->addData([
                 'screen'        => $screen,
                 'background'    => 'bg-wetasphalt',
                 'options'       => [
-                    'triangle_builder_inliner' => Service::get_option('triangle_builder_inliner')
+                    'triangle_builder_inliner' => $this->Service->Option->get_option('triangle_builder_inliner')
                 ],
             ]);
             $view->setSections([
-                'EmailTemplate.edit-codeeditor' => ['name' => 'Code editor', 'active' => true],
+                'EmailTemplate.edit-builder' => ['name' => 'Builder', 'active' => true],
+                'EmailTemplate.edit-codeeditor' => ['name' => 'Code editor'],
                 'EmailTemplate.edit-preview' => ['name' => 'Preview'],
             ]);
             $view->build();
@@ -127,8 +179,8 @@ class EmailTemplate extends Base {
 
         /** Show status */
         ob_start();
-            $view = new View();
-            $view->setTemplate('blank');
+            $view = new View($this->Plugin);
+            $view->setTemplate('backend.blank');
             $view->addData([
                 'status' => ($status) ? 'Email send successfully!' : 'Email failed to send, please turn off conflicting plugin and try again!',
             ]);

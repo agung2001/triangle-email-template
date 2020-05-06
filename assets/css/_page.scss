@@ -1,5 +1,6 @@
 /**
 * Page Setting
+* @backend
 */
 #section-setting {
   #form-result {
@@ -30,6 +31,7 @@
 
 /**
 * Page Contact
+* @backend
 */
 #section-contact {
   #add-user-to-lists {
@@ -67,6 +69,38 @@
 * Page Email Template
 * @backend @edit
 */
+#section-builder {
+  .email-grid {
+    position: relative;
+    max-width:600px;
+    margin: 0 auto;
+  }
+  .item {
+    display: block;
+    position: absolute;
+    margin: 5px 0px;
+    padding: 0px;
+    z-index: 1;
+    //background: #fff;
+    color: #000;
+    border: 2px solid red;
+    border-radius: 3px;
+  }
+  .item.muuri-item-dragging {
+    z-index: 3;
+  }
+  .item.muuri-item-releasing {
+    z-index: 2;
+  }
+  .item.muuri-item-hidden {
+    z-index: 0;
+  }
+  .item-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+}
 #section-codeeditor {
   padding: 10px;
   .container, .element_fields {

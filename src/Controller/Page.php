@@ -15,7 +15,6 @@ use Triangle\View;
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\MenuPage;
 use Triangle\Wordpress\SubmenuPage;
-use Triangle\Wordpress\Service;
 
 class Page extends Base {
 
@@ -69,8 +68,8 @@ class Page extends Base {
             foreach($default as &$value) $value = 'text';
             $params = $this->sanitizeParams($_POST, $default);
             /** Set View */
-            $view = new View();
-            $view->setTemplate('default');
+            $view = new View($this->Plugin);
+            $view->setTemplate('backend.default');
             $view->setOptions(['shortcode' => true]);
             $view->setSections(['Backend.contact.send' => ['name' => 'Send', 'active' => true]]);
             $view->addData([
@@ -80,8 +79,8 @@ class Page extends Base {
             ]);
         } else {
             /** Set View */
-            $view = new View();
-            $view->setTemplate('default');
+            $view = new View($this->Plugin);
+            $view->setTemplate('backend.default');
             $view->setSections(['Backend.contact.contact' => ['name' => 'Contact', 'active' => true]]);
             $view->setOptions(['shortcode' => true]);
             $view->addData([
@@ -132,8 +131,8 @@ class Page extends Base {
         }
 
         /** Set View */
-        $view = new View();
-        $view->setTemplate('default');
+        $view = new View($this->Plugin);
+        $view->setTemplate('backend.default');
         $view->setOptions(['shortcode' => false]);
         $view->addData([
             'menuSlug'      => $menuSlug,
@@ -141,20 +140,20 @@ class Page extends Base {
             'result'        => isset($result) ? $result : '',
             'options'       => [
                 // Animation
-                'triangle_animation' => Service::get_option('triangle_animation'),
-                'triangle_animation_tab' => Service::get_option('triangle_animation_tab'),
-                'triangle_animation_content' => Service::get_option('triangle_animation_content'),
+                'triangle_animation' => $this->Service->Option->get_option('triangle_animation'),
+                'triangle_animation_tab' => $this->Service->Option->get_option('triangle_animation_tab'),
+                'triangle_animation_content' => $this->Service->Option->get_option('triangle_animation_content'),
                 // Builder
-                'triangle_builder_inliner' => Service::get_option('triangle_builder_inliner'),
+                'triangle_builder_inliner' => $this->Service->Option->get_option('triangle_builder_inliner'),
                 // SMTP
-                'triangle_smtp' => Service::get_option('triangle_smtp'),
-                'triangle_smtp_encryption' => Service::get_option('triangle_smtp_encryption'),
-                'triangle_smtp_host' => Service::get_option('triangle_smtp_host'),
-                'triangle_smtp_port' => Service::get_option('triangle_smtp_port'),
-                'triangle_smtp_auth' => Service::get_option('triangle_smtp_auth'),
-                'triangle_smtp_tls' => Service::get_option('triangle_smtp_tls'),
-                'triangle_smtp_username' => Service::get_option('triangle_smtp_username'),
-                'triangle_smtp_password' => md5(Service::get_option('triangle_smtp_password')),
+                'triangle_smtp' => $this->Service->Option->get_option('triangle_smtp'),
+                'triangle_smtp_encryption' => $this->Service->Option->get_option('triangle_smtp_encryption'),
+                'triangle_smtp_host' => $this->Service->Option->get_option('triangle_smtp_host'),
+                'triangle_smtp_port' => $this->Service->Option->get_option('triangle_smtp_port'),
+                'triangle_smtp_auth' => $this->Service->Option->get_option('triangle_smtp_auth'),
+                'triangle_smtp_tls' => $this->Service->Option->get_option('triangle_smtp_tls'),
+                'triangle_smtp_username' => $this->Service->Option->get_option('triangle_smtp_username'),
+                'triangle_smtp_password' => md5($this->Service->Option->get_option('triangle_smtp_password')),
             ]
         ]);
         $view->setSections([

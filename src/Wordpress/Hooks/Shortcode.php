@@ -24,6 +24,4 @@ class Shortcode extends Hook {
         );
     }
 
-
-
 }

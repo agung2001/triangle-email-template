@@ -13,7 +13,6 @@ namespace Triangle\Api;
 
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\User;
-use Triangle\Wordpress\Service;
 
 class EmailTemplate extends Api {
 
@@ -87,7 +86,7 @@ class EmailTemplate extends Api {
         $data = array();
         $this->EmailTemplate->setID($_POST['args']['post_id']);
         $data['templates'] = $this->get_template_elements_value($_POST['args']['post_id']);
-        $data['options'] = ['inliner' => Service::get_option('triangle_builder_inliner')];
+        $data['options'] = ['inliner' => $this->Service->Option->get_option('triangle_builder_inliner')];
         wp_send_json((object) $data);
     }
 

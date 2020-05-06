@@ -11,8 +11,6 @@ namespace Triangle;
  * @subpackage Triangle\Includes
  */
 
-use Triangle\Wordpress\Service;
-
 class View {
 
     /**
@@ -54,9 +52,11 @@ class View {
      * View constructor
      * @return void
      */
-    public function __construct()
+    public function __construct($plugin)
     {
-        $this->Helper = new Helper();
+        $this->Plugin = $plugin;
+        $this->Helper = $plugin->getHelper();
+        $this->Service = $plugin->getService();
         $this->data = [];
         $this->options = [];
     }
@@ -89,7 +89,7 @@ class View {
      * @return mixed    Return escape value
      */
     public function esc($type, $value, $args = []){
-        return Service::esc($type, $value, $args);
+        return $this->Service->Template->esc($type, $value, $args);
     }
 
     /**

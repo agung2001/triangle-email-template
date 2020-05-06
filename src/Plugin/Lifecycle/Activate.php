@@ -20,30 +20,13 @@ use Triangle\Wordpress\User;
 class Activate {
 
     /**
-     * @access   protected
-     * @var      object    $plugin  Plugin object
-     */
-    protected $Plugin;
-
-    /**
-     * @access   protected
-     * @var      object    $helper  Helper object for controller
-     */
-    protected $Helper;
-
-    /**
-     * Plugin configuration
-     * @var     object
-     */
-    protected $config;
-
-    /**
      * Activate constructor
      * @return void
      */
     public function __construct($config){
         $this->Plugin = new Plugin($config);
         $this->Helper = new Helper();
+        $this->Service = new Service();
         $this->config = $config;
         $this->initDemoTheme();
         $this->initOptions();
@@ -54,7 +37,7 @@ class Activate {
      * @return void
      */
     public function initDemoTheme(){
-        $path = Service::getPath($this->config->path);
+        $path = $this->Service->Asset->getPath($this->config->path);
         $themes = $this->Helper->getDir($path['plugin_path'] . 'assets/demo');
         foreach($themes as $theme){
             /** Copy Directories */
@@ -78,7 +61,7 @@ class Activate {
      * @return void
      */
     private function setupThemeData($theme, $src){
-        $path = Service::getPath($this->config->path);
+        $path = $this->Service->Asset->getPath($this->config->path);
         $EmailTemplate = new EmailTemplate($this->Plugin);
         $EmailTemplate->setArgs([
             'name'        => $theme,
@@ -123,8 +106,8 @@ class Activate {
             'triangle_builder_inliner' => 'juice'
         ];
         foreach($defaultOptions as $key => $value){
-            if(!Service::get_option($key)){
-                Service::update_option($key, $value);
+            if(!$this->Service->Option->get_option($key)){
+                $this->Service->Option->update_option($key, $value);
             }
         }
     }
