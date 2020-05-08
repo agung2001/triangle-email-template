@@ -16,6 +16,7 @@ use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Email;
 use Triangle\Wordpress\Filter;
 use Triangle\Wordpress\Shortcode;
+use Triangle\Wordpress\Type;
 use Triangle\Wordpress\User;
 
 class EmailTemplate extends Base {
@@ -45,7 +46,15 @@ class EmailTemplate extends Base {
         $action->setAcceptedArgs(0);
         $this->hooks[] = $action;
 
-        /** @frontend - Hooks - Change default single_emailtemplate */
+        /** @frontend - Create custom page template for customizer */
+        $action = clone $action;
+        $action->setHook('template_include');
+        $action->setCallback('customizer_custom_page');
+        $action->setAcceptedArgs(1);
+        $action->setPriority(999);
+        $this->hooks[] = $action;
+
+        /** @frontend - Change default single_emailtemplate */
         $filter = new Filter();
         $filter->setComponent($this);
         $filter->setHook('single_template');
@@ -53,7 +62,7 @@ class EmailTemplate extends Base {
         $filter->setAcceptedArgs(1);
         $this->hooks[] = $filter;
 
-        /** @frontend - Hooks - Modify content for builder */
+        /** @frontend - Modify content for builder */
         $filter = clone $filter;
         $filter->setHook('the_content');
         $filter->setCallback('cpt_single_template_content');
@@ -70,23 +79,31 @@ class EmailTemplate extends Base {
     }
 
     /**
-     * Create custom single template for Emailtemplate post type
-     * @var     string  $template   Path to the template. See locate_template().
-     * @var     string  $type       Sanitized filename without extension.
-     * @var     array   $templates  A list of template candidates, in descending order of priority.
-     * @return  array   Template
+     * Create custom page for customizer and template
      */
-    public function cpt_single_template($single){
-        global $post;
-        $path = unserialize(TRIANGLE_PATH);
-        $this->loadModel('EmailTemplate');
-        if ( $post->post_type == $this->EmailTemplate->getName() ) {
-            $templatePath = $path['view_path'] . 'EmailTemplate/template/single-emailtemplate.php';
-            return ( file_exists( $templatePath ) ) ? $templatePath : $single;
+    public function customizer_custom_page($template){
+        $default = ['post_id', 'triangle_customize'];
+        $specs = $this->validateParams($_GET, $default);
+        if(is_customize_preview() && $specs && $_GET['triangle_customize'] == 'true') {
+            $post = Type::get_post($_GET['post_id']);
+            $post->template = get_post_meta($post->ID, 'template_html', true);
+            ob_start();
+                $view = new View($this->Plugin);
+                $view->setTemplate('frontend.blank');
+                $view->addData(compact('post'));
+                $view->setSections([
+                    'Template.frontend.customize' => ['name' => 'Builder', 'active' => true]
+                ]);
+                $view->build();
+            echo ob_get_clean(); return;
+        } else {
+            return $template;
         }
-        return $single;
     }
 
+    /**
+     * Modify single emailtemplate page
+     */
     public function cpt_single_template_content($content){
         global $post;
         $this->loadModel('EmailTemplate');
@@ -94,7 +111,7 @@ class EmailTemplate extends Base {
             $post->template = get_post_meta($post->ID, 'template_html', true);
             ob_start();
                 $view = new View($this->Plugin);
-                $view->setTemplate('frontend.emailtemplate');
+                $view->setTemplate('frontend.editor');
                 $view->addData(compact('post'));
                 $view->setSections([
                     'EmailTemplate.frontend.builder' => ['name' => 'Builder', 'active' => true]
@@ -106,12 +123,30 @@ class EmailTemplate extends Base {
     }
 
     /**
+     * Create custom single template for Emailtemplate post type
+     * @var     string  $template   Path to the template. See locate_template().
+     * @var     string  $type       Sanitized filename without extension.
+     * @var     array   $templates  A list of template candidates, in descending order of priority.
+     * @return  array   Template
+     */
+    public function cpt_single_template($single){
+        global $post;
+        $path = unserialize(TRIANGLE_PATH);
+        $this->loadModel('EmailTemplate');
+        if ( $post->post_type == $this->EmailTemplate->getName() ) {
+            $templatePath = $path['view_path'] . 'EmailTemplate/theme/single.php';
+            return ( file_exists( $templatePath ) ) ? $templatePath : $single;
+        }
+        return $single;
+    }
+
+    /**
      * Eneque scripts @backend
      * @return  void
      * @var     array   $hook_suffix     The current admin page
      */
     public function backend_enequeue($hook_suffix){
-        $screen = $this->Service->Page->getScreen();
+        $screen = unserialize(TRIANGLE_SCREEN);
         $this->backend_load_plugin_libraries([],[$this->EmailTemplate->getName()]);
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()) {
             if($screen->pagenow=='post.php' || $screen->pagenow=='post-new.php'){
@@ -127,8 +162,9 @@ class EmailTemplate extends Base {
      * @return  void
      */
     public function edit_emailtemplate(){
-        $screen = $this->Service->Page->getScreen();
+        $screen = unserialize(TRIANGLE_SCREEN);
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
+            $this->Service->Asset->wp_enqueue_media();
             $view = new View($this->Plugin);
             $view->setTemplate('backend.box');
             $view->setOptions(['shortcode' => false]);

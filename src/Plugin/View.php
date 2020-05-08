@@ -52,8 +52,7 @@ class View {
      * View constructor
      * @return void
      */
-    public function __construct($plugin)
-    {
+    public function __construct($plugin){
         $this->Plugin = $plugin;
         $this->Helper = $plugin->getHelper();
         $this->Service = $plugin->getService();

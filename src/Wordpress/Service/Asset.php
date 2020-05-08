@@ -14,6 +14,12 @@ namespace Triangle\Wordpress\Service;
 class Asset {
 
     /**
+     * WordpressEnqueue Media - for custom wp_editor
+     * @return  void
+     */
+    public function wp_enqueue_media(){ wp_enqueue_media(); }
+
+    /**
      * Wordpress path function
      */
     public function getPath($path){

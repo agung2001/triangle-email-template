@@ -38,7 +38,7 @@ class Activate {
      */
     public function initDemoTheme(){
         $path = $this->Service->Asset->getPath($this->config->path);
-        $themes = $this->Helper->getDir($path['plugin_path'] . 'assets/demo');
+        $themes = $this->Helper->Directory->getDir($path['plugin_path'] . 'assets/demo');
         foreach($themes as $theme){
             /** Copy Directories */
             $src = $path['plugin_path'] . 'assets/demo/' . $theme;

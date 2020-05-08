@@ -17,18 +17,6 @@ use Triangle\Wordpress\Type;
 class Model extends Type {
 
     /**
-     * @access   protected
-     * @var      object    $Plugin  Store plugin object and configuration
-     */
-    protected $Plugin;
-
-    /**
-     * @access   protected
-     * @var      object    $helper  Helper object for controller
-     */
-    protected $Helper;
-
-    /**
      * Construct type
      * @return void
      * @var    object $plugin Plugin configuration
@@ -39,7 +27,8 @@ class Model extends Type {
         $this->name = substr(strrchr(get_called_class(), "\\"), 1);
         $this->name = strtolower($this->name);
         $this->Plugin = $plugin;
-        $this->Helper = new Helper();
+        $this->Helper = $plugin->getHelper();
+        $this->Service = $plugin->getService();
         $this->taxonomies = [];
         $this->hooks = [];
         $this->metas = [];

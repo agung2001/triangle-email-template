@@ -40,8 +40,8 @@ class Frontend extends Base {
      * @var     array   $hook_suffix     The current admin page
      */
     public function frontend_enequeue(){
+        define('TRIANGLE_SCREEN', serialize( $this->Service->Page->getScreen() ));
 //        $this->loadModel('EmailTemplate');
-//        define('TRIANGLE_SCREEN', serialize(Service::getScreen()));
 //        $screens = ['toplevel_page_triangle','triangle_page_triangle-setting'];
 //        $this->backend_load_plugin_assets();
 //        $types = [$this->EmailTemplate->getName()];
@@ -59,7 +59,7 @@ class Frontend extends Base {
         $view->setTemplate('backend.blank');
         $view->setSections(['Backend.script' => []]);
         $view->setOptions(['shortcode' => false]);
-        $view->addData(['screen' => $this->Service->Page->getScreen()]);
+        $view->addData(['screen' => unserialize(TRIANGLE_SCREEN)]);
         $view->addData(['options' => [
             'animation_tab' => $this->Service->Option->get_option('triangle_animation_tab'),
             'animation_content' => $this->Service->Option->get_option('triangle_animation_content'),
@@ -76,7 +76,7 @@ class Frontend extends Base {
      * @return  void
      */
     private function frontend_load_plugin_scripts(){
-        $screen = $this->Service->Page->getScreen();
+        $screen = unserialize(TRIANGLE_SCREEN);
         if($screen->base=='users') $this->Service->Asset->wp_enqueue_script('triangle_user_js', 'backend/user.js');
         if($screen->base=='toplevel_page_triangle') $this->Service->Asset->wp_enqueue_script('triangle_contact_js', 'backend/contact/contact.js', '', '', true);
         if($screen->base=='triangle_page_triangle-setting') $this->Service->Asset->wp_enqueue_script('triangle_setting_js', 'backend/setting.js', '', '', true);

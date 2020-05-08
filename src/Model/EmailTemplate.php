@@ -80,7 +80,7 @@ class EmailTemplate extends Model {
      * @var     bool    $update     Whether this is an existing post being updated or not.
      */
     public function save_emailtemplate($post_id, $post, $update){
-        $pagenow = $this->Service->Page->getScreen()->pagenow;
+        global $pagenow;
         if (!empty($_POST) && $post->post_type=='emailtemplate' && in_array($pagenow, ['post.php', 'post-new.php'])){
             /** Load Options */
             $this->loadController('EmailTemplate');

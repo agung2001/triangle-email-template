@@ -10,7 +10,8 @@ if [ "production" == "$1" ]
       rm -rf composer.json
 
       # Sass
-      rm -rf assets/css/.sass-cache
+      rm -rf assets/css/backend/.sass-cache
+      rm -rf assets/css/frontend/.sass-cache
       rm -rf style.css.map
       rm -rf assets/css/*.scss
       rm -rf assets/css/bootstrap

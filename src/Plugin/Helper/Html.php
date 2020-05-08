@@ -14,18 +14,26 @@ namespace Triangle\Helper;
 class Html {
 
     /**
-     * Wordpress enqueue script
-     * @var   string    $handle     Name of the script. Should be unique
+     * Outputing assets
      * @var   string    $src        Full URL of the script, or path of the script relative to the WordPress root directory
-     * @var   array     $deps       An array of registered script handles this script depends on
-     * @var   string    $ver        String specifying script version number, if it has one, which is added to the URL as a query string for cache busting purposes
-     * @var   bool      $in_footer  	Whether to enqueue the script before </body> instead of in the <head>
+     * @var   bool     $asny        Async
+     */
+    public function css($src){
+        $path = unserialize(TRIANGLE_PATH)['plugin_url'] . 'assets/css/';
+        if(!strpos($src, '//')) $src = $path . $src;
+        echo "<link rel='stylesheet' type='text/css' href='$src' />\n";
+    }
+
+    /**
+     * Outputing assets
+     * @var   string    $src        Full URL of the script, or path of the script relative to the WordPress root directory
+     * @var   bool     $asny        Async
      */
     public function script($src, $async = false){
         $path = unserialize(TRIANGLE_PATH)['plugin_url'] . 'assets/js/';
         if(!strpos($src, '//')) $src = $path . $src;
         $async = ($async) ? 'async' : '';
-        echo "<script src='$src' $async></script>";
+        echo "<script src='$src' $async></script>\n";
     }
 
 }
