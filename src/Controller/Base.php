@@ -35,11 +35,18 @@ class Base extends Controller {
                 'animation_content' => $this->Service->Option->get_option('triangle_animation_content'),
             ]]);
             $view->build();
-
             /** Styles and Scripts */
             $min = (TRIANGLE_PRODUCTION) ? '.min' : '';
             $this->Service->Asset->wp_enqueue_style('triangle_css', "backend/style$min.css" );
-            $this->Service->Asset->wp_enqueue_script('triangle_js_footer', "backend/plugin$min.js",'', '', true);
+            $this->Service->Asset->wp_enqueue_script('triangle_js', "backend/plugin$min.js",'', '', true);
+            /** Wordpress Cores */
+            $this->Service->Asset->wp_enqueue_script('tinymce_js', $this->Service->Asset->includes_url( 'js/tinymce/' ) . 'wp-tinymce.php', array( 'jquery' ), false, true);
+            $this->Service->Asset->setCore(true);
+                $this->Service->Asset->wp_enqueue_style('wp-color-picker');
+                $this->Service->Asset->wp_enqueue_script('wp-color-picker');
+            $this->Service->Asset->setCore(false);
+            /** Fontawesome */
+            $this->Service->Asset->wp_enqueue_style('fontawesome_css', 'fontawesome/css/all.min.css');
             /** Animate.css */
             if($this->Service->Option->get_option('triangle_animation')) $this->Service->Asset->wp_enqueue_style('animatecss', 'animate.min.css');
             /** jQuery Select2 */

@@ -70,37 +70,51 @@
 * @backend @edit
 */
 #section-builder {
+  #juice-builder-elements { display:none !important; }
   .email-grid {
     position: relative;
     margin: 0 auto;
     max-width:800px;
-  }
-  .item {
-    display: block;
-    position: absolute;
-    margin: 5px 0px;
-    padding: 0px;
-    z-index: 1;
-    //background: #fff;
-    color: #000;
-    &:hover {
-      border: 3px solid $amethyst;
-      border-radius: 3px;
+    .item {
+      display: block;
+      position: absolute;
+      margin: 5px 0px;
+      padding: 0px;
+      z-index: 1;
+      color: #000;
+      &:hover {
+        border: 3px solid $amethyst;
+        border-radius: 3px;
+      }
+      .item-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
     }
-    .item-content {
-      position: relative;
-      width: 100%;
-      height: 100%;
+    .item.muuri-item-placeholder {
+      border: 3px dotted $amethyst;
+      z-index: 3;
+      .item-content {
+        display:none;
+      }
+      &:after {
+        position:absolute;
+        content: 'PLACEHOLDER';
+        margin: 0 0 0 -60px;
+        color: #a8a8a8;
+        left:50%;
+      }
     }
-  }
-  .item.muuri-item-dragging {
-    z-index: 3;
-  }
-  .item.muuri-item-releasing {
-    z-index: 2;
-  }
-  .item.muuri-item-hidden {
-    z-index: 0;
+    .item.muuri-item-dragging {
+      z-index: 3;
+    }
+    .item.muuri-item-releasing {
+      z-index: 2;
+    }
+    .item.muuri-item-hidden {
+      z-index: 0;
+    }
   }
   #element-setting {
     float:right;
@@ -115,18 +129,13 @@
       padding: 4px;
       border:none;
       cursor:pointer;
+      i { padding: 0 3px; }
     }
   }
 }
-#element-setting-dialog-content {
-  min-height:250px;
-}
 #section-codeeditor {
   padding: 10px;
-  .container, .element_fields {
-    display:none;
-  }
-  #juice-builder-elements { display:none !important; }
+  .container, .element_fields { display:none; }
   #template-elements, .select2-container {
     width:100% !important;
     display:none;
@@ -138,11 +147,5 @@
     textarea {
       min-height:400px;
     }
-  }
-}
-#section-preview {
-  #juice_preview {
-    width:100% !important;
-    min-height:750px !important;
   }
 }

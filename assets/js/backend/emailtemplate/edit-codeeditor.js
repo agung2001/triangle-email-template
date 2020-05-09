@@ -14,6 +14,7 @@
         window.editor = ace.edit("template-editor");
         window.editor.session.setMode(elements[element].mode);
         window.editor.setOption("enableEmmet", true);
+        window.editor.setOption("maxLines", "Infinity");
         /** Template Editor Text Area Script */
         if(window.textarea) {
             window.editor.getSession().setValue(window.textarea.val());
@@ -78,7 +79,6 @@
         });
         jQuery('#juice_input').val(htmlPreview);
         jQuery('#juice_output').val(htmlPreview);
-        jQuery('#juice_preview').contents().find('html').html(htmlPreview);
     }
 
     /**

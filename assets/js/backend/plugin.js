@@ -2,17 +2,21 @@
  * Handle section tab
  * @about-page
  * */
-jQuery('ul.nav-tab-wrapper li').on('click', function(){
+jQuery(document).on('click', 'ul.nav-tab-general li', handleSectionTab);
+jQuery(document).on('click', 'ul.nav-tab-jconfirm li', handleSectionTab);
+function handleSectionTab(){
     /** Animate */
     let animation = `animated ${window.trianglePlugin.options.animation_tab}`;
     animate(this, animation);
     /** Show Content */
-    var tab_id = jQuery(this).attr('data-tab');
-    jQuery('ul.nav-tab-wrapper li').removeClass('nav-tab-active');
-    jQuery('.tab-content').removeClass('current');
+    let parent = jQuery(this).parent();
+    let tab_id = jQuery(this).attr('data-tab');
+    jQuery('li', parent).removeClass('nav-tab-active');
+    parent = jQuery(this).parent().parent().next();
+    jQuery('.tab-content', parent).removeClass('current');
     jQuery(this).addClass('nav-tab-active');
     jQuery("#"+tab_id).addClass(`current animated ${window.trianglePlugin.options.animation_content}`);
-});
+}
 
 /**
  * Animate UI Component

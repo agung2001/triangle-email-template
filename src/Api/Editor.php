@@ -34,21 +34,23 @@ class Editor extends Api {
     }
 
     /**
-     * Load block editor
+     * Load WP block editor
+     * @return  string     Load WP block editor with content
      */
     public function load_editor(){
+        /** Validate Params */
+        if(!$this->validateParams($_POST, ['element'])) die('Parameters did not match the specs!');
+
+        /** Return block editor */
         $content = html_entity_decode($_POST['element']);
         $content = preg_replace('/\s+/', ' ', stripslashes($content));
-
         ob_start();
-            wp_editor( $content, 'ngasal', [] );
-        $temp = ob_get_clean();
-        $temp .= \_WP_Editors::enqueue_scripts();
-        $temp .= print_footer_scripts();
-        $temp .= \_WP_Editors::editor_js();
-
-        echo $temp;
-        exit;
+            wp_editor( $content, 'wp_element_editor', [] );
+        $content = ob_get_clean();
+        $content .= \_WP_Editors::enqueue_scripts();
+        $content .= print_footer_scripts();
+        $content .= \_WP_Editors::editor_js();
+        echo $content; exit;
     }
 
 }

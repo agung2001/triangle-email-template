@@ -14,10 +14,30 @@ namespace Triangle\Wordpress\Service;
 class Asset {
 
     /**
+     * @access   protected
+     * @var      bool    $core    Determine wether the assets is core wordpress or plugin assets
+     */
+    protected $core;
+
+    /**
+     * Asset constructor
+     * @return void
+     */
+    public function __construct(){ $this->core = false; }
+
+    /**
      * WordpressEnqueue Media - for custom wp_editor
      * @return  void
      */
     public function wp_enqueue_media(){ wp_enqueue_media(); }
+
+    /**
+     * Wordpress Includes URL - Retrieves the URL to the includes directory.
+     * @var     string      $path   Path relative to the includes URL.
+     * @var     string      $scheme   Scheme to give the includes URL context. Accepts 'http', 'https', or 'relative'.
+     * @return  string
+     */
+    public function includes_url($path = '', $scheme = null){ return includes_url($path, $scheme); }
 
     /**
      * Wordpress path function
@@ -44,9 +64,11 @@ class Asset {
      * @var   string    $ver        String specifying script version number, if it has one, which is added to the URL as a query string for cache busting purposes
      * @var   bool      $media  	The media for which this stylesheet has been defined.
      */
-    public function wp_enqueue_style($handle, $src, $deps = [], $ver = false, $media = 'all'){
-        $path = unserialize(TRIANGLE_PATH)['plugin_url'] . 'assets/css/';
-        if(!strpos($src, '//')) $src = $path . $src;
+    public function wp_enqueue_style($handle, $src = '', $deps = [], $ver = false, $media = 'all'){
+        if(!$this->core){
+            $path = unserialize(TRIANGLE_PATH)['plugin_url'] . 'assets/css/';
+            if(!strpos($src, '//')) $src = $path . $src;
+        }
         wp_enqueue_style($handle, $src, $deps, $ver, $media);
     }
 
@@ -58,10 +80,28 @@ class Asset {
      * @var   string    $ver        String specifying script version number, if it has one, which is added to the URL as a query string for cache busting purposes
      * @var   bool      $in_footer  	Whether to enqueue the script before </body> instead of in the <head>
      */
-    public function wp_enqueue_script($handle, $src, $deps = [], $ver = false, $in_footer = false){
-        $path = unserialize(TRIANGLE_PATH)['plugin_url'] . 'assets/js/';
-        if(!strpos($src, '//')) $src = $path . $src;
+    public function wp_enqueue_script($handle, $src = '', $deps = [], $ver = false, $in_footer = false){
+        if(!$this->core) {
+            $path = unserialize(TRIANGLE_PATH)['plugin_url'] . 'assets/js/';
+            if (!strpos($src, '//')) $src = $path . $src;
+        }
         wp_enqueue_script($handle, $src, $deps, $ver, $in_footer);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCore()
+    {
+        return $this->core;
+    }
+
+    /**
+     * @param bool $core
+     */
+    public function setCore($core)
+    {
+        $this->core = $core;
     }
 
 }

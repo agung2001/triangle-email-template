@@ -8,7 +8,7 @@
         <div class="header <?= (isset($background)) ? $background : '' ?>">
             <?= (isset($nav)) ? $this->loadContent($nav) : '' ?>
 
-            <ul class="nav-tab-wrapper nav-tab-general">
+            <ul class="nav-tab-wrapper nav-tab-jconfirm">
                 <?php foreach($this->sections as $path => $option): ?>
                     <?php
                         $slug = str_replace(' ','',strtolower($option['name']));

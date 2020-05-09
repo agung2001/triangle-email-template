@@ -1,9 +1,17 @@
+<!--Start: Juice-->
+<div id="juice_err"></div>
+<div id="juice-builder-elements">
+    <textarea id="juice_input" class="juice_fields"></textarea>
+    <textarea name="juice_output" id="juice_output" class="juice_fields"></textarea>
+</div>
+<!--End: Juice-->
+
 <!--Start : Builder Container-->
 <div class="builder-container">
     <div class="grid email-grid">
 
         <div class="item col-sm-12">
-            <div class="item-content" style="text-align:center;">
+            <div class="item-content">
                 <h1><a href="#">e-Verify</a></h1>
             </div>
         </div>
@@ -64,85 +72,23 @@
 <!--Start : Builder Element-->
 <div style="display:none;">
     <div id="element-setting">
-        <button type="button" id="action-column" class="dashicons-before dashicons-schedule"></button>
-        <button type="button" id="action-setting" class="dashicons-before dashicons-admin-tools"></button>
+        <button type="button" id="element-action-grid"><i class="fas fa-layer-group"></i></button>
+        <button type="button" id="element-action-setting"><i class="fas fa-cog"></i></button>
+        <button type="button" id="element-action-remove"><i class="fas fa-trash"></i></button>
     </div>
-    <textarea name="element-setting-dialog" id="element-setting-dialog"></textarea>
+    <div id="grid-setting">
+
+    </div>
+    <div id="new-element">
+        <div class="item-content text-center">
+            <p>NEW ELEMENT</p>
+        </div>
+    </div>
 </div>
 <!--End : Builder Element-->
 
-<style>
-    /*.mce-toolbar-grp { display:none; }*/
-    /*.jconfirm .mce-toolbar-grp { display:block; }*/
-</style>
-
-<script type="text/javascript">
-    jQuery(document).ready(function($){
-        /** Load Email Grid */
-        var emailGrid = new Muuri('.email-grid', {
-            items: '.item',
-            dragEnabled: true,
-        });
-
-        /** Setting Element */
-        let elementSetting = $('#element-setting');
-        $('.email-grid .item').hover(function(){
-            $('.item-content', this).before(elementSetting);
-        }, function(){
-            elementSetting.remove();
-        });
-
-        /** Modify Element */
-        $(document).on('click', '#action-setting', function(){
-            var itemContent = $(this).parent().parent();
-            var content = $('.item-content', itemContent).html();
-            $.confirm({
-                title: 'Element Setting',
-                columnClass: 'col-md-12',
-                theme: 'material',
-                closeIcon: true,
-                animation: 'scale',
-                type: 'purple',
-                offsetTop: 40,
-                content: function () {
-                    var self = this;
-                    return $.ajax({
-                        method: 'POST',
-                        url: 'admin-ajax.php',
-                        data: {
-                            'action'    : 'triangle-editor',
-                            'element'   : content,
-                        },
-                    }).done(function (response) {
-                        self.setContent(response);
-                    }).fail(function(){
-                        self.setContent('Something went wrong.');
-                    });
-                },
-                buttons: {
-                    save: function () {
-                        $.alert({
-                            content: function () {
-                                var self = this;
-                                return $.ajax({
-                                    url: 'https://jsonplaceholder.typicode.com/todos/1',
-                                    dataType: 'json',
-                                    method: 'get'
-                                }).done(function (response) {
-                                    self.setContent('Description: ' + response);
-                                    self.setTitle('Element Saved!');
-                                }).fail(function(){
-                                    self.setContent('Something went wrong.');
-                                });
-                                jQuery('.mce-toolbar-grp').remove();
-                            }
-                        });
-                    },
-                    cancel: function () {
-                        jQuery('.mce-toolbar-grp').remove();
-                    },
-                }
-            });
-        });
-    });
-</script>
+<!--Start: New Element-->
+<div id="btn-add-new-element" class="fab bg-amethyst">
+    <i class="fas fa-plus"></i>
+</div>
+<!--End: New Element-->

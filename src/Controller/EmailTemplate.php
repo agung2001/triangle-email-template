@@ -39,7 +39,7 @@ class EmailTemplate extends Base {
         $action->setAcceptedArgs(1);
         $this->hooks[] = $action;
 
-        /** @backend @emailTemplate - Setup editor script */
+        /** @backend @emailTemplate - Setup builder,editor script */
         $action = clone $action;
         $action->setHook('edit_form_after_title');
         $action->setCallback('edit_emailtemplate');
@@ -150,7 +150,8 @@ class EmailTemplate extends Base {
         $this->backend_load_plugin_libraries([],[$this->EmailTemplate->getName()]);
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()) {
             if($screen->pagenow=='post.php' || $screen->pagenow=='post-new.php'){
-                $this->Service->Asset->wp_enqueue_script('triangle_emailtemplate_js', 'backend/emailtemplate/edit.js', [], false, true);
+                $this->Service->Asset->wp_enqueue_script('emailtemplate_builder_js', 'backend/emailtemplate/edit-builder.js', [], false, true);
+                $this->Service->Asset->wp_enqueue_script('emailtemplate_codeeditor_js', 'backend/emailtemplate/edit-codeeditor.js', [], false, true);
                 $this->Service->Asset->wp_enqueue_script('juice_js', 'backend/juice.build.js', [], false, true);
             }
         }
@@ -178,7 +179,6 @@ class EmailTemplate extends Base {
             $view->setSections([
                 'EmailTemplate.edit-builder' => ['name' => 'Builder', 'active' => true],
                 'EmailTemplate.edit-codeeditor' => ['name' => 'Code editor'],
-                'EmailTemplate.edit-preview' => ['name' => 'Preview'],
             ]);
             $view->build();
         }
