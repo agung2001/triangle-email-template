@@ -70,57 +70,63 @@
 * @backend @edit
 */
 #section-builder {
-  #juice-builder-elements { display:none !important; }
   .email-grid {
     position: relative;
     margin: 0 auto;
     max-width:800px;
-    .item {
-      display: block;
+    .row {
+      width:100%;
+      height:auto;
       position: absolute;
-      margin: 5px 0px;
-      padding: 0px;
+      background: #f0f0f0;
+      border-radius: 3px;
       z-index: 1;
-      color: #000;
-      &:hover {
-        border: 3px solid $amethyst;
-        border-radius: 3px;
-      }
-      .item-content {
+      will-change: transform;
+      .row-header {
         position: relative;
-        width: 100%;
-        height: 100%;
+        overflow: hidden;
+        padding: 8px 20px;
+        background: $amethyst;
+        color: #fff;
+        border-radius: 3px 3px 0 0;
+      }
+      .row-content {
+        position: relative;
+        border: 10px solid transparent;
+        min-height: 95px;
+      }
+      &.muuri-item-placeholder {
+        border: 3px dotted $amethyst;
+        z-index: 3;
+        .item-content {
+          display:none;
+        }
+        &:after {
+          position:absolute;
+          content: 'PLACEHOLDER';
+          margin: -20px 0 0 -60px;
+          color: #a8a8a8;
+          left:50%;
+        }
+      }
+      &.muuri-item-dragging {
+        z-index: 3;
+        cursor: move;
+      }
+      &.muuri-item-releasing {
+        z-index: 2;
+      }
+      &.muuri-item-hidden {
+        z-index: 0;
       }
     }
-    .item.muuri-item-placeholder {
-      border: 3px dotted $amethyst;
-      z-index: 3;
-      .item-content {
-        display:none;
-      }
-      &:after {
-        position:absolute;
-        content: 'PLACEHOLDER';
-        margin: 0 0 0 -60px;
-        color: #a8a8a8;
-        left:50%;
-      }
-    }
-    .item.muuri-item-dragging {
-      z-index: 3;
-    }
-    .item.muuri-item-releasing {
-      z-index: 2;
-    }
-    .item.muuri-item-hidden {
-      z-index: 0;
-    }
+
   }
-  #element-setting {
-    float:right;
-    height:30px;
-    padding:3px 0 0 0;
-    margin-top:-35px;
+  #row-setting {
+    position:absolute;
+    z-index:9;
+    right:0;
+    margin-top: -40px;
     background: $amethyst;
     border-radius: 5px 5px 0 0;
     button {
@@ -132,8 +138,53 @@
       i { padding: 0 3px; }
     }
   }
+  #element-setting {
+    position:absolute;
+    z-index:999;
+    right:-33px;
+    background: $amethyst;
+    border-radius: 0 5px 5px 0;
+    padding: 5px 3px;
+    button {
+      display:block;
+      background: $amethyst;
+      color: #fff;
+      padding: 4px;
+      border:none;
+      cursor:pointer;
+      i { padding: 0 3px; }
+    }
+  }
+}
+
+.element {
+  position: absolute;
+  width: 100%;
+  margin: 5px 0;
+  will-change: transform;
+  .element-content {
+    position: relative;
+    padding: 20px;
+    background: #fff;
+    border-radius: 4px;
+    font-size: 17px;
+    cursor: pointer;
+    -webkit-box-shadow: 0px 1px 3px 0 rgba(0,0,0,0.2);
+    box-shadow: 0px 1px 3px 0 rgba(0,0,0,0.2);
+  }
+  &.muuri-item-releasing {
+    z-index: 9998;
+  }
+  &.muuri-item-dragging {
+    z-index: 9999;
+    cursor: move;
+  }
+  &.muuri-item-hidden {
+    z-index: 0;
+  }
 }
 #section-codeeditor {
+  //#juice-builder-elements { display:none !important; }
   padding: 10px;
   .container, .element_fields { display:none; }
   #template-elements, .select2-container {

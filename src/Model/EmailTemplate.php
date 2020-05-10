@@ -81,7 +81,7 @@ class EmailTemplate extends Model {
      */
     public function save_emailtemplate($post_id, $post, $update){
         global $pagenow;
-        if (!empty($_POST) && $post->post_type=='emailtemplate' && in_array($pagenow, ['post.php', 'post-new.php'])){
+        if (!empty($_POST) && $post->post_type==$this->name && in_array($pagenow, ['post.php', 'post-new.php'])){
             /** Load Options */
             $this->loadController('EmailTemplate');
             $this->ID = $post_id;

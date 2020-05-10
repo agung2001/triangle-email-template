@@ -44,12 +44,7 @@ class Editor extends Api {
         /** Return block editor */
         $content = html_entity_decode($_POST['element']);
         $content = preg_replace('/\s+/', ' ', stripslashes($content));
-        ob_start();
-            wp_editor( $content, 'wp_element_editor', [] );
-        $content = ob_get_clean();
-        $content .= \_WP_Editors::enqueue_scripts();
-        $content .= print_footer_scripts();
-        $content .= \_WP_Editors::editor_js();
+        $content = $this->Service->Page->ajax_wp_editor($content, 'wp_element_editor');
         echo $content; exit;
     }
 

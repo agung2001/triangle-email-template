@@ -6,7 +6,7 @@
         <div class="col-sm-5">
             <select id="grid-column-size">
                 <?php for($i = 1; $i<=12; $i++): ?>
-                    <option value="<?= $i ?>"><?= $i ?> Column</option>
+                    <option value="<?= $i ?>" <?= (isset($column) && $column==$i) ? 'selected' : '' ?>><?= $i ?> Column</option>
                 <?php endfor; ?>
             </select>
             <p class="field-info">
@@ -20,7 +20,7 @@
             <label>Background</label>
         </div>
         <div class="col-sm-5">
-            <input type="text" id="grid-background-color">
+            <div class="color-picker"></div>
             <p class="field-info">
                 Grid background color
             </p>

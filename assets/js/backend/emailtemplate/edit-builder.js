@@ -1,43 +1,79 @@
 jQuery(document).ready(function($){
-    /** Init Email Grid */
+    /** Row Setting */
+    var rowSetting = $('#row-setting');
+    $(document).on('mouseenter', `.email-grid .row`, function(){
+        $(`.row-content`, this).before(rowSetting);
+    }).on('mouseleave', `.email-grid .row`, function(){
+        rowSetting.remove();
+    });
+
+    /** Element Setting */
+    var elementSetting = $('#element-setting');
+    $(document).on('mouseenter', `.email-grid .element`, function(){
+        $(`.element-content`, this).before(elementSetting);
+    }).on('mouseleave', `.email-grid .element`, function(){
+        elementSetting.remove();
+    });
+
+    /** Muuri JS Grid */
+    var itemContainers = Array.prototype.slice.call($('.builder-container .row-content'));
+    var columnGrids = [];
     var emailGrid;
-    initEmailGrid();
-    function initEmailGrid(){
-        if(emailGrid) emailGrid.destroy();
-        emailGrid = new Muuri('.email-grid', {
-            items: '.item',
+    itemContainers.forEach(function (container) {
+        var muuri = new Muuri(container, {
+            items: '.element',
             layoutDuration: 400,
             layoutEasing: 'ease',
             dragEnabled: true,
-            dragPlaceholder: {
-                enabled: true,
-                duration: 400,
-                createElement: function (item) {
-                    return item.getElement().cloneNode(true);
-                }
-            },
+            dragSortInterval: 0,
+            dragSortGroup: 'column',
+            dragSortWith: 'column',
+            dragContainer: document.body,
+            dragReleaseDuration: 400,
+            dragReleaseEasing: 'ease'
+        })
+        .on('dragStart', function (item) {
+            item.getElement().style.width = item.getWidth() + 'px';
+            item.getElement().style.height = item.getHeight() + 'px';
+            rowSetting.remove();
+            elementSetting.remove();
+        })
+        .on('dragReleaseEnd', function (item) {
+            item.getElement().style.width = '';
+            item.getElement().style.height = '';
+            columnGrids.forEach(function (muuri) {
+                muuri.refreshItems();
+            });
+        })
+        .on('layoutStart', function () {
+            emailGrid.refreshItems().layout();
         });
-    }
-
-    /** Setting Element */
-    let elementSetting = $('#element-setting');
-    $(document).on('mouseenter', '.email-grid .item', function(){
-        $('.item-content', this).before(elementSetting);
-    }).on('mouseleave', '.email-grid .item', function(){
-        elementSetting.remove();
+        columnGrids.push(muuri);
+    });
+    emailGrid = new Muuri('.email-grid', {
+        layoutDuration: 400,
+        layoutEasing: 'ease',
+        dragEnabled: true,
+        dragSortInterval: 0,
+        dragStartPredicate: {
+            handle: '.row-header'
+        },
+        dragReleaseDuration: 400,
+        dragReleaseEasing: 'ease'
     });
 
     /** Add new element */
     $(document).on('click', '#btn-add-new-element', function(){
         var element = document.createElement('div');
             element.innerHTML = $('#new-element').html();
-            element.className = "item col-sm-12";
+            element.className = "row col-sm-12";
         emailGrid.add(element);
     });
 
     /** Modify Grid */
     $(document).on('click', '#element-action-grid', function(){
-        let item = $(this).parent().parent();
+        var item = $(this).parent().parent();
+        let column = item.attr('class').split(' ');
         $.confirm({
             title: 'Grid Setting',
             icon: 'fas fa-layer-group',
@@ -56,11 +92,11 @@ jQuery(document).ready(function($){
                     url: 'admin-ajax.php',
                     data: {
                         'action'    : 'triangle-editor-grid-setting',
-                        'class'     : item.attr('class'),
+                        'column'    : column.filter((value) => (value.includes('col-sm-')) )[0].replace('col-sm-',''),
                     },
                 }).done(function (response) {
                     self.setContent(response);
-                    setTimeout(function(){ jQuery('#grid-background-color').wpColorPicker(); }, 500);
+                    setTimeout(function(){ initColorPicker(); }, 500);
                 }).fail(function(){
                     self.setContent('Something went wrong.');
                 });
@@ -69,8 +105,10 @@ jQuery(document).ready(function($){
                 save: function () {
                     $(item).removeAttr('class');
                     $(item).addClass(`item col-sm-${$('#grid-column-size').val()}`);
-                    $(item).css('background', $('#grid-background-color').val());
-                    setTimeout(function(){ initEmailGrid(); }, 500);
+                    $('.item-content', item).css('background', $('.pcr-button').css('color'));
+                    setTimeout(function(){
+                        initEmailGrid();
+                    },500);
                 },
                 cancel: function () {},
             }
@@ -112,6 +150,7 @@ jQuery(document).ready(function($){
                     let init = tinymce.extend( {}, tinyMCEPreInit.mceInit[ 'wp_element_editor' ] );
                     try { tinymce.init( init ); } catch(e){}
                     let value = tinymce.editors.wp_element_editor.getContent();
+                    tinymce.execCommand('mceRemoveControl', true, '#wp_element_editor');
                     $('.item-content', item).html(value);
                     setTimeout(function(){ initEmailGrid(); }, 500);
                     $('.mce-toolbar-grp').remove();
@@ -126,6 +165,44 @@ jQuery(document).ready(function($){
     /** Remove element from the grid */
     $(document).on('click', '#element-action-remove', function(){
         var element = $(this).parent().parent();
-        emailGrid.remove(element[0], {removeElements: true});
+        console.log(element);
+        emailGrid.remove(element, {removeElements: true});
+
+        // emailGrid = new Muuri('.email-grid', {
+        //     layoutDuration: 400,
+        //     layoutEasing: 'ease',
+        //     dragEnabled: true,
+        //     dragSortInterval: 0,
+        //     dragStartPredicate: {
+        //         handle: '.row-header'
+        //     },
+        //     dragReleaseDuration: 400,
+        //     dragReleaseEasing: 'ease'
+        // });
     });
+
+    /** Initiate color picker */
+    function initColorPicker(){
+        let pickr = Pickr.create({
+            el: '.color-picker',
+            theme: 'classic',
+            components: {
+                /** Main Components */
+                preview: true,
+                opacity: true,
+                hue: true,
+                /** Input Output Options */
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    hsla: true,
+                    hsva: true,
+                    cmyk: true,
+                    input: true,
+                    clear: true,
+                    save: true
+                }
+            }
+        });
+    }
 });

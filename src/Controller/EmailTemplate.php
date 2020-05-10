@@ -47,27 +47,27 @@ class EmailTemplate extends Base {
         $this->hooks[] = $action;
 
         /** @frontend - Create custom page template for customizer */
-        $action = clone $action;
-        $action->setHook('template_include');
-        $action->setCallback('customizer_custom_page');
-        $action->setAcceptedArgs(1);
-        $action->setPriority(999);
-        $this->hooks[] = $action;
+//        $action = clone $action;
+//        $action->setHook('template_include');
+//        $action->setCallback('customizer_custom_page');
+//        $action->setAcceptedArgs(1);
+//        $action->setPriority(999);
+//        $this->hooks[] = $action;
 
         /** @frontend - Change default single_emailtemplate */
-        $filter = new Filter();
-        $filter->setComponent($this);
-        $filter->setHook('single_template');
-        $filter->setCallback('cpt_single_template');
-        $filter->setAcceptedArgs(1);
-        $this->hooks[] = $filter;
+//        $filter = new Filter();
+//        $filter->setComponent($this);
+//        $filter->setHook('single_template');
+//        $filter->setCallback('cpt_single_template');
+//        $filter->setAcceptedArgs(1);
+//        $this->hooks[] = $filter;
 
         /** @frontend - Modify content for builder */
-        $filter = clone $filter;
-        $filter->setHook('the_content');
-        $filter->setCallback('cpt_single_template_content');
-        $filter->setAcceptedArgs(1);
-        $this->hooks[] = $filter;
+//        $filter = clone $filter;
+//        $filter->setHook('the_content');
+//        $filter->setCallback('cpt_single_template_content');
+//        $filter->setAcceptedArgs(1);
+//        $this->hooks[] = $filter;
 
         /** @backend @emailTemplate - Setup editor script */
         $shortcode = new Shortcode();
@@ -106,7 +106,6 @@ class EmailTemplate extends Base {
      */
     public function cpt_single_template_content($content){
         global $post;
-        $this->loadModel('EmailTemplate');
         if( is_single() && $post->post_type == $this->EmailTemplate->getName() ) {
             $post->template = get_post_meta($post->ID, 'template_html', true);
             ob_start();
@@ -132,7 +131,6 @@ class EmailTemplate extends Base {
     public function cpt_single_template($single){
         global $post;
         $path = unserialize(TRIANGLE_PATH);
-        $this->loadModel('EmailTemplate');
         if ( $post->post_type == $this->EmailTemplate->getName() ) {
             $templatePath = $path['view_path'] . 'EmailTemplate/theme/single.php';
             return ( file_exists( $templatePath ) ) ? $templatePath : $single;
@@ -147,14 +145,21 @@ class EmailTemplate extends Base {
      */
     public function backend_enequeue($hook_suffix){
         $screen = unserialize(TRIANGLE_SCREEN);
-        $this->backend_load_plugin_libraries([],[$this->EmailTemplate->getName()]);
-        if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()) {
-            if($screen->pagenow=='post.php' || $screen->pagenow=='post-new.php'){
-                $this->Service->Asset->wp_enqueue_script('emailtemplate_builder_js', 'backend/emailtemplate/edit-builder.js', [], false, true);
+        $requiredAssets = [];
+        /** Load Assets Libraries for pages and sections */
+        if (in_array($screen->pagenow, ['post.php', 'post-new.php'])){
+            /** @emailtemplate @edit - @section codeeditor */
+            if(isset($_GET['section']) && $_GET['section'] == 'codeeditor') {
+                $requiredAssets = ['ace'];
                 $this->Service->Asset->wp_enqueue_script('emailtemplate_codeeditor_js', 'backend/emailtemplate/edit-codeeditor.js', [], false, true);
-                $this->Service->Asset->wp_enqueue_script('juice_js', 'backend/juice.build.js', [], false, true);
+            /** @emailtemplate @edit - @section builder */
+            } else {
+                $this->Service->Asset->wp_enqueue_media();
+                $this->Service->Asset->wp_enqueue_script('emailtemplate_builder_js', 'backend/emailtemplate/edit-builder.js', [], false, true);
+                $requiredAssets = ['wp-tinymce','colorpicker','confirm','muuri'];
             }
         }
+        $this->backend_load_plugin_libraries([], [$this->EmailTemplate->getName()], $requiredAssets);
     }
 
     /**
@@ -165,21 +170,25 @@ class EmailTemplate extends Base {
     public function edit_emailtemplate(){
         $screen = unserialize(TRIANGLE_SCREEN);
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
-            $this->Service->Asset->wp_enqueue_media();
+            /** Setup View */
             $view = new View($this->Plugin);
             $view->setTemplate('backend.box');
             $view->setOptions(['shortcode' => false]);
             $view->addData([
+                'disableTab'    => 'true',
                 'screen'        => $screen,
                 'background'    => 'bg-wetasphalt',
                 'options'       => [
                     'triangle_builder_inliner' => $this->Service->Option->get_option('triangle_builder_inliner')
                 ],
             ]);
-            $view->setSections([
-                'EmailTemplate.edit-builder' => ['name' => 'Builder', 'active' => true],
-                'EmailTemplate.edit-codeeditor' => ['name' => 'Code editor'],
-            ]);
+            /** Sections */
+            $sections = array();
+            $sections['EmailTemplate.edit-builder'] = ['name' => 'Builder', 'link' => 'builder'];
+            $sections['EmailTemplate.edit-codeeditor'] = ['name' => 'Code editor', 'link' => 'codeeditor'];
+            if(!isset($_GET['section']) || (isset($_GET['section']) && $_GET['section'] == 'builder')) $sections['EmailTemplate.edit-builder']['active'] = true;
+            if(isset($_GET['section']) && $_GET['section'] == 'codeeditor') $sections['EmailTemplate.edit-codeeditor']['active'] = true;
+            $view->setSections($sections);
             $view->build();
         }
     }
@@ -195,7 +204,6 @@ class EmailTemplate extends Base {
         if(!$this->validateParams($atts, $default)) { echo ('Parameters did not match the specs!'); return; }
 
         /** Prepare Data */
-        $this->loadModel('EmailTemplate');
         $this->EmailTemplate->setID($atts['field_template']);
         $this->EmailTemplate->getMetas()['template_standard']->setSingle(true);
         $template = $this->EmailTemplate->getMetas()['template_standard']->get_post_meta();

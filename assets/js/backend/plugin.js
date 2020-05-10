@@ -2,8 +2,8 @@
  * Handle section tab
  * @about-page
  * */
-jQuery(document).on('click', 'ul.nav-tab-general li', handleSectionTab);
-jQuery(document).on('click', 'ul.nav-tab-jconfirm li', handleSectionTab);
+jQuery(document).on('click', '.triangle-container ul.nav-tab-general li', handleSectionTab);
+jQuery(document).on('click', '.triangle-container ul.nav-tab-jconfirm li', handleSectionTab);
 function handleSectionTab(){
     /** Animate */
     let animation = `animated ${window.trianglePlugin.options.animation_tab}`;

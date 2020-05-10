@@ -25,6 +25,7 @@ class EmailTemplate extends Api {
      */
     public function __construct($plugin){
         parent::__construct($plugin);
+        $this->loadModel('EmailTemplate');
 
         /** @backend - API - Page Contact */
         $action = new Action();
@@ -57,11 +58,8 @@ class EmailTemplate extends Api {
         $default = ['typeArgs', 'userArgs'];
         if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
 
-        /** Load Data */
-        $this->loadModel('EmailTemplate');
-        $data = array();
-
         /** Get Template Data */
+        $data = array();
         $this->EmailTemplate->setArgs($_POST['typeArgs']);
         $data['templates'] = [];
         foreach($this->EmailTemplate->get_posts() as $template){
@@ -89,7 +87,6 @@ class EmailTemplate extends Api {
         if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
 
         /** Load Data */
-        $this->loadModel('EmailTemplate');
         $data = array();
         $this->EmailTemplate->setID($_POST['args']['post_id']);
         $data['templates'] = $this->get_template_elements_value($_POST['args']['post_id']);
@@ -103,11 +100,23 @@ class EmailTemplate extends Api {
      * @return  void
      */
     public function editor_grid_setting(){
+        /** Validate Params */
+        $default = ['column'];
+        if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
+        /** Sanitize Params */
+        $default = array_flip($default);
+        $default['column'] = 'text';
+        $params = $this->sanitizeParams($_POST, $default);
+
+        /** Load Page */
         ob_start();
             $view = new View($this->Plugin);
             $view->setTemplate('backend.jconfirm');
             $view->setOptions(['shortcode' => false]);
-            $view->addData(['background'    => 'bg-amethyst']);
+            $view->addData([
+                'background'    => 'bg-amethyst',
+                'column'        => $params['column'],
+            ]);
             $view->setSections([
                 'EmailTemplate.element.grid-setting' => ['name' => 'Setting', 'active' => true],
             ]);
@@ -122,7 +131,6 @@ class EmailTemplate extends Api {
      * @return      array       Configurations and meta_fields value
      */
     private function get_template_elements_value($postID){
-        $this->loadModel('EmailTemplate');
         $templates = $this->Plugin->getConfig()->templates;
         $this->EmailTemplate->setID($postID);
         foreach($templates as $template){

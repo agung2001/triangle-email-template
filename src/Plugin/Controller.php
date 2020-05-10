@@ -70,7 +70,8 @@ class Controller {
     public function sanitizeParams($params, $default, $results = []){
         foreach($default as $key => $type){
             $results[$key] = (isset($params[$key])) ? $params[$key] : '';
-            $results[$key] = $this->Service->Validate->sanitize($type, $results[$key]);
+            if(is_array($results[$key])) $results[$key] = $this->sanitizeParams($results[$key], $default[$key], []);
+            else $results[$key] = $this->Service->Validate->sanitize($type, $results[$key]);
         }
         return $results;
     }

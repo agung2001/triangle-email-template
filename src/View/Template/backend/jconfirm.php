@@ -8,16 +8,16 @@
         <div class="header <?= (isset($background)) ? $background : '' ?>">
             <?= (isset($nav)) ? $this->loadContent($nav) : '' ?>
 
-            <ul class="nav-tab-wrapper nav-tab-jconfirm">
-                <?php foreach($this->sections as $path => $option): ?>
+            <ul class="nav-tab-wrapper <?= (isset($disableTab)) ? '' : 'nav-tab-jconfirm' ?>">
+                <?php if(isset($section['link'])){ ?>
                     <?php
-                        $slug = str_replace(' ','',strtolower($option['name']));
-                        $active = isset($option['active']) ? 'nav-tab-active' : '';
+                    $url = $this->Service->Page->add_query_arg( NULL, NULL ).'&section='.$section['link'];
+                    $url = $this->Service->Page->home_url($url);
                     ?>
-                    <li class="nav-tab <?= $active ?>" data-tab="section-<?= $slug ?>">
-                        <?= $option['name'] ?>
-                    </li>
-                <?php endforeach; ?>
+                    <a href="<?= $url ?>"><?= $section['name'] ?></a>
+                <?php } else { ?>
+                    <?= $section['name'] ?>
+                <?php } ?>
             </ul>
         </div>
 
@@ -28,7 +28,7 @@
                     $active = isset($option['active']) ? 'current' : '';
                 ?>
                 <div id="section-<?= $slug ?>" class="tab-content triangle-sections <?= $active ?>">
-                    <?= $this->loadContent($path) ?>
+                    <?= (isset($section['link']) && $active=='') ? '' : $this->loadContent($path); ?>
                 </div>
             <?php endforeach; ?>
         </div>
