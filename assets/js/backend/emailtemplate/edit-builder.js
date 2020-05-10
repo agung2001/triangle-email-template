@@ -16,10 +16,10 @@ jQuery(document).ready(function($){
     });
 
     /** Muuri JS Grid */
-    var itemContainers = Array.prototype.slice.call($('.builder-container .row-content'));
     var columnGrids = [];
     var emailGrid;
-    itemContainers.forEach(function (container) {
+    Array.prototype.slice.call($('.builder-container .row-content')).forEach(buildElements);
+    function buildElements(container){
         var muuri = new Muuri(container, {
             items: '.element',
             layoutDuration: 400,
@@ -32,31 +32,31 @@ jQuery(document).ready(function($){
             dragReleaseDuration: 400,
             dragReleaseEasing: 'ease'
         })
-        .on('dragStart', function (item) {
-            item.getElement().style.width = item.getWidth() + 'px';
-            item.getElement().style.height = item.getHeight() + 'px';
-            rowSetting.remove();
-            elementSetting.remove();
-        })
-        .on('dragReleaseEnd', function (item) {
-            item.getElement().style.width = '';
-            item.getElement().style.height = '';
-            columnGrids.forEach(function (muuri) {
-                muuri.refreshItems();
+            .on('dragStart', function (item) {
+                item.getElement().style.width = item.getWidth() + 'px';
+                item.getElement().style.height = item.getHeight() + 'px';
+                rowSetting.remove();
+                elementSetting.remove();
+            })
+            .on('dragReleaseEnd', function (item) {
+                item.getElement().style.width = '';
+                item.getElement().style.height = '';
+                columnGrids.forEach(function (muuri) {
+                    muuri.refreshItems();
+                });
+            })
+            .on('layoutStart', function () {
+                emailGrid.refreshItems().layout();
             });
-        })
-        .on('layoutStart', function () {
-            emailGrid.refreshItems().layout();
-        });
         columnGrids.push(muuri);
-    });
+    }
     emailGrid = new Muuri('.email-grid', {
         layoutDuration: 400,
         layoutEasing: 'ease',
         dragEnabled: true,
         dragSortInterval: 0,
         dragStartPredicate: {
-            handle: '.row-header'
+            handle: '#row-action-move'
         },
         dragReleaseDuration: 400,
         dragReleaseEasing: 'ease'
@@ -64,10 +64,15 @@ jQuery(document).ready(function($){
 
     /** Add new element */
     $(document).on('click', '#btn-add-new-element', function(){
-        var element = document.createElement('div');
-            element.innerHTML = $('#new-element').html();
-            element.className = "row col-sm-12";
-        emailGrid.add(element);
+        var row = document.createElement('div');
+            row.innerHTML = $('#new-row').html();
+            row.className = "row col-sm-12";
+        emailGrid.add(row);
+        /** Reinitiate grid */
+        columnGrids.forEach((muuri) => { muuri.destroy(); });
+        columnGrids = [];
+        Array.prototype.slice.call($('.builder-container .row-content')).forEach(buildElements);
+        emailGrid.refreshItems().layout();
     });
 
     /** Modify Grid */
@@ -162,23 +167,19 @@ jQuery(document).ready(function($){
         });
     });
 
+    /** Remove row from the grid */
+    $(document).on('click', '#row-action-remove', function(){
+        var row = $(this).parent().parent().parent();
+        console.log(row);
+        emailGrid.remove(row[0], {removeElements: true});
+    });
+
     /** Remove element from the grid */
     $(document).on('click', '#element-action-remove', function(){
         var element = $(this).parent().parent();
-        console.log(element);
-        emailGrid.remove(element, {removeElements: true});
-
-        // emailGrid = new Muuri('.email-grid', {
-        //     layoutDuration: 400,
-        //     layoutEasing: 'ease',
-        //     dragEnabled: true,
-        //     dragSortInterval: 0,
-        //     dragStartPredicate: {
-        //         handle: '.row-header'
-        //     },
-        //     dragReleaseDuration: 400,
-        //     dragReleaseEasing: 'ease'
-        // });
+        columnGrids.forEach((muuri) => {
+            muuri.remove(element[0], {removeElements: true});
+        });
     });
 
     /** Initiate color picker */

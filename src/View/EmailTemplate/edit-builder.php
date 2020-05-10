@@ -1,6 +1,6 @@
 <div class="builder-container">
     <div class="grid email-grid">
-        <div class="row">
+        <div class="row col-sm-12">
             <div class="row-content">
                 <div class="element"><div class="element-content"><span>Item #</span>1</div></div>
                 <div class="element"><div class="element-content"><span>Item #</span>2</div></div>
@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row col-sm-12">
             <div class="row-content">
                 <div class="element"><div class="element-content"><span>Item #</span>1</div></div>
                 <div class="element"><div class="element-content"><span>Item #</span>2</div></div>
@@ -27,7 +27,9 @@
 <div style="display:none;">
     <div id="row-setting">
         <div class="row-header">
-            <button type="button" id="element-action-setting"><i class="fas fa-cog"></i></button>
+            <button type="button" id="row-action-move"><i class="fas fa-arrows-alt"></i></button>
+            <button type="button" id="row-action-setting"><i class="fas fa-cog"></i></button>
+            <button type="button" id="row-action-remove"><i class="fas fa-trash"></i></button>
         </div>
     </div>
     <div id="element-setting">
@@ -35,9 +37,9 @@
         <button type="button" id="element-action-setting"><i class="fas fa-cog"></i></button>
         <button type="button" id="element-action-remove"><i class="fas fa-trash"></i></button>
     </div>
-    <div id="new-element">
+    <div id="new-row">
         <div class="row-content">
-            <p>NEW ELEMENT</p>
+            <div class="element"><div class="element-content">NEW ELEMENT</div></div>
         </div>
     </div>
 </div>
