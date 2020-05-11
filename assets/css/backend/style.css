@@ -955,6 +955,7 @@ input:checked + .slider:before {
 * @backend @edit
 */
 #section-builder .email-grid {
+  font-family: 'Lato', sans-serif;
   position: relative;
   margin: 0 auto;
   max-width: 800px; }
@@ -962,10 +963,13 @@ input:checked + .slider:before {
     width: 100%;
     height: auto;
     position: absolute;
-    background: #f0f0f0;
     border-radius: 3px;
+    padding: 3px 0;
     z-index: 1;
     will-change: transform; }
+    #section-builder .email-grid .row:hover {
+      border: 2px solid #9b59b6;
+      z-index: 2; }
     #section-builder .email-grid .row .row-header {
       position: relative;
       overflow: hidden;
@@ -974,20 +978,8 @@ input:checked + .slider:before {
       color: #fff;
       border-radius: 3px 3px 0 0; }
     #section-builder .email-grid .row .row-content {
-      position: relative;
-      border: 10px solid transparent;
-      min-height: 95px; }
-    #section-builder .email-grid .row.muuri-item-placeholder {
-      border: 3px dotted #9b59b6;
-      z-index: 3; }
-      #section-builder .email-grid .row.muuri-item-placeholder .item-content {
-        display: none; }
-      #section-builder .email-grid .row.muuri-item-placeholder:after {
-        position: absolute;
-        content: 'PLACEHOLDER';
-        margin: -20px 0 0 -60px;
-        color: #a8a8a8;
-        left: 50%; }
+      min-height: 20px;
+      position: relative; }
     #section-builder .email-grid .row.muuri-item-dragging {
       z-index: 3;
       cursor: move; }
@@ -995,57 +987,63 @@ input:checked + .slider:before {
       z-index: 2; }
     #section-builder .email-grid .row.muuri-item-hidden {
       z-index: 0; }
+  #section-builder .email-grid .row-dropzone {
+    min-height: 100px;
+    border: 1px solid #9b59b6; }
 #section-builder #row-setting {
   position: absolute;
   z-index: 999;
   right: 0;
-  margin-top: -40px;
+  margin-top: -38px;
   background: #9b59b6;
   border-radius: 5px 5px 0 0; }
-  #section-builder #row-setting button {
+  #section-builder #row-setting a {
     background: #9b59b6;
     color: #fff;
     padding: 4px;
     border: none;
     cursor: pointer; }
-    #section-builder #row-setting button i {
+    #section-builder #row-setting a i {
       padding: 0 3px; }
 #section-builder #element-setting {
   position: absolute;
-  z-index: 999;
-  right: -33px;
+  right: -25px;
   background: #9b59b6;
-  border-radius: 0 5px 5px 0;
-  padding: 5px 3px; }
-  #section-builder #element-setting button {
+  border-radius: 5px;
+  padding: 5px 3px;
+  margin: 0;
+  z-index: 999; }
+  #section-builder #element-setting a {
     display: block;
     background: #9b59b6;
     color: #fff;
     padding: 4px;
     border: none;
     cursor: pointer; }
-    #section-builder #element-setting button i {
+    #section-builder #element-setting a i {
       padding: 0 3px; }
 
 .element {
   position: absolute;
-  width: 100%;
-  margin: 5px 0;
+  padding: 0;
   will-change: transform; }
+  .element:hover {
+    z-index: 999; }
   .element .element-content {
     position: relative;
-    padding: 20px;
-    background: #fff;
-    border-radius: 4px;
     font-size: 17px;
     cursor: pointer;
-    -webkit-box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.2);
-    box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.2); }
-  .element.muuri-item-releasing {
-    z-index: 9998; }
+    z-index: 0; }
+    .element .element-content a {
+      text-decoration: none; }
+  .element.muuri-item-placeholder {
+    border: 3px dotted #9b59b6;
+    z-index: 2; }
   .element.muuri-item-dragging {
-    z-index: 9999;
+    z-index: 3;
     cursor: move; }
+  .element.muuri-item-releasing {
+    z-index: 2; }
   .element.muuri-item-hidden {
     z-index: 0; }
 

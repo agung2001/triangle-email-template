@@ -43,7 +43,13 @@ class EmailTemplate extends Api {
 
         /** @backend - API - Editor Grid Setting */
         $action = clone $action;
-        $action->setHook('wp_ajax_triangle-editor-grid-setting');
+        $action->setHook('wp_ajax_triangle-editor-row-setting');
+        $action->setCallback('editor_row_setting');
+        $this->hooks[] = $action;
+
+        /** @backend - API - Editor Grid Setting */
+        $action = clone $action;
+        $action->setHook('wp_ajax_triangle-editor-element-grid-setting');
         $action->setCallback('editor_grid_setting');
         $this->hooks[] = $action;
     }
@@ -92,6 +98,28 @@ class EmailTemplate extends Api {
         $data['templates'] = $this->get_template_elements_value($_POST['args']['post_id']);
         $data['options'] = ['inliner' => $this->Service->Option->get_option('triangle_builder_inliner')];
         wp_send_json((object) $data);
+    }
+
+    /**
+     * Get data for EmailTemplate page
+     * @backend
+     * @return  void
+     */
+    public function editor_row_setting(){
+        /** Load Page */
+        ob_start();
+        $view = new View($this->Plugin);
+        $view->setTemplate('backend.jconfirm');
+        $view->setOptions(['shortcode' => false]);
+        $view->addData([
+            'background'    => 'bg-amethyst',
+        ]);
+        $view->setSections([
+            'EmailTemplate.element.row-setting' => ['name' => 'Setting', 'active' => true],
+        ]);
+        $view->build();
+        $content = ob_get_clean();
+        echo $content; exit;
     }
 
     /**

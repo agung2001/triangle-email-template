@@ -14,7 +14,7 @@
                     $url = $this->Service->Page->add_query_arg( NULL, NULL ).'&section='.$section['link'];
                     $url = $this->Service->Page->home_url($url);
                     ?>
-                    <a href="<?= $url ?>"><?= $section['name'] ?></a>
+                    <a id="tab-<?= $slug ?>" href="<?= $url ?>"><?= $section['name'] ?></a>
                 <?php } else { ?>
                     <?= $section['name'] ?>
                 <?php } ?>

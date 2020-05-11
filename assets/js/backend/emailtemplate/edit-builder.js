@@ -16,34 +16,65 @@ jQuery(document).ready(function($){
     });
 
     /** Muuri JS Grid */
-    var columnGrids = [];
-    var emailGrid;
-    Array.prototype.slice.call($('.builder-container .row-content')).forEach(buildElements);
+    var columnGrids, emailGrid;
+
+    /** Initiate Element Grid */
+    initElementGrid();
+    function initElementGrid(){
+        if(columnGrids) columnGrids.forEach((muuri) => { muuri.destroy(); });
+        columnGrids = [];
+        Array.prototype.slice.call($('.email-grid .row-content')).forEach(buildElements);
+        if(emailGrid) emailGrid.refreshItems().layout();
+    }
+    /** Build Elements */
     function buildElements(container){
         var muuri = new Muuri(container, {
             items: '.element',
             layoutDuration: 400,
             layoutEasing: 'ease',
             dragEnabled: true,
-            dragSortInterval: 0,
-            dragSortGroup: 'column',
-            dragSortWith: 'column',
+            dragSort: function () {
+                return columnGrids;
+            },
+            dragSortHeuristics: {
+                sortInterval: 0,
+                minDragDistance: 0,
+                minBounceBackAngle: 0
+            },
+            dragStartPredicate: {
+                handle: '#element-action-move'
+            },
             dragContainer: document.body,
             dragReleaseDuration: 400,
-            dragReleaseEasing: 'ease'
+            dragReleaseEasing: 'ease',
+            dragPlaceholder: {
+                enabled: true,
+                duration: 400,
+                createElement: function (item) {
+                    return item.getElement().cloneNode(true);
+                }
+            },
         })
             .on('dragStart', function (item) {
+                $('.email-grid').each(function() {
+                    $(this).find('.row').addClass('row-dropzone');
+                });
                 item.getElement().style.width = item.getWidth() + 'px';
                 item.getElement().style.height = item.getHeight() + 'px';
                 rowSetting.remove();
                 elementSetting.remove();
+                emailGrid.refreshItems().layout();
             })
             .on('dragReleaseEnd', function (item) {
+                $('.email-grid').each(function() {
+                    $(this).find('.row').removeClass('row-dropzone');
+                });
                 item.getElement().style.width = '';
                 item.getElement().style.height = '';
                 columnGrids.forEach(function (muuri) {
                     muuri.refreshItems();
                 });
+                emailGrid.refreshItems().layout();
             })
             .on('layoutStart', function () {
                 emailGrid.refreshItems().layout();
@@ -54,12 +85,16 @@ jQuery(document).ready(function($){
         layoutDuration: 400,
         layoutEasing: 'ease',
         dragEnabled: true,
-        dragSortInterval: 0,
+        dragSortHeuristics: {
+            sortInterval: 0,
+            minDragDistance: 0,
+            minBounceBackAngle: 0
+        },
         dragStartPredicate: {
             handle: '#row-action-move'
         },
         dragReleaseDuration: 400,
-        dragReleaseEasing: 'ease'
+        dragReleaseEasing: 'ease',
     });
 
     /** Add new element */
@@ -69,20 +104,16 @@ jQuery(document).ready(function($){
             row.className = "row col-sm-12";
         emailGrid.add(row);
         /** Reinitiate grid */
-        columnGrids.forEach((muuri) => { muuri.destroy(); });
-        columnGrids = [];
-        Array.prototype.slice.call($('.builder-container .row-content')).forEach(buildElements);
-        emailGrid.refreshItems().layout();
+        initElementGrid();
     });
 
-    /** Modify Grid */
-    $(document).on('click', '#element-action-grid', function(){
-        var item = $(this).parent().parent();
-        let column = item.attr('class').split(' ');
+    /** JConfirm - Row Setting */
+    $(document).on('click', '#row-action-setting', function(){
+        var row = $(this).parent().parent().parent();
         $.confirm({
-            title: 'Grid Setting',
-            icon: 'fas fa-layer-group',
-            columnClass: 'col-md-12',
+            title: 'Row Setting',
+            icon: 'fas fa-cog',
+            columnClass: 'col-sm-12',
             theme: 'material',
             closeIcon: 'cancel',
             escapeKey: 'cancel',
@@ -96,37 +127,73 @@ jQuery(document).ready(function($){
                     method: 'POST',
                     url: 'admin-ajax.php',
                     data: {
-                        'action'    : 'triangle-editor-grid-setting',
-                        'column'    : column.filter((value) => (value.includes('col-sm-')) )[0].replace('col-sm-',''),
+                        'action'    : 'triangle-editor-row-setting',
                     },
                 }).done(function (response) {
                     self.setContent(response);
-                    setTimeout(function(){ initColorPicker(); }, 500);
+                    setTimeout(function(){ initColorPicker(); }, 300);
                 }).fail(function(){
                     self.setContent('Something went wrong.');
                 });
             },
             buttons: {
                 save: function () {
-                    $(item).removeAttr('class');
-                    $(item).addClass(`item col-sm-${$('#grid-column-size').val()}`);
-                    $('.item-content', item).css('background', $('.pcr-button').css('color'));
-                    setTimeout(function(){
-                        initEmailGrid();
-                    },500);
+                    $('.row-content', row).css('background', $('.pcr-button').css('color'));
+                    setTimeout(function(){ emailGrid.refreshItems().layout(); }, 500);
                 },
                 cancel: function () {},
             }
         });
     });
 
-    /** Modify Element */
+    /** JConfirm - Element Grid Setting */
+    $(document).on('click', '#element-action-grid', function(){
+        var element = $(this).parent().parent();
+        let column = element.attr('class').split(' ');
+        $.confirm({
+            title: 'Grid Setting',
+            icon: 'fas fa-layer-group',
+            columnClass: 'col-sm-12',
+            theme: 'material',
+            closeIcon: 'cancel',
+            escapeKey: 'cancel',
+            backgroundDismiss: true,
+            animation: 'scale',
+            type: 'purple',
+            offsetTop: 40,
+            content: function () {
+                var self = this;
+                return $.ajax({
+                    method: 'POST',
+                    url: 'admin-ajax.php',
+                    data: {
+                        'action'    : 'triangle-editor-element-grid-setting',
+                        'column'    : column.filter((value) => (value.includes('col-sm-')) )[0].replace('col-sm-',''),
+                    },
+                }).done(function (response) {
+                    self.setContent(response);
+                }).fail(function(){
+                    self.setContent('Something went wrong.');
+                });
+            },
+            buttons: {
+                save: function () {
+                    $(element).removeAttr('class');
+                    $(element).addClass(`element col-sm-${$('#grid-column-size').val()}`);
+                    setTimeout(function(){ initElementGrid(); }, 300);
+                },
+                cancel: function () {},
+            }
+        });
+    });
+
+    /** JConfirm - Element Setting */
     $(document).on('click', '#element-action-setting', function(){
-        let item = $(this).parent().parent();
-        let content = $('.item-content', item).html();
+        let element = $(this).parent().parent();
+        let content = $('.element-content', element).html();
         $.confirm({
             title: 'Element Setting',
-            columnClass: 'col-md-12',
+            columnClass: 'col-sm-12',
             icon: 'fas fa-cog',
             theme: 'material',
             closeIcon: 'cancel',
@@ -152,13 +219,15 @@ jQuery(document).ready(function($){
             },
             buttons: {
                 save: function () {
+                    /** Destroy TinyMCE */
                     let init = tinymce.extend( {}, tinyMCEPreInit.mceInit[ 'wp_element_editor' ] );
                     try { tinymce.init( init ); } catch(e){}
                     let value = tinymce.editors.wp_element_editor.getContent();
                     tinymce.execCommand('mceRemoveControl', true, '#wp_element_editor');
-                    $('.item-content', item).html(value);
-                    setTimeout(function(){ initEmailGrid(); }, 500);
+                    /** Save Style */
+                    $('.element-content', element).html(value);
                     $('.mce-toolbar-grp').remove();
+                    setTimeout(function(){ initElementGrid(); }, 300);
                 },
                 cancel: function () {
                     $('.mce-toolbar-grp').remove();
@@ -169,16 +238,50 @@ jQuery(document).ready(function($){
 
     /** Remove row from the grid */
     $(document).on('click', '#row-action-remove', function(){
-        var row = $(this).parent().parent().parent();
-        console.log(row);
-        emailGrid.remove(row[0], {removeElements: true});
+        let row = $(this).parent().parent().parent();
+        $.confirm({
+            title: 'Delete Row',
+            content: 'are you sure you want to delete the row?',
+            theme: 'material',
+            icon: 'fas fa-trash',
+            escapeKey: 'cancel',
+            type: 'red',
+            buttons: {
+                confirm: function () {
+                    emailGrid.remove(row[0], {removeElements: true});
+                },
+                cancel: function () {},
+            }
+        });
+    });
+
+    /** Clone Element */
+    $(document).on('click', '#element-action-clone', function(){
+        let row_content = $(this).parent().parent().parent();
+        let element = $(this).parent().parent();
+        $('#element-setting', element).remove();
+        $(element).clone().appendTo(row_content);
+        initElementGrid();
     });
 
     /** Remove element from the grid */
     $(document).on('click', '#element-action-remove', function(){
-        var element = $(this).parent().parent();
-        columnGrids.forEach((muuri) => {
-            muuri.remove(element[0], {removeElements: true});
+        let element = $(this).parent().parent();
+        $.confirm({
+            title: 'Delete Element',
+            content: 'are you sure you want to delete the element?',
+            theme: 'material',
+            icon: 'fas fa-trash',
+            escapeKey: 'cancel',
+            type: 'red',
+            buttons: {
+                confirm: function () {
+                    columnGrids.forEach((muuri) => {
+                        muuri.remove(element[0], {removeElements: true});
+                    });
+                },
+                cancel: function () {},
+            }
         });
     });
 
