@@ -47,27 +47,12 @@ class EmailTemplate extends Base {
         $this->hooks[] = $action;
 
         /** @frontend - Create custom page template for customizer */
-//        $action = clone $action;
-//        $action->setHook('template_include');
-//        $action->setCallback('customizer_custom_page');
-//        $action->setAcceptedArgs(1);
-//        $action->setPriority(999);
-//        $this->hooks[] = $action;
-
-        /** @frontend - Change default single_emailtemplate */
-//        $filter = new Filter();
-//        $filter->setComponent($this);
-//        $filter->setHook('single_template');
-//        $filter->setCallback('cpt_single_template');
-//        $filter->setAcceptedArgs(1);
-//        $this->hooks[] = $filter;
-
-        /** @frontend - Modify content for builder */
-//        $filter = clone $filter;
-//        $filter->setHook('the_content');
-//        $filter->setCallback('cpt_single_template_content');
-//        $filter->setAcceptedArgs(1);
-//        $this->hooks[] = $filter;
+        $action = clone $action;
+        $action->setHook('template_include');
+        $action->setCallback('customizer_custom_page');
+        $action->setAcceptedArgs(1);
+        $action->setPriority(999);
+        $this->hooks[] = $action;
 
         /** @backend @emailTemplate - Setup editor script */
         $shortcode = new Shortcode();
@@ -84,58 +69,24 @@ class EmailTemplate extends Base {
     public function customizer_custom_page($template){
         $default = ['post_id', 'triangle_customize'];
         $specs = $this->validateParams($_GET, $default);
-        if(is_customize_preview() && $specs && $_GET['triangle_customize'] == 'true') {
+        $user = User::get_current_user();
+        $user = (isset($user->ID) && $user->ID) ? true :false;
+        // TODO: set this as customizer preview and editor "is_customize_preview()"
+        if($user && $specs && $_GET['triangle_customize'] == 'true') {
             $post = Type::get_post($_GET['post_id']);
             $post->template = get_post_meta($post->ID, 'template_html', true);
             ob_start();
                 $view = new View($this->Plugin);
-                $view->setTemplate('frontend.blank');
+                $view->setTemplate('backend.customize');
                 $view->addData(compact('post'));
                 $view->setSections([
-                    'Template.frontend.customize' => ['name' => 'Builder', 'active' => true]
+                    'EmailTemplate.backend.customize' => ['name' => 'Customize', 'active' => true]
                 ]);
                 $view->build();
             echo ob_get_clean(); return;
         } else {
             return $template;
         }
-    }
-
-    /**
-     * Modify single emailtemplate page
-     */
-    public function cpt_single_template_content($content){
-        global $post;
-        if( is_single() && $post->post_type == $this->EmailTemplate->getName() ) {
-            $post->template = get_post_meta($post->ID, 'template_html', true);
-            ob_start();
-                $view = new View($this->Plugin);
-                $view->setTemplate('frontend.editor');
-                $view->addData(compact('post'));
-                $view->setSections([
-                    'EmailTemplate.frontend.builder' => ['name' => 'Builder', 'active' => true]
-                ]);
-                $view->build();
-            $content .= ob_get_clean();
-        }
-        return $content;
-    }
-
-    /**
-     * Create custom single template for Emailtemplate post type
-     * @var     string  $template   Path to the template. See locate_template().
-     * @var     string  $type       Sanitized filename without extension.
-     * @var     array   $templates  A list of template candidates, in descending order of priority.
-     * @return  array   Template
-     */
-    public function cpt_single_template($single){
-        global $post;
-        $path = unserialize(TRIANGLE_PATH);
-        if ( $post->post_type == $this->EmailTemplate->getName() ) {
-            $templatePath = $path['view_path'] . 'EmailTemplate/theme/single.php';
-            return ( file_exists( $templatePath ) ) ? $templatePath : $single;
-        }
-        return $single;
     }
 
     /**
@@ -186,6 +137,7 @@ class EmailTemplate extends Base {
             $sections = array();
             $sections['EmailTemplate.edit-builder'] = ['name' => 'Builder', 'link' => 'builder'];
             $sections['EmailTemplate.edit-codeeditor'] = ['name' => 'Code editor', 'link' => 'codeeditor'];
+            $sections['EmailTemplate.edit-preview'] = ['name' => 'Preview', 'link' => $this->Service->Page->home_url('?triangle_customize=true&post_id='. $screen->post->ID)];
             if(!isset($_GET['section']) || (isset($_GET['section']) && $_GET['section'] == 'builder')) $sections['EmailTemplate.edit-builder']['active'] = true;
             if(isset($_GET['section']) && $_GET['section'] == 'codeeditor') $sections['EmailTemplate.edit-codeeditor']['active'] = true;
             $view->setSections($sections);

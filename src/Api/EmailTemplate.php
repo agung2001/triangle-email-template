@@ -49,8 +49,8 @@ class EmailTemplate extends Api {
 
         /** @backend - API - Editor Grid Setting */
         $action = clone $action;
-        $action->setHook('wp_ajax_triangle-editor-element-grid-setting');
-        $action->setCallback('editor_grid_setting');
+        $action->setHook('wp_ajax_triangle-editor-element-setting');
+        $action->setCallback('editor_element_setting');
         $this->hooks[] = $action;
     }
 
@@ -101,7 +101,7 @@ class EmailTemplate extends Api {
     }
 
     /**
-     * Get data for EmailTemplate page
+     * Ajax - Load editor row setting
      * @backend
      * @return  void
      */
@@ -123,11 +123,11 @@ class EmailTemplate extends Api {
     }
 
     /**
-     * Get data for EmailTemplate page
+     * Ajax - Load editor element setting
      * @backend
      * @return  void
      */
-    public function editor_grid_setting(){
+    public function editor_element_setting(){
         /** Validate Params */
         $default = ['column'];
         if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
@@ -146,7 +146,8 @@ class EmailTemplate extends Api {
                 'column'        => $params['column'],
             ]);
             $view->setSections([
-                'EmailTemplate.element.grid-setting' => ['name' => 'Setting', 'active' => true],
+                'EmailTemplate.element.element-editor' => ['name' => 'Editor', 'active' => true],
+                'EmailTemplate.element.element-setting' => ['name' => 'Setting'],
             ]);
             $view->build();
         $content = ob_get_clean();

@@ -84,6 +84,29 @@ class View {
     }
 
     /**
+     * Helper to handle data logic within section loop
+     * - Slugify
+     * - Determine active tab
+     * - Determine which content to load
+     * - Convert url for url type sections
+     */
+    public function sectionLoopLogic($path, $section){
+        $data = array();
+        $data['slug'] = str_replace(' ','',strtolower($section['name']));
+        $data['active'] = isset($section['active']) ? true : false;
+        $data['content'] = (isset($section['link']) && !$data['active']) ? '' : $this->loadContent($path); /** Handle url sections type */
+        $data['content'] = (isset($section['link']) && strpos($section['link'], '//') ) ? $section['link'] : $data['content']; /** Handle http:// link */
+        if( isset($section['link']) && !strpos($section['link'], '//') ) {
+            $data['url'] = $this->Service->Page->add_query_arg(NULL, NULL) . '&section=' . $section['link'];
+            $data['url'] = $this->Service->Page->home_url($data['url']);
+            $data['url'] = '<a id="tab-' . $data['slug'] . '" href="' . $data['url'] . '">' . $section['name'] . '</a>';
+        } elseif( isset($section['link']) && strpos($section['link'], '//') ){
+            $data['url'] = '<a id="tab-' . $data['slug'] . '" href="' . $section['link'] . '" target="_blank">' . $section['name'] . '</a>';
+        } else { $data['url'] = $section['name']; }
+        return $data;
+    }
+
+    /**
      * Escape function generated within Service.php class
      * @return mixed    Return escape value
      */

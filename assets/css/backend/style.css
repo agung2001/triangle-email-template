@@ -955,10 +955,16 @@ input:checked + .slider:before {
 * @backend @edit
 */
 #section-builder .email-grid {
+  /** Templating */
+  /** Grid Template */
   font-family: 'Lato', sans-serif;
   position: relative;
   margin: 0 auto;
   max-width: 800px; }
+  #section-builder .email-grid h1, #section-builder .email-grid h2, #section-builder .email-grid h3, #section-builder .email-grid h4, #section-builder .email-grid h5, #section-builder .email-grid h6 {
+    font-weight: 400; }
+  #section-builder .email-grid a {
+    color: #3498db; }
   #section-builder .email-grid .row {
     width: 100%;
     height: auto;

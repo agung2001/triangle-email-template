@@ -10,7 +10,6 @@
  */
 
 /** Load Helper and Service */
-global $post;
 $user = Triangle\Wordpress\User::get_current_user();
 if(!isset($user->ID) || !$user->ID) $service->Page->wp_redirect('/');
 $helper = new Triangle\Helper();
@@ -29,14 +28,9 @@ $service = new Triangle\Wordpress\Service();
 </head>
 <body>
 
-<!-- Start::Content -->
-<?php if($service->Template->have_posts()): ?>
-    <?php while($service->Template->have_posts()): ?>
-        <?php $service->Template->the_post(); ?>
-        <?php $service->Template->the_content(); ?>
-    <?php endwhile; ?>
-<?php endif; ?>
-<!-- End::Content -->
+<?php foreach($this->sections as $path => $options): ?>
+    <?= $this->loadContent($path) ?>
+<?php endforeach; ?>
 
 </body>
 </html>

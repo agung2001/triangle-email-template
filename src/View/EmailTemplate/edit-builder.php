@@ -78,20 +78,19 @@
 
 </div>
 
-<!--Start : Builder Element-->
+<!--Start : Builder Elements-->
 <div style="display:none;">
     <div id="row-setting">
         <div class="row-header">
             <a id="row-action-move" title="Move Row"><i class="fas fa-arrows-alt"></i></a>
-            <a id="row-action-setting" title="Modify Row"><i class="fas fa-cog"></i></a>
+            <a id="row-action-setting" title="Row Setting"><i class="fas fa-cog"></i></a>
             <a id="row-action-remove" title="Remove Row"><i class="fas fa-trash"></i></a>
         </div>
     </div>
     <div id="element-setting">
         <a id="element-action-move" title="Move Element"><i class="fas fa-arrows-alt"></i></a>
         <a id="element-action-clone" title="Clone Element"><i class="far fa-clone"></i></a>
-        <a id="element-action-grid" title="Modify Grid"><i class="fas fa-layer-group"></i></a>
-        <a id="element-action-setting" title="Modify Element"><i class="fas fa-cog"></i></a>
+        <a id="element-action-setting" title="Element Setting"><i class="fas fa-cog"></i></a>
         <a id="element-action-remove" title="Remove Element"><i class="fas fa-trash"></i></a>
     </div>
     <div id="new-row">
@@ -102,8 +101,8 @@
 </div>
 <!--End : Builder Element-->
 
-<!--Start: New Element-->
+<!--Start: FAB New Element-->
 <div id="btn-add-new-element" class="fab bg-amethyst">
     <i class="fas fa-plus"></i>
 </div>
-<!--End: New Element-->
+<!--End: FAB New Element-->

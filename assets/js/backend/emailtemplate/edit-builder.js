@@ -146,51 +146,11 @@ jQuery(document).ready(function($){
         });
     });
 
-    /** JConfirm - Element Grid Setting */
-    $(document).on('click', '#element-action-grid', function(){
-        var element = $(this).parent().parent();
-        let column = element.attr('class').split(' ');
-        $.confirm({
-            title: 'Grid Setting',
-            icon: 'fas fa-layer-group',
-            columnClass: 'col-sm-12',
-            theme: 'material',
-            closeIcon: 'cancel',
-            escapeKey: 'cancel',
-            backgroundDismiss: true,
-            animation: 'scale',
-            type: 'purple',
-            offsetTop: 40,
-            content: function () {
-                var self = this;
-                return $.ajax({
-                    method: 'POST',
-                    url: 'admin-ajax.php',
-                    data: {
-                        'action'    : 'triangle-editor-element-grid-setting',
-                        'column'    : column.filter((value) => (value.includes('col-sm-')) )[0].replace('col-sm-',''),
-                    },
-                }).done(function (response) {
-                    self.setContent(response);
-                }).fail(function(){
-                    self.setContent('Something went wrong.');
-                });
-            },
-            buttons: {
-                save: function () {
-                    $(element).removeAttr('class');
-                    $(element).addClass(`element col-sm-${$('#grid-column-size').val()}`);
-                    setTimeout(function(){ initElementGrid(); }, 300);
-                },
-                cancel: function () {},
-            }
-        });
-    });
-
     /** JConfirm - Element Setting */
     $(document).on('click', '#element-action-setting', function(){
         let element = $(this).parent().parent();
         let content = $('.element-content', element).html();
+        let column = element.attr('class').split(' ');
         $.confirm({
             title: 'Element Setting',
             columnClass: 'col-sm-12',
@@ -208,17 +168,29 @@ jQuery(document).ready(function($){
                     method: 'POST',
                     url: 'admin-ajax.php',
                     data: {
-                        'action'    : 'triangle-editor',
-                        'element'   : content,
+                        'action'    : 'triangle-editor-element-setting',
+                        'column'    : column.filter((value) => (value.includes('col-sm-')) )[0].replace('col-sm-',''),
                     },
-                }).done(function (response) {
+                }).success(function (response) {
+                    $('#element-editor').html(response);
                     self.setContent(response);
+                    $.ajax({
+                        method: 'POST',
+                        url: 'admin-ajax.php',
+                        data: {
+                            'action'    : 'triangle-editor',
+                            'content'   : content,
+                        },
+                    }).success(function(response){
+                        $('#element-editor').html(response);
+                    });
                 }).fail(function(){
                     self.setContent('Something went wrong.');
                 });
             },
             buttons: {
                 save: function () {
+                    /** Editor */
                     /** Destroy TinyMCE */
                     let init = tinymce.extend( {}, tinyMCEPreInit.mceInit[ 'wp_element_editor' ] );
                     try { tinymce.init( init ); } catch(e){}
@@ -227,6 +199,11 @@ jQuery(document).ready(function($){
                     /** Save Style */
                     $('.element-content', element).html(value);
                     $('.mce-toolbar-grp').remove();
+                    setTimeout(function(){ initElementGrid(); }, 300);
+
+                    /** Setting */
+                    $(element).removeAttr('class');
+                    $(element).addClass(`element col-sm-${$('#grid-column-size').val()}`);
                     setTimeout(function(){ initElementGrid(); }, 300);
                 },
                 cancel: function () {

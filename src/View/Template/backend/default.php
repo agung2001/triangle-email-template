@@ -10,33 +10,19 @@
 
             <ul class="nav-tab-wrapper <?= (isset($disableTab)) ? '' : 'nav-tab-general' ?>">
                 <?php foreach($this->sections as $path => $section): ?>
-                    <?php
-                        $slug = str_replace(' ','',strtolower($section['name']));
-                        $active = isset($section['active']) ? 'nav-tab-active' : '';
-                    ?>
-                    <li class="nav-tab <?= $active ?>" data-tab="section-<?= $slug ?>">
-                        <?php if(isset($section['link'])){ ?>
-                            <?php
-                            $url = $this->Service->Page->add_query_arg( NULL, NULL ).'&section='.$section['link'];
-                            $url = $this->Service->Page->home_url($url);
-                            ?>
-                            <a id="tab-<?= $slug ?>" href="<?= $url ?>"><?= $section['name'] ?></a>
-                        <?php } else { ?>
-                            <?= $section['name'] ?>
-                        <?php } ?>
+                    <?php extract($this->sectionLoopLogic($path, $section)); ?>
+                    <li class="nav-tab <?= ($active) ? 'nav-tab-active' : '' ?>" data-tab="section-<?= $slug ?>">
+                        <?= $url ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
         </div>
 
         <div class="content">
-            <?php foreach($this->sections as $path => $option): ?>
-                <?php
-                    $slug = str_replace(' ','',strtolower($option['name']));
-                    $active = isset($option['active']) ? 'current' : '';
-                ?>
-                <div id="section-<?= $slug ?>" class="tab-content triangle-sections <?= $active ?>">
-                    <?= (isset($section['link']) && $active=='') ? '' : $this->loadContent($path); ?>
+            <?php foreach($this->sections as $path => $section): ?>
+                <?php extract($this->sectionLoopLogic($path, $section)); ?>
+                <div id="section-<?= $slug ?>" class="tab-content triangle-sections <?= ($active) ? 'current' : '' ?>">
+                    <?= $content ?>
                 </div>
             <?php endforeach; ?>
         </div>

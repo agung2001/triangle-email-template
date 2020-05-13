@@ -39,10 +39,10 @@ class Editor extends Api {
      */
     public function load_editor(){
         /** Validate Params */
-        if(!$this->validateParams($_POST, ['element'])) die('Parameters did not match the specs!');
+        if(!$this->validateParams($_POST, ['content'])) die('Parameters did not match the specs!');
 
         /** Return block editor */
-        $content = html_entity_decode($_POST['element']);
+        $content = html_entity_decode($_POST['content']);
         $content = preg_replace('/\s+/', ' ', stripslashes($content));
         $content = $this->Service->Page->ajax_wp_editor($content, 'wp_element_editor');
         echo $content; exit;
