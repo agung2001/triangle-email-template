@@ -1,20 +1,7 @@
 jQuery(document).ready(function($){
-    /** Row Setting */
-    var rowSetting = $('#row-setting');
-    $(document).on('mouseenter', `.email-grid .row`, function(){
-        $(`.row-content`, this).before(rowSetting);
-    }).on('mouseleave', `.email-grid .row`, function(){
-        rowSetting.remove();
-    });
-
-    /** Element Setting */
-    var elementSetting = $('#element-setting');
-    $(document).on('mouseenter', `.email-grid .element`, function(){
-        $(`.element-content`, this).before(elementSetting);
-    }).on('mouseleave', `.email-grid .element`, function(){
-        elementSetting.remove();
-    });
-
+/**
+ * Grid Functions
+ * */
     /** Muuri JS Grid */
     var columnGrids, emailGrid;
 
@@ -107,112 +94,6 @@ jQuery(document).ready(function($){
         initElementGrid();
     });
 
-    /** JConfirm - Row Setting */
-    $(document).on('click', '#row-action-setting', function(){
-        var row = $(this).parent().parent().parent();
-        $.confirm({
-            title: 'Row Setting',
-            icon: 'fas fa-cog',
-            columnClass: 'col-sm-12',
-            theme: 'material',
-            closeIcon: 'cancel',
-            escapeKey: 'cancel',
-            backgroundDismiss: true,
-            animation: 'scale',
-            type: 'purple',
-            offsetTop: 40,
-            content: function () {
-                var self = this;
-                return $.ajax({
-                    method: 'POST',
-                    url: 'admin-ajax.php',
-                    data: {
-                        'action'    : 'triangle-editor-row-setting',
-                    },
-                }).done(function (response) {
-                    self.setContent(response);
-                    setTimeout(function(){ initColorPicker(); }, 300);
-                }).fail(function(){
-                    self.setContent('Something went wrong.');
-                });
-            },
-            buttons: {
-                save: function () {
-                    $('.row-content', row).css('background', $('.pcr-button').css('color'));
-                    setTimeout(function(){ emailGrid.refreshItems().layout(); }, 500);
-                },
-                cancel: function () {},
-            }
-        });
-    });
-
-    /** JConfirm - Element Setting */
-    $(document).on('click', '#element-action-setting', function(){
-        let element = $(this).parent().parent();
-        let content = $('.element-content', element).html();
-        let column = element.attr('class').split(' ');
-        $.confirm({
-            title: 'Element Setting',
-            columnClass: 'col-sm-12',
-            icon: 'fas fa-cog',
-            theme: 'material',
-            closeIcon: 'cancel',
-            escapeKey: 'cancel',
-            backgroundDismiss: true,
-            animation: 'scale',
-            type: 'purple',
-            offsetTop: 40,
-            content: function () {
-                var self = this;
-                return $.ajax({
-                    method: 'POST',
-                    url: 'admin-ajax.php',
-                    data: {
-                        'action'    : 'triangle-editor-element-setting',
-                        'column'    : column.filter((value) => (value.includes('col-sm-')) )[0].replace('col-sm-',''),
-                    },
-                }).success(function (response) {
-                    $('#element-editor').html(response);
-                    self.setContent(response);
-                    $.ajax({
-                        method: 'POST',
-                        url: 'admin-ajax.php',
-                        data: {
-                            'action'    : 'triangle-editor',
-                            'content'   : content,
-                        },
-                    }).success(function(response){
-                        $('#element-editor').html(response);
-                    });
-                }).fail(function(){
-                    self.setContent('Something went wrong.');
-                });
-            },
-            buttons: {
-                save: function () {
-                    /** Editor */
-                    /** Destroy TinyMCE */
-                    let init = tinymce.extend( {}, tinyMCEPreInit.mceInit[ 'wp_element_editor' ] );
-                    try { tinymce.init( init ); } catch(e){}
-                    let value = tinymce.editors.wp_element_editor.getContent();
-                    tinymce.execCommand('mceRemoveControl', true, '#wp_element_editor');
-                    /** Save Style */
-                    $('.element-content', element).html(value);
-                    $('.mce-toolbar-grp').remove();
-                    setTimeout(function(){ initElementGrid(); }, 300);
-
-                    /** Setting */
-                    $(element).removeAttr('class');
-                    $(element).addClass(`element col-sm-${$('#grid-column-size').val()}`);
-                    setTimeout(function(){ initElementGrid(); }, 300);
-                },
-                cancel: function () {
-                    $('.mce-toolbar-grp').remove();
-                },
-            }
-        });
-    });
-
     /** Remove row from the grid */
     $(document).on('click', '#row-action-remove', function(){
         let row = $(this).parent().parent().parent();
@@ -262,9 +143,157 @@ jQuery(document).ready(function($){
         });
     });
 
+/**
+ * Setting Functions
+ * */
+    /** Row Setting */
+    var rowSetting = $('#row-setting');
+    $(document).on('mouseenter', `.email-grid .row`, function(){
+        $(`.row-content`, this).before(rowSetting);
+    }).on('mouseleave', `.email-grid .row`, function(){
+        rowSetting.remove();
+    });
+
+    /** Element Setting */
+    var elementSetting = $('#element-setting');
+    $(document).on('mouseenter', `.email-grid .element`, function(){
+        $(`.element-content`, this).before(elementSetting);
+    }).on('mouseleave', `.email-grid .element`, function(){
+        elementSetting.remove();
+    });
+
+    /** Row Margin and Padding */
+    var rowLinked = { margin: true, padding: true };
+    $(document).on('click', '#row-margin-linked', function(){ toggleMarginorPaddingLinked('row', 'margin'); });
+    $(document).on('click', '#row-padding-linked', function(){ toggleMarginorPaddingLinked('row', 'padding'); });
+    $(document).on('keyup', '.row-margin', function(){ setMarginorPaddingLinkedValue('row', 'margin', $(this).val() ); });
+    $(document).on('keyup', '.row-padding', function(){ setMarginorPaddingLinkedValue('row', 'padding', $(this).val() ); });
+
+    /** Element Margin and Padding */
+    var elementLinked = { margin: true, padding: true };
+    $(document).on('click', '#element-margin-linked', function(){ toggleMarginorPaddingLinked('element', 'margin'); });
+    $(document).on('click', '#element-padding-linked', function(){ toggleMarginorPaddingLinked('element', 'padding'); });
+    $(document).on('keyup', '.element-margin', function(){ setMarginorPaddingLinkedValue('element', 'margin', $(this).val() ); });
+    $(document).on('keyup', '.element-padding', function(){ setMarginorPaddingLinkedValue('element', 'padding', $(this).val() ); });
+
+    /** JConfirm - Row Setting */
+    $(document).on('click', '#row-action-setting', function(){
+        var row = $(this).parent().parent().parent();
+        $.confirm({
+            title: 'Row',
+            icon: 'fas fa-cog',
+            columnClass: 'col-sm-12',
+            theme: 'material',
+            closeIcon: 'cancel',
+            escapeKey: 'cancel',
+            backgroundDismiss: true,
+            animation: 'scale',
+            type: 'purple',
+            offsetTop: 40,
+            content: function () {
+                var self = this;
+                return $.ajax({
+                    method: 'POST',
+                    url: 'admin-ajax.php',
+                    data: {
+                        'action'    : 'triangle-editor-row-setting',
+                    },
+                }).done(function (response) {
+                    self.setContent(response);
+                    setTimeout(function(){ initColorPicker(); }, 300);
+                }).fail(function(){
+                    self.setContent('Something went wrong.');
+                });
+            },
+            buttons: {
+                save: function () {
+                    /** Save Style */
+                    $('.row-content', row).css('background', $('.pcr-button').css('color'));
+                    setMarginorPadding($('.row-content', row), 'row', 'margin');
+                    setMarginorPadding($('.row-content', row), 'row', 'padding');
+
+                    /** Clean Script */
+                    setTimeout(function(){ emailGrid.refreshItems().layout(); }, 500);
+                },
+                cancel: function () {},
+            }
+        });
+    });
+
+    /** JConfirm - Element Setting */
+    $(document).on('click', '#element-action-setting', function(){
+        let element = $(this).parent().parent();
+        let content = $('.element-content', element).html();
+        let column = element.attr('class').split(' ');
+        $.confirm({
+            title: 'Element',
+            columnClass: 'col-sm-12',
+            icon: 'fas fa-cog',
+            theme: 'material',
+            closeIcon: 'cancel',
+            escapeKey: 'cancel',
+            backgroundDismiss: true,
+            animation: 'scale',
+            type: 'purple',
+            offsetTop: 40,
+            content: function () {
+                var self = this;
+                return $.ajax({
+                    method: 'POST',
+                    url: 'admin-ajax.php',
+                    data: {
+                        'action'    : 'triangle-editor-element-setting',
+                        'column'    : column.filter((value) => (value.includes('col-sm-')) )[0].replace('col-sm-',''),
+                    },
+                }).success(function (response) {
+                    $('#element-editor').html(response);
+                    self.setContent(response);
+                    $.ajax({
+                        method: 'POST',
+                        url: 'admin-ajax.php',
+                        data: {
+                            'action'    : 'triangle-editor',
+                            'content'   : content,
+                        },
+                    }).success(function(response){
+                        $('#element-editor').html(response);
+                    });
+                }).fail(function(){
+                    self.setContent('Something went wrong.');
+                });
+            },
+            buttons: {
+                save: function () {
+                    /** Editor */
+                    /** Destroy TinyMCE */
+                    let init = tinymce.extend( {}, tinyMCEPreInit.mceInit[ 'wp_element_editor' ] );
+                    try { tinymce.init( init ); } catch(e){}
+                    let value = tinymce.editors.wp_element_editor.getContent();
+                    tinymce.execCommand('mceRemoveControl', true, '#wp_element_editor');
+
+                    /** Save Style */
+                    $('.element-content', element).html(value);
+                    setMarginorPadding($('.element-content', element), 'element', 'margin');
+                    setMarginorPadding($('.element-content', element), 'element', 'padding');
+
+                    /** Grid Setting */
+                    $(element).removeAttr('class');
+                    $(element).addClass(`element col-sm-${$('#grid-column-size').val()}`);
+
+                    /** Clean Script */
+                    setTimeout(function(){ initElementGrid(); }, 300);
+                    $('.mce-toolbar-grp').remove();
+                },
+                cancel: function () {
+                    $('.mce-toolbar-grp').remove();
+                },
+            }
+        });
+    });
+
     /** Initiate color picker */
     function initColorPicker(){
-        let pickr = Pickr.create({
+        return Pickr.create({
             el: '.color-picker',
             theme: 'classic',
             components: {
@@ -286,4 +315,48 @@ jQuery(document).ready(function($){
             }
         });
     }
+
+    /**
+     * Set margin or padding from the setting
+     * @var     string  dom     DOM element
+     * @var     string  type    (row, element)
+     * @var     string  type    (margin, padding)
+     * */
+    function setMarginorPadding(dom, type, MarginorPadding){
+        $(dom).css(`${MarginorPadding}-top`, ($(`#${type}-${MarginorPadding}-top`).val()) ? $(`#${type}-${MarginorPadding}-top`).val() : '0' );
+        $(dom).css(`${MarginorPadding}-right`, ($(`#${type}-${MarginorPadding}-right`).val()) ? $(`#${type}-${MarginorPadding}-right`).val() : '0' );
+        $(dom).css(`${MarginorPadding}-bottom`, ($(`#${type}-${MarginorPadding}-bottom`).val()) ? $(`#${type}-${MarginorPadding}-bottom`).val() : '0' );
+        $(dom).css(`${MarginorPadding}-left`, ($(`#${type}-${MarginorPadding}-left`).val()) ? $(`#${type}-${MarginorPadding}-left`).val() : '0' );
+    }
+
+    /**
+     * Toggle Margin Linked
+     * @var     string  type    (row, element)
+     * @var     string  type    (margin, padding)
+     * */
+    function toggleMarginorPaddingLinked(type, MarginorPadding){
+        /** Set Value */
+        if(type=='row') rowLinked[MarginorPadding] = !rowLinked[MarginorPadding];
+        if(type=='element') rowLinked[MarginorPadding] = !rowLinked[MarginorPadding];
+        /** Change Icon */
+        let icon = (type=='row') ? rowLinked : elementLinked;
+            icon = (icon[MarginorPadding]) ? `<i class="fas fa-link"></i>` : `<i class="fas fa-unlink"></i>`;
+        $(`#${type}-${MarginorPadding}-linked`).html(icon);
+    }
+
+    /**
+     * Set Margin or Padding Linked Value
+     * @var     string  type    (row, element)
+     * @var     string  type    (margin, padding)
+     * */
+    function setMarginorPaddingLinkedValue(type, MarginorPadding, value){
+        let linked = (type=='row') ? rowLinked : elementLinked;
+        if(linked[MarginorPadding]){
+            $(`#${type}-${MarginorPadding}-top`).val(value);
+            $(`#${type}-${MarginorPadding}-right`).val(value);
+            $(`#${type}-${MarginorPadding}-bottom`).val(value);
+            $(`#${type}-${MarginorPadding}-left`).val(value);
+        }
+    }
+
 });
