@@ -17,7 +17,7 @@ class Validate {
      * Wordpress sanitize script
      * @return mixed    Return sanitized values
      */
-    public static function sanitize($type, $value, $args = []){
+    public function sanitize($type, $value, $args = []){
         if($type=='key') return sanitize_key($value);
         elseif($type=='filename') return sanitize_file_name($value);
         elseif($type=='text' || $type=='int') return sanitize_text_field($value);

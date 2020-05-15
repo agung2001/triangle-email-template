@@ -14,10 +14,7 @@ namespace Triangle\Controller;
 use Triangle\View;
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Email;
-use Triangle\Wordpress\Filter;
 use Triangle\Wordpress\Shortcode;
-use Triangle\Wordpress\Type;
-use Triangle\Wordpress\User;
 
 class EmailTemplate extends Base {
 
@@ -69,12 +66,15 @@ class EmailTemplate extends Base {
     public function customizer_custom_page($template){
         $default = ['post_id', 'triangle_customize'];
         $specs = $this->validateParams($_GET, $default);
-        $user = User::get_current_user();
+        $user = $this->Service->User->get_current_user();
         $user = (isset($user->ID) && $user->ID) ? true :false;
         // TODO: set this as customizer preview and editor "is_customize_preview()"
         if($user && $specs && $_GET['triangle_customize'] == 'true') {
-            $post = Type::get_post($_GET['post_id']);
-            $post->template = get_post_meta($post->ID, 'template_html', true);
+            $this->EmailTemplate->setID($_GET['post_id']);
+            $post = $this->EmailTemplate->get_post();
+            $post->template = $this->EmailTemplate->getMetas()['template_html'];
+            $post->template->setArgs(['single' => true]);
+            $post->template = $post->template->get_post_meta();
             ob_start();
                 $view = new View($this->Plugin);
                 $view->setTemplate('backend.customize');
@@ -121,6 +121,12 @@ class EmailTemplate extends Base {
     public function edit_emailtemplate(){
         $screen = unserialize(TRIANGLE_SCREEN);
         if(isset($screen->post->post_type) && $screen->post->post_type==$this->EmailTemplate->getName()){
+            /** Prepare Data */
+            $this->EmailTemplate->setID($screen->post->ID);
+            $screen->post->template = $this->EmailTemplate->getMetas()['template_html'];
+            $screen->post->template->setArgs(['single' => true]);
+            $screen->post->template = $screen->post->template->get_post_meta();
+
             /** Setup View */
             $view = new View($this->Plugin);
             $view->setTemplate('backend.box');
@@ -132,7 +138,9 @@ class EmailTemplate extends Base {
                 'options'       => [
                     'triangle_builder_inliner' => $this->Service->Option->get_option('triangle_builder_inliner')
                 ],
+                'template'      => $screen->post->template,
             ]);
+
             /** Sections */
             $sections = array();
             $sections['EmailTemplate.edit-builder'] = ['name' => 'Builder', 'link' => 'builder'];
@@ -157,11 +165,11 @@ class EmailTemplate extends Base {
 
         /** Prepare Data */
         $this->EmailTemplate->setID($atts['field_template']);
-        $this->EmailTemplate->getMetas()['template_standard']->setSingle(true);
+        $this->EmailTemplate->getMetas()['template_standard']->setArgs(['single' => true]);
         $template = $this->EmailTemplate->getMetas()['template_standard']->get_post_meta();
         $template = isset($template) ? $template : '';
         $users = explode(',',$atts['field_users']);
-        foreach($users as &$user) $user = User::get_user_by('ID', $user)->data->user_email;
+        foreach($users as &$user) $user = $this->Service->User->get_user_by('ID', $user)->data->user_email;
 
         /** Send Email */
         $email = new Email();

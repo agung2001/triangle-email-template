@@ -1,14 +1,14 @@
 <?php
 
-namespace Triangle\Wordpress;
+namespace Triangle\Wordpress\Service;
 
 !defined( 'WPINC ' ) or die;
 
 /**
- * Retrieve wordpress user data
+ * Add extra layer for wordpress functions
  *
  * @package    Triangle
- * @subpackage Triangle/Controller
+ * @subpackage Triangle\Wordpress
  */
 
 class User {
@@ -18,7 +18,7 @@ class User {
      * @backend
      * @return  object  Lists of user object
      */
-    public static function get_users($args){
+    public function get_users($args){
         return get_users($args);
     }
 
@@ -27,7 +27,7 @@ class User {
      * @backend
      * @return  object  User object
      */
-    public static function get_user_by($field, $value){
+    public function get_user_by($field, $value){
         return get_user_by($field, $value);
     }
 
@@ -36,7 +36,7 @@ class User {
      * @backend
      * @return  object  User object
      */
-    public static function get_current_user(){
+    public function get_current_user(){
         return wp_get_current_user();
     }
 

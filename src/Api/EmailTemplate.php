@@ -13,7 +13,6 @@ namespace Triangle\Api;
 
 use Triangle\View;
 use Triangle\Wordpress\Action;
-use Triangle\Wordpress\User;
 
 class EmailTemplate extends Api {
 
@@ -75,11 +74,11 @@ class EmailTemplate extends Api {
         }
 
         /** Get User Data */;
-        $data['users'] = User::get_users($_POST['userArgs']);
-        $data['currentUser'] = User::get_current_user();
-        $data['defaultUser'] = User::get_user_by('ID',$_POST['user_id']);
+        $data['users'] = $this->Service->User->get_users($_POST['userArgs']);
+        $data['currentUser'] = $this->Service->User->get_current_user();
+        $data['defaultUser'] = $this->Service->User->get_user_by('ID',$_POST['user_id']);
         /** Get default user */
-        wp_send_json($data);
+        $this->Service->API->wp_send_json($data);
     }
 
     /**
@@ -97,7 +96,7 @@ class EmailTemplate extends Api {
         $this->EmailTemplate->setID($_POST['args']['post_id']);
         $data['templates'] = $this->get_template_elements_value($_POST['args']['post_id']);
         $data['options'] = ['inliner' => $this->Service->Option->get_option('triangle_builder_inliner')];
-        wp_send_json((object) $data);
+        $this->Service->API->wp_send_json((object) $data);
     }
 
     /**

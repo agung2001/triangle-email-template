@@ -1,85 +1,12 @@
 <div class="builder-container">
-    <div class="grid email-grid">
-
-        <div class="row">
-            <div class="row-content">
-                <div class="element col-sm-12">
-                    <div class="element-content">
-                        <h1><a href="#">e-Verify</a></h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="row-content">
-                <div class="element col-sm-12">
-                    <div class="element-content">
-                        <img src="http://wp-dev/app/uploads/EmailTemplate/e-verify/images/email.png" alt="" style="width:300px; display:block; margin:0 auto;">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="row-content">
-                <div class="element col-sm-12">
-                    <div class="element-content">
-                        <h2>Please verify your email</h2>
-                        <h3>Amazing deals, updates, interesting news right in your inbox</h3>
-                        <p><a href="#" class="btn btn-primary">Yes! Subscribe Me</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="row-content">
-                <div class="element col-sm-4">
-                    <div class="element-content">
-                        <h3 class="heading">About</h3>
-                        <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                    </div>
-                </div>
-                <div class="element col-sm-4">
-                    <div class="element-content">
-                        <h3 class="heading">Contact Info</h3>
-                        <ul>
-                            <li><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-                            <li><span class="text">+2 392 3929 210</span></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="element col-sm-4">
-                    <div class="element-content">
-                        <h3 class="heading">Useful Links</h3>
-                        <ul>
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Services</a></li>
-                            <li><a href="#">Work</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="row-content">
-                <div class="element col-sm-12">
-                    <div class="element-content">
-                        <p>No longer want to receive these email? You can <a href="#" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    <div id="builder_dom" class="grid email-grid">
+        <?= $template ?>
     </div>
-
 </div>
 
 <!--Start : Builder Elements-->
 <div style="display:none;">
+    <textarea id="template_html" name="template_html" cols="30" rows="10"></textarea>
     <div id="row-setting">
         <div class="row-header">
             <a id="row-action-move" title="Move Row"><i class="fas fa-arrows-alt"></i></a>

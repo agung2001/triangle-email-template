@@ -11,7 +11,6 @@ namespace Triangle\Model;
  * @subpackage Triangle/Model
  */
 
-use Triangle\Helper;
 use Triangle\Wordpress\Type;
 
 class Model extends Type {

@@ -31,22 +31,6 @@ class Page {
     }
 
     /**
-     * Wordpress - Load wp_editor
-     * @var     string      $content    Html content string to be edited
-     * @var     string      $id         WP_Editor id
-     * @return  string                  Generated html consist of wp_editor
-     */
-    public function ajax_wp_editor($content, $id){
-        ob_start();
-            wp_editor( $content, $id, [] );
-        $content = ob_get_clean();
-        $content .= \_WP_Editors::enqueue_scripts();
-        $content .= print_footer_scripts();
-        $content .= \_WP_Editors::editor_js();
-        return $content;
-    }
-
-    /**
      * Wordpress redirect
      */
     public function wp_redirect($url){ wp_redirect($url); exit; }

@@ -12,6 +12,7 @@ jQuery(document).ready(function($){
         columnGrids = [];
         Array.prototype.slice.call($('.email-grid .row-content')).forEach(buildElements);
         if(emailGrid) emailGrid.refreshItems().layout();
+        renderGrid();
     }
     /** Build Elements */
     function buildElements(container){
@@ -107,6 +108,7 @@ jQuery(document).ready(function($){
             buttons: {
                 confirm: function () {
                     emailGrid.remove(row[0], {removeElements: true});
+                    renderGrid();
                 },
                 cancel: function () {},
             }
@@ -137,6 +139,7 @@ jQuery(document).ready(function($){
                     columnGrids.forEach((muuri) => {
                         muuri.remove(element[0], {removeElements: true});
                     });
+                    renderGrid();
                 },
                 cancel: function () {},
             }
@@ -172,7 +175,7 @@ jQuery(document).ready(function($){
     /** Element Margin and Padding */
     var elementLinked = { margin: true, padding: true };
     $(document).on('click', '#element-margin-linked', function(){ toggleMarginorPaddingLinked('element', 'margin'); });
-    $(document).on('click', '#element-padding-linked', function(){ toggleMarginorPaddingLinked('element', 'padding'); });
+    $(document).on('click', '#element-padding-linked', function(){ console.log('mencoba'); toggleMarginorPaddingLinked('element', 'padding'); });
     $(document).on('keyup', '.element-margin', function(){ setMarginorPaddingLinkedValue('element', 'margin', $(this).val() ); });
     $(document).on('keyup', '.element-padding', function(){ setMarginorPaddingLinkedValue('element', 'padding', $(this).val() ); });
 
@@ -213,7 +216,10 @@ jQuery(document).ready(function($){
                     setMarginorPadding($('.row-content', row), 'row', 'padding');
 
                     /** Clean Script */
-                    setTimeout(function(){ emailGrid.refreshItems().layout(); }, 500);
+                    setTimeout(function(){
+                        emailGrid.refreshItems().layout();
+                        renderGrid();
+                    }, 500);
                 },
                 cancel: function () {},
             }
@@ -337,7 +343,7 @@ jQuery(document).ready(function($){
     function toggleMarginorPaddingLinked(type, MarginorPadding){
         /** Set Value */
         if(type=='row') rowLinked[MarginorPadding] = !rowLinked[MarginorPadding];
-        if(type=='element') rowLinked[MarginorPadding] = !rowLinked[MarginorPadding];
+        if(type=='element') elementLinked[MarginorPadding] = !elementLinked[MarginorPadding];
         /** Change Icon */
         let icon = (type=='row') ? rowLinked : elementLinked;
             icon = (icon[MarginorPadding]) ? `<i class="fas fa-link"></i>` : `<i class="fas fa-unlink"></i>`;
@@ -357,6 +363,14 @@ jQuery(document).ready(function($){
             $(`#${type}-${MarginorPadding}-bottom`).val(value);
             $(`#${type}-${MarginorPadding}-left`).val(value);
         }
+    }
+
+    /**
+     * Grab #builder_dom into #template_html to be saved
+     * */
+    function renderGrid(){
+        let dom = $('#builder_dom').html();
+        $('#template_html').val(dom);
     }
 
 });

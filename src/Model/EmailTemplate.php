@@ -13,7 +13,6 @@ namespace Triangle\Model;
 
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Meta;
-use Triangle\Wordpress\Type;
 
 class EmailTemplate extends Model {
 
@@ -28,7 +27,7 @@ class EmailTemplate extends Model {
         parent::__construct($plugin);
 
         /** @backend - Post_type : emailtemplate */
-        $this->args['publicly_queryable'] = true;
+        $this->args['publicly_queryable'] = false;
         $this->args['has_archive'] = false;
         $this->args['show_in_menu'] = false;
         $this->args['labels'] = ['name' => 'Email Template'];
@@ -87,7 +86,7 @@ class EmailTemplate extends Model {
             $this->ID = $post_id;
 
             /** Validate Params */
-            $default = ['template_html', 'juice_output'];
+            $default = ['template_html'];
             if(!$this->EmailTemplate->validateParams($_POST, $default)) die('Parameters did not match the specs!');
 
             /** Sanitize Params */
@@ -96,10 +95,10 @@ class EmailTemplate extends Model {
             $params = $this->EmailTemplate->sanitizeParams($_POST, $default);
 
             /** Save meta field */
-            $params['template_standard'] = $params['juice_output'];
+            $results = [];
             foreach($this->metas as $key => $meta){
                 if(!isset($params[$key])) continue;
-                $value = html_entity_decode($params[$key]);
+                $value = $params[$key];
                 $meta->setValue($value);
                 $results[] = $meta->update_post_meta();
             }
@@ -113,7 +112,8 @@ class EmailTemplate extends Model {
      * @var     int     $post_id    Post ID
      */
     public function delete_emailtemplate($post_id){
-        $post = Type::get_post($post_id);
+        $this->setID($post_id);
+        $post = $this->get_post();
         if($post->post_type==$this->name){
             $slug = str_replace('__trashed','',strtolower($post->post_name));
             $path = unserialize(TRIANGLE_PATH);

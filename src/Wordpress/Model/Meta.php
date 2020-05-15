@@ -33,58 +33,53 @@ class Meta {
 
     /**
      * @access   protected
-     * @var      string    $prev_value   Previous value to check before updating
+     * @var      string    $args   Generalize metadata arguments
      */
-    protected $prev_value;
+    protected $args;
 
     /**
-     * @access   protected
-     * @var      bool    $unique   Whether the same key should not be added
+     * Metadata constructor
      */
-    protected $unique;
-
-    /**
-     * @access   protected
-     * @var      bool    $single   	If true, returns only the first value for the specified meta key
-     */
-    protected $single;
-
-    /**
-     * Meta constructor
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->prev_value = '';
-        $this->unique = false;
-        $this->single = false;
+    public function __construct(){
+        $this->args = [];
     }
 
     /**
+     * Clear args for the next function call - dynamic args usage
+     */
+    public function clearArgs($data){ $this->args = []; return $data; }
+
+    /**
      * Retrieves a post meta field for the given post ID.
+     * @var      bool    $single   	If true, returns only the first value for the specified meta key
      * @return array       Will be an array if $single is false. Will be value of the meta field if $single is true
      */
     public function get_post_meta()
     {
-        return get_post_meta( $this->type->getID(), $this->key, $this->single );
+        $this->args['single'] = (!isset($this->args['single']) || !is_bool($this->args['single'])) ? false : $this->args['single'];
+        return $this->clearArgs(get_post_meta( $this->type->getID(), $this->key, $this->args['single'] ));
     }
 
     /**
      * Adds a meta field to the given post
+     * @var      bool    $unique   Whether the same key should not be added
      * @return int      Meta ID on success, false on failure
      */
     public function add_post_meta()
     {
-        return add_post_meta( $this->type->getID(), $this->key, $this->value, $this->unique );
+        $this->args['unque'] = (!isset($this->args['unque']) || !is_bool($this->args['unique'])) ? false : $this->args['unque'];
+        return $this->clearArgs(add_post_meta( $this->type->getID(), $this->key, $this->value, $this->args['unique'] ));
     }
 
     /**
      * Adds a meta field to the given post
+     * @var      string    $prev_value   Previous value to check before updating
      * @return bool     The new meta field ID if a field with the given key didn't exist and was therefore added, true on successful update, false on failure
      */
     public function update_post_meta()
     {
-        return update_post_meta( $this->type->getID(), $this->key, $this->value, $this->prev_value );
+        $this->args['prev_value'] = (!isset($this->args['prev_value']) || !is_bool($this->args['prev_value'])) ? false : $this->args['prev_value'];
+        return $this->clearArgs(update_post_meta( $this->type->getID(), $this->key, $this->value, $this->args['prev_value'] ));
     }
 
     /**
@@ -138,49 +133,17 @@ class Meta {
     /**
      * @return string
      */
-    public function getPrevValue(): string
+    public function getArgs()
     {
-        return $this->prev_value;
+        return $this->args;
     }
 
     /**
-     * @param string $prev_value
+     * @param string $args
      */
-    public function setPrevValue(string $prev_value): void
+    public function setArgs($args)
     {
-        $this->prev_value = $prev_value;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isUnique(): bool
-    {
-        return $this->unique;
-    }
-
-    /**
-     * @param bool $unique
-     */
-    public function setUnique(bool $unique): void
-    {
-        $this->unique = $unique;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSingle(): bool
-    {
-        return $this->single;
-    }
-
-    /**
-     * @param bool $single
-     */
-    public function setSingle(bool $single): void
-    {
-        $this->single = $single;
+        $this->args = $args;
     }
 
 }

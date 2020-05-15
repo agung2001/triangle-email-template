@@ -15,7 +15,6 @@ use Triangle\Plugin;
 use Triangle\Helper;
 use Triangle\Model\EmailTemplate;
 use Triangle\Wordpress\Service;
-use Triangle\Wordpress\User;
 
 class Activate {
 
@@ -68,7 +67,7 @@ class Activate {
             'numberposts' => 1
         ]);
         if(!$EmailTemplate->get_posts()){
-            $currentUser = User::get_current_user();
+            $currentUser = $this->Service->User->get_current_user();
             $EmailTemplate->setArgs([
                 'post_title'    => ucwords($theme),
                 'post_content'  => '',
