@@ -11,9 +11,8 @@ namespace Triangle\Api;
  * @subpackage Triangle/Controller
  */
 
+use Triangle\View;
 use Triangle\Wordpress\Action;
-use Triangle\Wordpress\User;
-use Triangle\Wordpress\Service;
 
 class EmailTemplate extends Api {
 
@@ -25,6 +24,7 @@ class EmailTemplate extends Api {
      */
     public function __construct($plugin){
         parent::__construct($plugin);
+        $this->loadModel('EmailTemplate');
 
         /** @backend - API - Page Contact */
         $action = new Action();
@@ -39,6 +39,18 @@ class EmailTemplate extends Api {
         $action->setHook('wp_ajax_triangle-emailtemplate-page-edit');
         $action->setCallback('page_edit');
         $this->hooks[] = $action;
+
+        /** @backend - API - Editor Grid Setting */
+        $action = clone $action;
+        $action->setHook('wp_ajax_triangle-editor-row-setting');
+        $action->setCallback('editor_row_setting');
+        $this->hooks[] = $action;
+
+        /** @backend - API - Editor Grid Setting */
+        $action = clone $action;
+        $action->setHook('wp_ajax_triangle-editor-element-setting');
+        $action->setCallback('editor_element_setting');
+        $this->hooks[] = $action;
     }
 
     /**
@@ -51,11 +63,8 @@ class EmailTemplate extends Api {
         $default = ['typeArgs', 'userArgs'];
         if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
 
-        /** Load Data */
-        $this->loadModel('EmailTemplate');
-        $data = array();
-
         /** Get Template Data */
+        $data = array();
         $this->EmailTemplate->setArgs($_POST['typeArgs']);
         $data['templates'] = [];
         foreach($this->EmailTemplate->get_posts() as $template){
@@ -65,11 +74,11 @@ class EmailTemplate extends Api {
         }
 
         /** Get User Data */;
-        $data['users'] = User::get_users($_POST['userArgs']);
-        $data['currentUser'] = User::get_current_user();
-        $data['defaultUser'] = User::get_user_by('ID',$_POST['user_id']);
+        $data['users'] = $this->Service->User->get_users($_POST['userArgs']);
+        $data['currentUser'] = $this->Service->User->get_current_user();
+        $data['defaultUser'] = $this->Service->User->get_user_by('ID',$_POST['user_id']);
         /** Get default user */
-        wp_send_json($data);
+        $this->Service->API->wp_send_json($data);
     }
 
     /**
@@ -83,12 +92,65 @@ class EmailTemplate extends Api {
         if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
 
         /** Load Data */
-        $this->loadModel('EmailTemplate');
         $data = array();
         $this->EmailTemplate->setID($_POST['args']['post_id']);
         $data['templates'] = $this->get_template_elements_value($_POST['args']['post_id']);
-        $data['options'] = ['inliner' => Service::get_option('triangle_builder_inliner')];
-        wp_send_json((object) $data);
+        $data['options'] = ['inliner' => $this->Service->Option->get_option('triangle_builder_inliner')];
+        $this->Service->API->wp_send_json((object) $data);
+    }
+
+    /**
+     * Ajax - Load editor row setting
+     * @backend
+     * @return  void
+     */
+    public function editor_row_setting(){
+        /** Load Page */
+        ob_start();
+        $view = new View($this->Plugin);
+        $view->setTemplate('backend.jconfirm');
+        $view->setOptions(['shortcode' => false]);
+        $view->addData([
+            'background'    => 'bg-amethyst',
+        ]);
+        $view->setSections([
+            'EmailTemplate.element.row-setting' => ['name' => 'Setting', 'active' => true],
+        ]);
+        $view->build();
+        $content = ob_get_clean();
+        echo $content; exit;
+    }
+
+    /**
+     * Ajax - Load editor element setting
+     * @backend
+     * @return  void
+     */
+    public function editor_element_setting(){
+        /** Validate Params */
+        $default = ['column'];
+        if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
+        /** Sanitize Params */
+        $default = array_flip($default);
+        $default['column'] = 'text';
+        $params = $this->sanitizeParams($_POST, $default);
+
+        /** Load Page */
+        ob_start();
+            $view = new View($this->Plugin);
+            $view->setTemplate('backend.jconfirm');
+            $view->setOptions(['shortcode' => false]);
+            $view->addData([
+                'background'    => 'bg-amethyst',
+                'column'        => $params['column'],
+            ]);
+            $view->setSections([
+                'EmailTemplate.element.element-editor' => ['name' => 'Editor', 'active' => true],
+                'EmailTemplate.element.element-setting' => ['name' => 'Setting'],
+            ]);
+            $view->build();
+        $content = ob_get_clean();
+        echo $content; exit;
     }
 
     /**
@@ -97,7 +159,6 @@ class EmailTemplate extends Api {
      * @return      array       Configurations and meta_fields value
      */
     private function get_template_elements_value($postID){
-        $this->loadModel('EmailTemplate');
         $templates = $this->Plugin->getConfig()->templates;
         $this->EmailTemplate->setID($postID);
         foreach($templates as $template){

@@ -38,16 +38,48 @@ class MetaBox {
     protected $screen;
 
     /**
+     * @access   protected
+     * @var      string    $context  The context within the screen where the boxes should display.
+     */
+    protected $context;
+
+    /**
+     * @access   protected
+     * @var      string    $priority  The priority within the context where the boxes should show ('high', 'low')
+     */
+    protected $priority;
+
+    /**
+     * @access   protected
+     * @var      string    $callback_args  Data that should be set as the $args property of the box array (which is the second parameter passed to your callback).
+     */
+    protected $callback_args;
+
+    /**
+     * Metabox constructor
+     * @return void
+     */
+    public function __construct(){
+        $this->screen = null;
+        $this->context = 'advanced';
+        $this->priority = 'default';
+        $this->callback_args = null;
+    }
+
+    /**
      * Meta boxes are handy, flexible, modular edit screen elements that can be used to collect information related to the post being edited.
      * @backend
      * @return  void
      */
-    public function add_meta_box(){
+    public function build(){
         add_meta_box(
             $this->id,
             $this->title,
             $this->callback,
-            $this->screen
+            $this->screen,
+            $this->context,
+            $this->priority,
+            $this->callback_args
         );
     }
 
@@ -113,6 +145,54 @@ class MetaBox {
     public function setScreen(string $screen): void
     {
         $this->screen = $screen;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * @param string $context
+     */
+    public function setContext($context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param string $priority
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCallbackArgs()
+    {
+        return $this->callback_args;
+    }
+
+    /**
+     * @param string $callback_args
+     */
+    public function setCallbackArgs($callback_args)
+    {
+        $this->callback_args = $callback_args;
     }
 
 }

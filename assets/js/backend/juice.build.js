@@ -6,6 +6,7 @@
         var input = document.querySelector('#juice_input');
         var errMessage = document.querySelector('#juice_err');
         var output = document.querySelector('#juice_output');
+        var templateEditor = document.querySelector('#template-editor');
 
         var render = function ()
         {
@@ -29,10 +30,10 @@
         };
 
         /** CUSTOM */
-        setTimeout(function(){
-            render();
-        },2000);
-        jQuery(document).on('input', '#template-editor', render);
+        // setTimeout(function(){
+        //     render();
+        // },2000);
+        // templateEditor.addEventListener('input', render);
 
         input.addEventListener('input', render);
         Array.prototype.slice.call(document.querySelectorAll('input[type=checkbox]'), 0)

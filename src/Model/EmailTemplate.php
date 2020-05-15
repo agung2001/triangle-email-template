@@ -13,8 +13,6 @@ namespace Triangle\Model;
 
 use Triangle\Wordpress\Action;
 use Triangle\Wordpress\Meta;
-use Triangle\Wordpress\Service;
-use Triangle\Wordpress\Type;
 
 class EmailTemplate extends Model {
 
@@ -81,29 +79,38 @@ class EmailTemplate extends Model {
      * @var     bool    $update     Whether this is an existing post being updated or not.
      */
     public function save_emailtemplate($post_id, $post, $update){
-        $pagenow = Service::getScreen()->pagenow;
-        if (!empty($_POST) && $post->post_type=='emailtemplate' && in_array($pagenow, ['post.php', 'post-new.php'])){
+        global $post, $pagenow;
+        if (!empty($_POST) && $post->post_type==$this->name && in_array($pagenow, ['post.php', 'post-new.php'])){
             /** Load Options */
             $this->loadController('EmailTemplate');
             $this->ID = $post_id;
 
             /** Validate Params */
-            $default = ['template_html', 'juice_output'];
+            $default = ['template_html'];
             if(!$this->EmailTemplate->validateParams($_POST, $default)) die('Parameters did not match the specs!');
 
             /** Sanitize Params */
             $default = array_flip($default);
-            foreach($default as &$value) $value = 'html';
+            $default['template_html'] = 'html';
+            $default['activeSection'] = 'text';
             $params = $this->EmailTemplate->sanitizeParams($_POST, $default);
 
             /** Save meta field */
-            $params['template_standard'] = $params['juice_output'];
+            $results = [];
             foreach($this->metas as $key => $meta){
                 if(!isset($params[$key])) continue;
-                $value = html_entity_decode($params[$key]);
+                $value = $params[$key];
                 $meta->setValue($value);
                 $results[] = $meta->update_post_meta();
             }
+
+            /** Redirect to activeSection */
+            $path = array();
+            $path['post'] = $post_id;
+            $path['action'] = 'edit';
+            $path['section'] = $params['activeSection'];
+            $path = unserialize(TRIANGLE_PATH)['admin_url'] . 'post.php?' . http_build_query($path);
+            $this->Service->Page->wp_redirect($path);
         }
     }
 
@@ -114,11 +121,12 @@ class EmailTemplate extends Model {
      * @var     int     $post_id    Post ID
      */
     public function delete_emailtemplate($post_id){
-        $post = Type::get_post($post_id);
+        $this->setID($post_id);
+        $post = $this->get_post();
         if($post->post_type==$this->name){
             $slug = str_replace('__trashed','',strtolower($post->post_name));
             $path = unserialize(TRIANGLE_PATH);
-            $dir = $path['upload_dir']['basedir'] . '/EmailTemplate/' . $slug;
+            $dir = $path['upload_dir']['basedir'] . '/emailtemplate/' . $slug;
             if(is_dir($dir)) $this->Helper->deleteDir($dir);
         }
     }

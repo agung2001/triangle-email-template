@@ -76,6 +76,12 @@ class Plugin {
     protected $Helper;
 
     /**
+     * @access   protected
+     * @var      object    $helper  Helper object for controller
+     */
+    protected $Service;
+
+    /**
      * Define the core functionality of the plugin.
      *
      * @param   array   $path     Wordpress plugin path
@@ -90,6 +96,7 @@ class Plugin {
         $this->models = [];
         $this->config = $config;
         $this->Helper = new Helper();
+        $this->Service = new Service();
     }
 
     /**
@@ -100,7 +107,7 @@ class Plugin {
      * @return  void
      */
     public function run(){
-        $this->path = Service::getPath($this->config->path);
+        $this->path = $this->Service->Asset->getPath($this->config->path);
         define('TRIANGLE_PATH', serialize($this->path));
         $this->Helper->defineConst($this);
         $this->loadModels();
@@ -113,7 +120,7 @@ class Plugin {
      * @return  void
      */
     public function loadModels(){
-        $models = $this->Helper->getDirFiles($this->path['plugin_path'] . 'src/Model');
+        $models = $this->Helper->Directory->getDirFiles($this->path['plugin_path'] . 'src/Model');
         $allow = ['.', '..','.DS_Store','index.php'];
         foreach($models as $model){
             if(in_array(basename($model), $allow)) continue;
@@ -136,7 +143,7 @@ class Plugin {
      * @pattern bridge
      */
     private function loadHooks($dir){
-        $controllers = $this->Helper->getDirFiles($this->path['plugin_path'] . 'src/' . $dir);
+        $controllers = $this->Helper->Directory->getDirFiles($this->path['plugin_path'] . 'src/' . $dir);
         $allow = ['.', '..','.DS_Store','index.php'];
         foreach($controllers as $controller){
             if(in_array(basename($controller), $allow)) continue;
@@ -293,6 +300,38 @@ class Plugin {
     public function setConfig(object $config): void
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return object
+     */
+    public function getHelper()
+    {
+        return $this->Helper;
+    }
+
+    /**
+     * @param object $Helper
+     */
+    public function setHelper($Helper)
+    {
+        $this->Helper = $Helper;
+    }
+
+    /**
+     * @return object
+     */
+    public function getService()
+    {
+        return $this->Service;
+    }
+
+    /**
+     * @param object $Service
+     */
+    public function setService($Service)
+    {
+        $this->Service = $Service;
     }
 
 }
