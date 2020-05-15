@@ -54,8 +54,8 @@ class View {
      */
     public function __construct($plugin){
         $this->Plugin = $plugin;
-        $this->Helper = $plugin->getHelper();
-        $this->Service = $plugin->getService();
+        $this->Helper = (method_exists($plugin, 'getHelper')) ? $plugin->getHelper() : '';
+        $this->Service = (method_exists($plugin, 'getService')) ? $plugin->getService() : '';
         $this->data = [];
         $this->options = [];
     }
@@ -98,7 +98,7 @@ class View {
         $data['content'] = (isset($section['link']) && strpos($section['link'], '//') ) ? $section['link'] : $data['content']; /** Handle http:// link */
         if( isset($section['link']) && !strpos($section['link'], '//') ) {
             $data['url'] = $this->Service->Page->add_query_arg(NULL, NULL) . '&section=' . $section['link'];
-            $data['url'] = $this->Service->Page->home_url($data['url']);
+            $data['url'] = unserialize(TRIANGLE_PATH)['home_url'] . $data['url'];
             $data['url'] = '<a id="tab-' . $data['slug'] . '" href="' . $data['url'] . '">' . $section['name'] . '</a>';
         } elseif( isset($section['link']) && strpos($section['link'], '//') ){
             $data['url'] = '<a id="tab-' . $data['slug'] . '" href="' . $section['link'] . '" target="_blank">' . $section['name'] . '</a>';

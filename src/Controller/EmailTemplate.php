@@ -126,6 +126,26 @@ class EmailTemplate extends Base {
             $screen->post->template = $this->EmailTemplate->getMetas()['template_html'];
             $screen->post->template->setArgs(['single' => true]);
             $screen->post->template = $screen->post->template->get_post_meta();
+            $options = [ 'builder_codeeditor' => $this->Service->Option->get_option('triangle_builder_codeeditor') ];
+
+            /** Load Sections */
+            $activeSection = (!isset($_GET['section'])) ? 'builder' : $_GET['section'];
+            $urlPreview = unserialize(TRIANGLE_PATH)['home_url'] . '?triangle_customize=true&post_id='. $screen->post->ID;
+            $sections = array();
+            $sections['EmailTemplate.edit-builder'] = ['name' => 'Builder', 'link' => 'builder'];
+            if($options['builder_codeeditor']) $sections['EmailTemplate.edit-codeeditor'] = ['name' => 'Code editor', 'link' => 'codeeditor'];
+            $sections['EmailTemplate.edit-preview'] = ['name' => 'Preview', 'link' => $urlPreview];
+            $sections['EmailTemplate.edit-' . $activeSection]['active'] = true;
+
+            /** Redirect if section is not loaded */
+            if(!isset($sections['EmailTemplate.edit-' . $activeSection]['name'])){
+                $path = array();
+                $path['post'] = $screen->post->ID;
+                $path['action'] = 'edit';
+                $path['section'] = 'builder';
+                $path = unserialize(TRIANGLE_PATH)['admin_url'] . 'post.php?' . http_build_query($path);
+                $this->Service->Page->js_redirect($path);
+            }
 
             /** Setup View */
             $view = new View($this->Plugin);
@@ -140,14 +160,6 @@ class EmailTemplate extends Base {
                 ],
                 'template'      => $screen->post->template,
             ]);
-
-            /** Sections */
-            $sections = array();
-            $sections['EmailTemplate.edit-builder'] = ['name' => 'Builder', 'link' => 'builder'];
-            $sections['EmailTemplate.edit-codeeditor'] = ['name' => 'Code editor', 'link' => 'codeeditor'];
-            $sections['EmailTemplate.edit-preview'] = ['name' => 'Preview', 'link' => $this->Service->Page->home_url('?triangle_customize=true&post_id='. $screen->post->ID)];
-            if(!isset($_GET['section']) || (isset($_GET['section']) && $_GET['section'] == 'builder')) $sections['EmailTemplate.edit-builder']['active'] = true;
-            if(isset($_GET['section']) && $_GET['section'] == 'codeeditor') $sections['EmailTemplate.edit-codeeditor']['active'] = true;
             $view->setSections($sections);
             $view->build();
         }

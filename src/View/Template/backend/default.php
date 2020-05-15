@@ -24,6 +24,11 @@
                 <div id="section-<?= $slug ?>" class="tab-content triangle-sections <?= ($active) ? 'current' : '' ?>">
                     <?= $content ?>
                 </div>
+                <?php if($active): ?>
+                    <div stlye="display:none;">
+                        <input type="hidden" name="activeSection" value="<?= $slug ?>">
+                    </div>
+                <?php endif; ?>
             <?php endforeach; ?>
         </div>
     </div>

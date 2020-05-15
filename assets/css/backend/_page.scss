@@ -196,8 +196,8 @@
   }
 }
 #section-codeeditor {
-  //#juice-builder-elements { display:none !important; }
   padding: 10px;
+  #juice-builder-elements { display:none !important; }
   .container, .element_fields { display:none; }
   #template-elements, .select2-container {
     width:100% !important;

@@ -11,14 +11,9 @@ namespace Triangle\Wordpress\Service;
  * @subpackage Triangle\Wordpress
  */
 
-class Page {
+use Triangle\View;
 
-    /**
-     * Wordpress - Retrieves a modified URL query string.
-     * @var  string     $path    Path relative to the home URL.
-     * @var  string     $scheme    Scheme to give the home URL context. Accepts 'http', 'https', 'relative', 'rest', or null.
-     */
-    public function home_url($path = '', $scheme = null){ return home_url($path, $scheme); }
+class Page {
 
     /**
      * Wordpress - Retrieves a modified URL query string.
@@ -34,6 +29,19 @@ class Page {
      * Wordpress redirect
      */
     public function wp_redirect($url){ wp_redirect($url); exit; }
+
+    /**
+     * Manuall Javascript Redirect
+     */
+    public function js_redirect($url){
+        ob_start();
+            $view = new View((object)array());
+            $view->setTemplate('backend.blank');
+            $view->setSections(['Element.redirect' => []]);
+            $view->addData(['redirectUrl' => $url]);
+            $view->build();
+        echo ob_get_clean(); exit;
+    }
 
     /**
      * Wordpress get screen

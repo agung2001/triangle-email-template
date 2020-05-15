@@ -111,6 +111,7 @@ class Backend extends Base {
             'field_option_animation_tab' => 'text',
             'field_option_animation_content' => 'text',
             'field_option_builder_inliner' => 'text',
+            'field_option_builder_codeeditor' => 'text',
             'field_option_smtp' => 'text',
             'field_option_smtp_auth' => 'text',
             'field_option_smtp_host' => 'text',

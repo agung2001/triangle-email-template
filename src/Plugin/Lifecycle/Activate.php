@@ -102,7 +102,7 @@ class Activate {
             'triangle_animation' => 'on',
             'triangle_animation_tab' => 'heartBeat',
             'triangle_animation_content' => 'fadeIn',
-            'triangle_builder_inliner' => 'juice'
+            'triangle_builder_inliner' => 'juice',
         ];
         foreach($defaultOptions as $key => $value){
             if(!$this->Service->Option->get_option($key)){

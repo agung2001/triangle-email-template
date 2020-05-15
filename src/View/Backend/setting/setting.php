@@ -76,6 +76,20 @@
                 </p>
             </div>
         </div>
+        <div class="row section-fields">
+            <div class="col-sm-2">
+                <label for="field_option_animation">Enable Code Editor</label>
+            </div>
+            <div class="col-sm-5">
+                <label class="switch">
+                    <input type="checkbox" name="field_option_builder_codeeditor" <?= ($options['triangle_builder_codeeditor']) ? 'checked' : '' ?>>
+                    <span class="slider round"></span>
+                </label>
+                <p class="field-info">
+                    Enable advanced code editor. Write your own custom html script into your email template.
+                </p>
+            </div>
+        </div>
 
         <div class="clear-row"></div>
 

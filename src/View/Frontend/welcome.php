@@ -1,1 +1,0 @@
-Welcome to <?= TRIANGLE_NAME ?> plugin!

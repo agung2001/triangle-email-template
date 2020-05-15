@@ -48,6 +48,7 @@ class Asset {
             'path' => $path,
             'home_path' => get_home_path(),
             'home_url' => get_home_url(),
+            'admin_url' => admin_url(),
             'plugin_path' => plugin_dir_path($path),
             'plugin_url' => plugin_dir_url($path),
             'upload_dir' => wp_upload_dir()

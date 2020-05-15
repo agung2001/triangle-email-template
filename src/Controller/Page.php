@@ -145,6 +145,7 @@ class Page extends Base {
                 'triangle_animation_content' => $this->Service->Option->get_option('triangle_animation_content'),
                 // Builder
                 'triangle_builder_inliner' => $this->Service->Option->get_option('triangle_builder_inliner'),
+                'triangle_builder_codeeditor' => $this->Service->Option->get_option('triangle_builder_codeeditor'),
                 // SMTP
                 'triangle_smtp' => $this->Service->Option->get_option('triangle_smtp'),
                 'triangle_smtp_encryption' => $this->Service->Option->get_option('triangle_smtp_encryption'),

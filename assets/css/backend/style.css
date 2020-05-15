@@ -1069,6 +1069,8 @@ input:checked + .slider:before {
 
 #section-codeeditor {
   padding: 10px; }
+  #section-codeeditor #juice-builder-elements {
+    display: none !important; }
   #section-codeeditor .container, #section-codeeditor .element_fields {
     display: none; }
   #section-codeeditor #template-elements, #section-codeeditor .select2-container {

@@ -79,7 +79,7 @@ class EmailTemplate extends Model {
      * @var     bool    $update     Whether this is an existing post being updated or not.
      */
     public function save_emailtemplate($post_id, $post, $update){
-        global $pagenow;
+        global $post, $pagenow;
         if (!empty($_POST) && $post->post_type==$this->name && in_array($pagenow, ['post.php', 'post-new.php'])){
             /** Load Options */
             $this->loadController('EmailTemplate');
@@ -91,7 +91,8 @@ class EmailTemplate extends Model {
 
             /** Sanitize Params */
             $default = array_flip($default);
-            foreach($default as &$value) $value = 'html';
+            $default['template_html'] = 'html';
+            $default['activeSection'] = 'text';
             $params = $this->EmailTemplate->sanitizeParams($_POST, $default);
 
             /** Save meta field */
@@ -102,6 +103,14 @@ class EmailTemplate extends Model {
                 $meta->setValue($value);
                 $results[] = $meta->update_post_meta();
             }
+
+            /** Redirect to activeSection */
+            $path = array();
+            $path['post'] = $post_id;
+            $path['action'] = 'edit';
+            $path['section'] = $params['activeSection'];
+            $path = unserialize(TRIANGLE_PATH)['admin_url'] . 'post.php?' . http_build_query($path);
+            $this->Service->Page->wp_redirect($path);
         }
     }
 
