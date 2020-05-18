@@ -984,7 +984,7 @@ input:checked + .slider:before {
     height: auto;
     position: absolute;
     border-radius: 3px;
-    padding: 3px 0;
+    margin-bottom: -3px;
     z-index: 1;
     will-change: transform; }
     #section-builder .email-grid .row:hover {
@@ -1014,7 +1014,7 @@ input:checked + .slider:before {
   position: absolute;
   z-index: 999;
   right: 0;
-  margin-top: -38px;
+  margin-top: -35px;
   background: #9b59b6;
   border-radius: 5px 5px 0 0; }
   #section-builder #row-setting a {
@@ -1030,7 +1030,7 @@ input:checked + .slider:before {
   right: -25px;
   background: #9b59b6;
   border-radius: 5px;
-  padding: 5px 3px;
+  padding: 3px 0px;
   margin: 0;
   z-index: 999; }
   #section-builder #element-setting a {
@@ -1044,8 +1044,9 @@ input:checked + .slider:before {
       padding: 0 3px; }
 
 .element {
-  position: absolute;
+  position: relative;
   padding: 0;
+  transform: none !important;
   will-change: transform; }
   .element:hover {
     z-index: 999; }
