@@ -22,7 +22,10 @@ class Validate {
         elseif($type=='filename') return sanitize_file_name($value);
         elseif($type=='text' || $type=='int') return sanitize_text_field($value);
         elseif($type=='email') return sanitize_email($value);
-        elseif($type=='html') return preg_replace('#<script(.*?)>(.*?)</script>#is', '', $value);
+        elseif($type=='html') {
+            $value = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $value);
+            return preg_replace('#<style(.*?)>(.*?)</style>#is', '', $value);
+        }
     }
 
 }
