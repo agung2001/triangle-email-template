@@ -459,14 +459,27 @@ jQuery(document).ready(function($){
         /** Refresh Grid */
         emailGrid.refreshItems().layout();
         refreshElementGrid();
-        renderGrid();
 
         /** Clean TinyMCE */
         $('.mce-toolbar-grp').remove();
 
-        /** Linked */
+        /** Reset MarginPadding Linked */
         rowLinked = { margin: true, padding: true };
         elementLinked = { margin: true, padding: true };
+
+        /** Render Grid */
+        renderGrid();
+    }
+
+    /** Trigger On Submit */
+    $(document).on('submit', '#post', triggerOnSubmit);
+    function triggerOnSubmit(e){
+        /** Remove Setting */
+        $('#builder_dom #row-setting').remove();
+        $('#builder_dom #element-setting').remove();
+        /** Render Grid */
+        renderGrid();
+        return true;
     }
 
 });
