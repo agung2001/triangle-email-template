@@ -58,3 +58,9 @@ function Triangle_activate(){
     new Triangle\Lifecycle\Activate($config);
 }
 register_activation_hook( __FILE__, 'Triangle_activate');
+
+
+function emailAdmin(){
+//    echo 'mencoba sukses kembali';
+}
+add_action( 'customize_save_after', 'emailAdmin' );

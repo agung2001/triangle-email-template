@@ -130,7 +130,7 @@ class Plugin {
             $model->build();
             $this->models[$name] = $model;
             foreach($model->getHooks() as $hook){
-                $class = str_replace( 'Triangle\\Wordpress\\' , '', get_class($hook) );
+                $class = str_replace( 'Triangle\\Wordpress\\Hook\\' , '', get_class($hook) );
                 if(in_array(strtolower($class), $this->enableHooks)) $hook->run();
             }
         }
@@ -152,7 +152,7 @@ class Plugin {
             $controller = new $controller($this);
             if($dir=='Controller') $this->controllers[$name] = $controller;
             foreach($controller->getHooks() as $hook){
-                $class = str_replace( 'Triangle\\Wordpress\\' , '', get_class($hook) );
+                $class = str_replace( 'Triangle\\Wordpress\\Hook\\' , '', get_class($hook) );
                 if(in_array(strtolower($class), $this->enableHooks)) $hook->run();
             }
         }

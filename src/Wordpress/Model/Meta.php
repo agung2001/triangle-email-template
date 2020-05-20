@@ -1,6 +1,6 @@
 <?php
 
-namespace Triangle\Wordpress;
+namespace Triangle\Wordpress\Model;
 
 !defined( 'WPINC ' ) or die;
 

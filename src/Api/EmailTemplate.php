@@ -12,7 +12,7 @@ namespace Triangle\Api;
  */
 
 use Triangle\View;
-use Triangle\Wordpress\Action;
+use Triangle\Wordpress\Hook\Action;
 
 class EmailTemplate extends Api {
 

@@ -11,8 +11,8 @@ namespace Triangle\Model;
  * @subpackage Triangle/Model
  */
 
-use Triangle\Wordpress\Action;
-use Triangle\Wordpress\Meta;
+use Triangle\Wordpress\Hook\Action;
+use Triangle\Wordpress\Model\Meta;
 
 class EmailTemplate extends Model {
 

@@ -52,10 +52,12 @@ class View {
      * View constructor
      * @return void
      */
-    public function __construct($plugin){
-        $this->Plugin = $plugin;
-        $this->Helper = (method_exists($plugin, 'getHelper')) ? $plugin->getHelper() : '';
-        $this->Service = (method_exists($plugin, 'getService')) ? $plugin->getService() : '';
+    public function __construct($plugin = []){
+        if($plugin){
+            $this->Plugin = $plugin;
+            $this->Helper = (method_exists($plugin, 'getHelper')) ? $plugin->getHelper() : '';
+            $this->Service = (method_exists($plugin, 'getService')) ? $plugin->getService() : '';
+        }
         $this->data = [];
         $this->options = [];
     }

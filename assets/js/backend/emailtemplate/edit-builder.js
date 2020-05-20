@@ -397,7 +397,6 @@ jQuery(document).ready(function($){
         if(type=='element') elementLinked[MarginorPadding] = !elementLinked[MarginorPadding];
         /** Change Icon */
         let icon = (type=='row') ? rowLinked : elementLinked;
-        console.log(icon);
             icon = (icon[MarginorPadding]) ? `<i class="fas fa-link"></i>` : `<i class="fas fa-unlink"></i>`;
         $(`#${type}-${MarginorPadding}-linked`).html(icon);
     }
