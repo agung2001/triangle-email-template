@@ -942,7 +942,7 @@ input:checked + .slider:before {
   background: #e67e22;
   color: #fff; }
 
-#section-send #email-send-status {
+#section-send #email_status {
   display: none;
   margin: 200px;
   text-align: center; }

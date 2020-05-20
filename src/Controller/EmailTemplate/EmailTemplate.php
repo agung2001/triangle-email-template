@@ -62,12 +62,10 @@ class EmailTemplate extends Base {
         $requiredAssets = [];
         /** Load Assets Libraries for pages and sections */
         if (in_array($screen->pagenow, ['post.php', 'post-new.php'])){
-            /** @emailtemplate @edit - @section codeeditor */
-            if(isset($_GET['section']) && $_GET['section'] == 'codeeditor') {
+            if(isset($_GET['section']) && $_GET['section'] == 'codeeditor') { /** @emailtemplate @edit - @section codeeditor */
                 $requiredAssets = ['ace'];
                 $this->Service->Asset->wp_enqueue_script('emailtemplate_codeeditor_js', 'backend/emailtemplate/edit-codeeditor.js', [], false, true);
-                /** @emailtemplate @edit - @section builder */
-            } else {
+            } else { /** @emailtemplate @edit - @section builder */
                 $this->Service->Asset->wp_enqueue_media();
                 $this->Service->Asset->wp_enqueue_script('emailtemplate_builder_js', 'backend/emailtemplate/edit-builder.js', [], false, true);
                 $requiredAssets = ['wp-tinymce','colorpicker','confirm','muuri'];
@@ -127,6 +125,28 @@ class EmailTemplate extends Base {
             $view->setSections($sections);
             $view->build();
         }
+    }
+
+    /**
+     * Setup scripts and metabox
+     * @backend - @emailtemplate
+     * @return  void
+     */
+    public function loadTemplate($post_id){
+        /** Prepare Data */
+        $this->EmailTemplate->setID($post_id);
+        $this->EmailTemplate->getMetas()['template_html']->setArgs(['single' => true]);
+        $post = $this->EmailTemplate->get_post();
+        $post->template = $this->EmailTemplate->getMetas()['template_html']->get_post_meta();
+
+        /** Setup View */
+        $view = new View($this->Plugin);
+        $view->setTemplate('emailtemplate.default');
+        $sections['EmailTemplate.edit-builder'] = ['name' => 'Builder', 'link' => 'builder'];
+        $view->setSections(['EmailTemplate.email-content' => ['name' => 'Email Content', 'active' => true]]);
+        $view->setOptions(['shortcode' => true]);
+        $view->addData(compact('post'));
+        return $view;
     }
 
     /**

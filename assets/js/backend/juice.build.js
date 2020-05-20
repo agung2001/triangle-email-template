@@ -3,10 +3,9 @@
 
         var juice = require('juice/client');
 
-        var input = document.querySelector('#juice_input');
+        var input = document.querySelector('#template_html');
         var errMessage = document.querySelector('#juice_err');
-        var output = document.querySelector('#juice_output');
-        var templateEditor = document.querySelector('#template-editor');
+        var output = document.querySelector('#template_standard');
 
         var render = function ()
         {
@@ -20,9 +19,6 @@
 
             try {
                 output.value = juice(input.value, options);
-
-                /** CUSTOM */
-                jQuery('#juice_preview').contents().find('html').html(output.value);
             } catch (err) {
                 input.className = 'err';
                 errMessage.innerHTML = err;
@@ -30,12 +26,11 @@
         };
 
         /** CUSTOM */
-        // setTimeout(function(){
-        //     render();
-        // },2000);
-        // templateEditor.addEventListener('input', render);
+        setTimeout(function(){
+            if(input) render();
+        },2000);
 
-        input.addEventListener('input', render);
+        // input.addEventListener('input', render);
         Array.prototype.slice.call(document.querySelectorAll('input[type=checkbox]'), 0)
             .forEach(c => c.addEventListener('change', render));
     },{"juice/client":90}],2:[function(require,module,exports){

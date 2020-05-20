@@ -447,27 +447,34 @@ jQuery(document).ready(function($){
      * Grab #builder_dom into #template_html to be saved
      * */
     function renderGrid(){
-        let dom = $('#builder_dom').html();
-        $('#template_html').val(dom);
+        let dom = $('#builder_dom');
+        /** Clean Dom */
+        $('.row',dom).css('transform', 'none');
+        $('.row-content',dom).css('transform', 'none');
+        $('.element',dom).css('transform', 'none');
+        $('.element-content',dom).css('transform', 'none');
+        /** Render */
+        console.log(dom.html());
+        $('#template_html').val(dom.html());
     }
 
     /**
      * Clean setting script, used to re-initiate setting modal dialog
      * */
     function cleanSettingScript(){
+        /** Clean TinyMCE */
+        $('.mce-toolbar-grp').remove();
+
+        /** Render Grid */
+        renderGrid();
+
         /** Refresh Grid */
         emailGrid.refreshItems().layout();
         refreshElementGrid();
 
-        /** Clean TinyMCE */
-        $('.mce-toolbar-grp').remove();
-
         /** Reset MarginPadding Linked */
         rowLinked = { margin: true, padding: true };
         elementLinked = { margin: true, padding: true };
-
-        /** Render Grid */
-        renderGrid();
     }
 
     /** Trigger On Submit */
@@ -478,6 +485,9 @@ jQuery(document).ready(function($){
         $('#builder_dom #element-setting').remove();
         /** Render Grid */
         renderGrid();
+        /** Refresh Grid */
+        emailGrid.refreshItems().layout();
+        refreshElementGrid();
         return true;
     }
 

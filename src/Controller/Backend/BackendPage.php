@@ -53,45 +53,49 @@ class BackendPage extends Base {
      * @return  void
      */
     public function page_contact(){
-        /** Sanitize Params */
-        $params = $this->sanitizeParams($_POST, ['field_menu_slug' => 'key']);
-        $params = array_merge($params, $this->sanitizeParams($_GET, ['user_id' => 'text']));
-
-        /** Handle submission */
-        $menuSlug = strtolower(TRIANGLE_NAME);
-        if($params['field_menu_slug']=='triangle'){
-            /** Validate Params */
+        /** Validate Params */
+        $default = array();
+        if(isset($_POST['triangle_contact'])){
             $default = ['field_template', 'field_users', 'field_from_name', 'field_from_email', 'field_email_subject'];
             if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
-            /** Sanitize Params */
             $default = array_flip($default);
             foreach($default as &$value) $value = 'text';
-            $params = $this->sanitizeParams($_POST, $default);
-            /** Set View */
-            $view = new View($this->Plugin);
-            $view->setTemplate('backend.default');
-            $view->setOptions(['shortcode' => true]);
+        }
+        /** Sanitize Params */
+        $default['triangle_contact'] = 'key';
+        $params = $this->sanitizeParams($_POST, $default);
+        $params = array_merge($params, $this->sanitizeParams($_GET, ['user_id' => 'text']));
+
+        /** Set View */
+        $view = new View($this->Plugin);
+        $view->setTemplate('backend.default');
+        $view->setOptions(['shortcode' => true]);
+        $view->addData(['background' => 'bg-carrot']);
+
+        /** Handle submission */
+        if($params['triangle_contact']=='send'){
+            /** Prepare Data */
+            $this->loadController('EmailTemplate');
+            $template = $this->EmailTemplate->loadTemplate($params['field_template']);
+
+            /** Setup View */
             $view->setSections(['Backend.contact.send' => ['name' => 'Send', 'active' => true]]);
             $view->addData([
                 'title' => 'Send',
-                'background' => 'bg-carrot',
-                'params' => $params
+                'params' => $params,
+                'template' => $template,
             ]);
-        } else {
-            /** Set View */
-            $view = new View($this->Plugin);
-            $view->setTemplate('backend.default');
+        }
+        else {
             $view->setSections(['Backend.contact.contact' => ['name' => 'Contact', 'active' => true]]);
-            $view->setOptions(['shortcode' => true]);
             $view->addData([
-                'menuSlug' => $menuSlug,
                 'title' => 'Contact User',
-                'background' => 'bg-carrot',
                 'user_id' => $params['user_id'],
             ]);
         }
 
         /** Set Main Page */
+        $menuSlug = strtolower(TRIANGLE_NAME);
         $page = new MenuPage();
         $page->setPageTitle(TRIANGLE_NAME);
         $page->setMenuTitle(TRIANGLE_NAME);
@@ -103,6 +107,7 @@ class BackendPage extends Base {
         $page->build();
 
         /** Set Page */
+        $menuSlug = strtolower(TRIANGLE_NAME);
         $page = new SubmenuPage();
         $page->setParentSlug(strtolower(TRIANGLE_NAME));
         $page->setMenuTitle('Contact');

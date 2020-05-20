@@ -12,6 +12,7 @@ namespace Triangle\Api;
  */
 
 use Triangle\View;
+use Triangle\Wordpress\Email;
 use Triangle\Wordpress\Hook\Action;
 
 class EmailTemplate extends Api {
@@ -50,6 +51,14 @@ class EmailTemplate extends Api {
         $action = clone $action;
         $action->setHook('wp_ajax_triangle-editor-element-setting');
         $action->setCallback('editor_element_setting');
+        $this->hooks[] = $action;
+
+        /** @backend - API - Page Contact */
+        $action = new Action();
+        $action->setComponent($this);
+        $action->setHook('wp_ajax_triangle-emailtemplate-send');
+        $action->setCallback('send_email');
+        $action->setAcceptedArgs(0);
         $this->hooks[] = $action;
     }
 
@@ -151,6 +160,41 @@ class EmailTemplate extends Api {
             $view->build();
         $content = ob_get_clean();
         echo $content; exit;
+    }
+
+    /**
+     * Get EmailTemplate configuration and meta_fields data
+     * @var         int         Post ID
+     * @return      array       Configurations and meta_fields value
+     */
+    public function send_email(){
+        /** Validate attributes */
+        $default = ['template', 'users', 'from' => ['name', 'email'], 'subject'];
+        if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
+
+        /** Sanitize Params */
+        $default = ['name' => 'text','email' => 'text'];
+        $params = $this->sanitizeParams($_POST['from'], $default);
+        $params = array('from' => $params);
+        $default = ['template' => 'html', 'users' => 'text', 'subject' => 'text'];
+        $params = array_merge($params, $this->sanitizeParams($_POST, $default));
+
+        /** Prepare Data */
+        $users = explode(',',$params['users']);
+        foreach($users as &$user) $user = $this->Service->User->get_user_by('ID', $user)->data->user_email;
+        $params['template'] = str_replace('\"','"', $params['template']);
+
+        /** Send Email */
+        $email = new Email();
+        $headers = $email->getHeaders();
+        $headers[] = 'From: '.$params['from']['name'].' <'.$params['from']['email'].'> ';
+        $email->setHeaders($headers);
+        $email->setTo($users);
+        $email->setSubject($params['subject']);
+        $email->setMessage($params['template']);
+        $status = $email->send();
+
+        wp_send_json($status);
     }
 
     /**

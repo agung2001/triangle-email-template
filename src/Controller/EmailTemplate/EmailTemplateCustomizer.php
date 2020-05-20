@@ -92,16 +92,15 @@ class EmailTemplateCustomizer extends Customizer {
 //        $this->Service->Page->is_customize_preview() &&
         if( $user && $specs && $_GET['triangle_customize'] == 'true') {
             $this->EmailTemplate->setID($_GET['post_id']);
+            $this->EmailTemplate->getMetas()['template_html']->setArgs(['single' => true]);
             $post = $this->EmailTemplate->get_post();
-            $post->template = $this->EmailTemplate->getMetas()['template_html'];
-            $post->template->setArgs(['single' => true]);
-            $post->template = $post->template->get_post_meta();
+            $post->template = $this->EmailTemplate->getMetas()['template_html']->get_post_meta();
             ob_start();
                 $view = new View($this->Plugin);
-                $view->setTemplate('backend.customize');
+                $view->setTemplate('emailtemplate.default');
                 $view->addData(compact('post'));
                 $view->setSections([
-                    'EmailTemplate.backend.customize' => ['name' => 'Customize', 'active' => true]
+                    'EmailTemplate.backend.customizer' => ['name' => 'Customize', 'active' => true]
                 ]);
                 $view->build();
             echo ob_get_clean(); return;
