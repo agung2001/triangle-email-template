@@ -9,10 +9,12 @@
  * @subpackage Triangle/EmailTemplate
  */
 ?>
+<div style="display:none;">
+    <!--Start: Juice-->
+    <div id="juice_err"></div>
     <textarea id="template_html" cols="30" rows="10"><?= $template->build() ?></textarea>
     <textarea id="template_standard" cols="30" rows="10"></textarea>
-<div style="display:none;">
-    <div id="juice_err"></div>
+    <!--End: Juice-->
     <input type="hidden" id="contact_users" value="<?= $params['field_users']  ?>">
     <input type="hidden" id="contact_from_name" value="<?= $params['field_from_name']  ?>">
     <input type="hidden" id="contact_from_email" value="<?= $params['field_from_email']  ?>">

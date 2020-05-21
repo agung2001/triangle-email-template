@@ -15,6 +15,7 @@
         window.editor.session.setMode(elements[element].mode);
         window.editor.setOption("enableEmmet", true);
         window.editor.setOption("maxLines", "Infinity");
+        window.editor.getSession().setUseWorker(false);
         /** Template Editor Text Area Script */
         if(window.textarea) {
             window.editor.getSession().setValue(window.textarea.val());
@@ -33,7 +34,7 @@
             url: 'admin-ajax.php',
             dataType : "json",
             data: {
-                'action'    : 'triangle-emailtemplate-page-edit',
+                'action'    : 'triangle-codeeditor',
                 'args'      : {
                     'post_id' : window.trianglePlugin.screen.post.ID,
                     'post_name' : window.trianglePlugin.screen.post.post_name,

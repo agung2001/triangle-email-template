@@ -11,7 +11,7 @@ namespace Triangle\Controller;
  * @subpackage Triangle/Controller
  */
 
-class Customizer extends Controller {
+class Customizer extends Base {
 
     /**
      * @access   protected

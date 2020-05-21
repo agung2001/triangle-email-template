@@ -85,14 +85,13 @@ class EmailTemplate extends Base {
             /** Prepare Data */
             $this->EmailTemplate->setID($screen->post->ID);
             $screen->post->template = $this->EmailTemplate->getMetas()['template_html'];
-            $screen->post->template->setArgs(['single' => true]);
-            $screen->post->template = $screen->post->template->get_post_meta();
+            $screen->post->template = $screen->post->template->get_post_meta(true);
             $options = [ 'builder_codeeditor' => $this->Service->Option->get_option('triangle_builder_codeeditor') ];
 
             /** Load Sections */
             $activeSection = (!isset($_GET['section'])) ? 'builder' : $_GET['section'];
             $urlCustomize = unserialize(TRIANGLE_PATH)['home_url'] . '?triangle_customize=true&post_id='. $screen->post->ID;
-            $urlCustomize = unserialize(TRIANGLE_PATH)['admin_url'] . 'customize.php?url=' . urlencode($urlCustomize) . '&triangle_template=true';
+            $urlCustomize = unserialize(TRIANGLE_PATH)['admin_url'] . 'customize.php?url=' . urlencode($urlCustomize) . '&triangle_template=true&post_id=' . $screen->post->ID;
             $sections = array();
             $sections['EmailTemplate.edit-builder'] = ['name' => 'Builder', 'link' => 'builder'];
             if($options['builder_codeeditor']) $sections['EmailTemplate.edit-codeeditor'] = ['name' => 'Code editor', 'link' => 'codeeditor'];
@@ -135,9 +134,8 @@ class EmailTemplate extends Base {
     public function loadTemplate($post_id){
         /** Prepare Data */
         $this->EmailTemplate->setID($post_id);
-        $this->EmailTemplate->getMetas()['template_html']->setArgs(['single' => true]);
         $post = $this->EmailTemplate->get_post();
-        $post->template = $this->EmailTemplate->getMetas()['template_html']->get_post_meta();
+        $post->template = $this->EmailTemplate->getMetas()['template_html']->get_post_meta(true);
 
         /** Setup View */
         $view = new View($this->Plugin);
@@ -161,8 +159,7 @@ class EmailTemplate extends Base {
 
         /** Prepare Data */
         $this->EmailTemplate->setID($atts['field_template']);
-        $this->EmailTemplate->getMetas()['template_standard']->setArgs(['single' => true]);
-        $template = $this->EmailTemplate->getMetas()['template_standard']->get_post_meta();
+        $template = $this->EmailTemplate->getMetas()['template_standard']->get_post_meta(true);
         $template = isset($template) ? $template : '';
         $users = explode(',',$atts['field_users']);
         foreach($users as &$user) $user = $this->Service->User->get_user_by('ID', $user)->data->user_email;

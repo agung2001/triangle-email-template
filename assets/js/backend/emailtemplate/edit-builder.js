@@ -454,7 +454,6 @@ jQuery(document).ready(function($){
         $('.element',dom).css('transform', 'none');
         $('.element-content',dom).css('transform', 'none');
         /** Render */
-        console.log(dom.html());
         $('#template_html').val(dom.html());
     }
 

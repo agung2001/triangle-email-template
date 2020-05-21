@@ -37,8 +37,8 @@ class EmailTemplate extends Api {
 
         /** @backend - API - Page Contact */
         $action = clone $action;
-        $action->setHook('wp_ajax_triangle-emailtemplate-page-edit');
-        $action->setCallback('page_edit');
+        $action->setHook('wp_ajax_triangle-codeeditor');
+        $action->setCallback('page_edit_codeeditor');
         $this->hooks[] = $action;
 
         /** @backend - API - Editor Grid Setting */
@@ -95,7 +95,7 @@ class EmailTemplate extends Api {
      * @backend
      * @return  void
      */
-    public function page_edit(){
+    public function page_edit_codeeditor(){
         /** Validate Params */
         $default = ['args' => ['post_id', 'post_name']];
         if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
