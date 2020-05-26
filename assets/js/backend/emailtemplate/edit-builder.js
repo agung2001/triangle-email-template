@@ -464,9 +464,6 @@ jQuery(document).ready(function($){
         /** Clean TinyMCE */
         $('.mce-toolbar-grp').remove();
 
-        /** Render Grid */
-        renderGrid();
-
         /** Refresh Grid */
         emailGrid.refreshItems().layout();
         refreshElementGrid();

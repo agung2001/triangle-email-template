@@ -6,14 +6,24 @@ body {
 h1,h2,h3,h4,h5,h6 {
   font-weight:300;
   margin:0;
+  padding-bottom: 10px;
 }
 h2 { font-size:44px; }
 h2 { font-size:40px; }
 h3 { font-size:24px; }
 h4 { font-size:20px; }
-a { color: $peterriver; }
+a { color: $wisteria; }
 p, li { font-size:15px; }
+.btn {
+  padding: 15px 30px;
+  color: #fff;
+  border-radius: 5px;
+}
 .btn-primary { background: $amethyst; }
+ul {
+  padding: 0;
+  li { list-style: none; }
+}
 
 #builder_dom {
   font-family: 'Lato', sans-serif;

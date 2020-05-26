@@ -12,6 +12,8 @@ if [ "production" == "$1" ]
       # Sass
       rm -rf assets/css/backend/.sass-cache
       rm -rf assets/css/frontend/.sass-cache
+      rm -rf assets/css/customizer/.sass-cache
+      rm -rf assets/css/emailtemplate/.sass-cache
       rm -rf style.css.map
       rm -rf assets/css/*.scss
       rm -rf assets/css/bootstrap

@@ -28,8 +28,10 @@
     /**
      * Init code editor
      * */
-    init_editor({
-        id : `<?= $this->esc( 'attr', $control->id ) ?>`,
-        mode : `<?= $mode ?>`,
-    });
+    if (typeof init_editor !== "undefined") {
+        init_editor({
+            id : `<?= $this->esc( 'attr', $control->id ) ?>`,
+            mode : `<?= $mode ?>`,
+        });
+    }
 </script>
