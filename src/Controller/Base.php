@@ -61,13 +61,6 @@ class Base extends Controller {
                 $this->Service->Asset->wp_enqueue_style('confirm_css', 'jquery-confirm.min.css');
                 $this->Service->Asset->wp_enqueue_script('confirm_js', 'jquery-confirm.min.js','','',true);
             }
-            /** Muuri JS */
-            if(isset($assets['muuri'])){
-                $this->Service->Asset->wp_enqueue_script('web-animation_js', 'muuri/web-animations.min.js','','',false);
-                $this->Service->Asset->wp_enqueue_script('velocity_js', 'muuri/velocity.min.js','','',false);
-                $this->Service->Asset->wp_enqueue_script('hammer_js', 'muuri/hammer.min.js','','',false);
-                $this->Service->Asset->wp_enqueue_script('muuri_js', 'muuri/muuri.min.js','','',false);
-            }
             /** Ace JS - Code Editor */
             if(isset($assets['ace'])){
                 $this->Service->Asset->wp_enqueue_script('acejs', 'ace/ace.min.js','','',true);

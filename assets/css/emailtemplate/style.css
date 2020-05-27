@@ -772,6 +772,11 @@ ul {
       padding: 10px 0;
       min-height: 20px;
       position: relative; }
+    #builder_dom .row .row-content:after {
+      content: " ";
+      display: block;
+      height: 0;
+      clear: both; }
   #builder_dom .element {
     position: relative;
     padding: 0;

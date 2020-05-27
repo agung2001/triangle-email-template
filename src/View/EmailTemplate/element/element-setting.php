@@ -1,4 +1,37 @@
 <div class="grid">
+
+    <!-- Element Attributes -->
+    <div class="row section-title">
+        <div class="col-sm-12">
+            <h3>Attributes</h3>
+        </div>
+    </div>
+
+    <div class="row section-fields">
+        <div class="col-sm-2">
+            <label>Id</label>
+        </div>
+        <div class="col-sm-5">
+            <input type="text" id="element-id" placeholder="Element Id">
+        </div>
+    </div>
+
+    <div class="row section-fields">
+        <div class="col-sm-2">
+            <label>Class</label>
+        </div>
+        <div class="col-sm-5">
+            <input type="text" id="element-class" placeholder="Element Class">
+        </div>
+    </div>
+
+    <!-- Element Setting -->
+    <div class="row section-title">
+        <div class="col-sm-12">
+            <h3>Setting</h3>
+        </div>
+    </div>
+
     <div class="row section-fields">
         <div class="col-sm-2">
             <label>Column Size</label>

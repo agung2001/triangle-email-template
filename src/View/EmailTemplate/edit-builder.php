@@ -1,21 +1,37 @@
 <div class="builder-container">
     <div id="builder_dom" class="grid email-grid">
-        <?= $template ?>
+        <?php if($template==''){ ?>
+            <div class="row col-sm-12">
+                <div class="row-content">
+                    <div class="element col-sm-12">
+                        <div class="element-content" >
+                            <p style="text-align:center; margin: 0 auto; padding:40px 0;">
+                                Hello Triangle!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php } else { ?>
+            <?= $template ?>
+        <?php } ?>
     </div>
 </div>
 
+
 <!--Start : Builder Elements-->
 <div style="display:none;">
+    <div id="rendered_dom"></div>
     <textarea id="template_html" name="template_html" cols="30" rows="10"></textarea>
-    <div id="row-setting">
+    <div id="row-setting" class="control-setting">
         <div class="row-header">
             <a id="row-action-move" title="Move Row"><i class="fas fa-arrows-alt"></i></a>
+            <a id="row-action-clone" title="Clone Row"><i class="far fa-clone"></i></a>
             <a id="row-action-setting" title="Row Setting"><i class="fas fa-cog"></i></a>
             <a id="row-action-remove" title="Remove Row"><i class="fas fa-trash"></i></a>
         </div>
     </div>
-    <div id="element-setting">
-        <a id="element-action-move" title="Move Element"><i class="fas fa-arrows-alt"></i></a>
+    <div id="element-setting" class="control-setting">
         <a id="element-action-clone" title="Clone Element"><i class="far fa-clone"></i></a>
         <a id="element-action-setting" title="Element Setting"><i class="fas fa-cog"></i></a>
         <a id="element-action-remove" title="Remove Element"><i class="fas fa-trash"></i></a>

@@ -68,7 +68,8 @@ class EmailTemplate extends Base {
             } else { /** @emailtemplate @edit - @section builder */
                 $this->Service->Asset->wp_enqueue_media();
                 $this->Service->Asset->wp_enqueue_script('emailtemplate_builder_js', 'backend/emailtemplate/edit-builder.js', [], false, true);
-                $requiredAssets = ['wp-tinymce','colorpicker','confirm','muuri'];
+                $this->Service->Asset->wp_enqueue_script('jquery_ui', 'backend/emailtemplate/jquery-ui.min.js', [], false, true);
+                $requiredAssets = ['wp-tinymce','colorpicker','confirm'];
             }
         }
         $this->backend_load_plugin_libraries([], [$this->EmailTemplate->getName()], $requiredAssets);

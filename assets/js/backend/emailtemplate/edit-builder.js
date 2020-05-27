@@ -1,103 +1,66 @@
 jQuery(document).ready(function($){
 /**
+ * jQuery UI Sortable
+ * */
+    // $().removeAttr('style');
+    // $('.row-content').removeAttr('id');
+
+    /** Init Sortable */
+    cleanSettingScript();
+    function initSortable() {
+        /** Draggable Row */
+        $('#builder_dom').sortable({
+            helper:'#row-action-move',
+            placeholder: "row-placeholder col-sm-12",
+            items: "> div",
+            stop: function( event, ui ) {
+                renderGrid();
+            }
+        }).disableSelection();
+        /** Draggable Element */
+        $( ".row-content" ).sortable({
+            containment: "document",
+            items: "> div",
+            connectWith: ".row-content",
+            start: function( event, ui ) {
+                /** Placeholder Grid */
+                let element = ui.item;
+                let height = $(element).css('height');
+                $('.ui-sortable-placeholder').css('min-height', height);
+                $('.row').addClass('row-dropzone');
+                $('.element').addClass('element-highlight');
+            },
+            stop: function( event, ui ) {
+                /** Placeholder Grid */
+                $('.row').removeClass('row-dropzone');
+                $('.element').removeClass('element-highlight');
+                /** Render Grid */
+                renderGrid();
+            }
+        }).disableSelection();
+    }
+
+/**
  * Grid Functions
  * */
-    /** Muuri JS Grid */
-    var columnGrids, emailGrid;
-
-    /** Initiate Element Grid */
-    initElementGrid();
-    function initElementGrid(){
-        if(columnGrids) columnGrids.forEach((muuri) => { muuri.destroy(); });
-        columnGrids = [];
-        Array.prototype.slice.call($('.email-grid .row-content')).forEach(buildElements);
-        if(emailGrid) emailGrid.refreshItems().layout();
-        renderGrid();
-    }
-    function refreshElementGrid(){
-        columnGrids.forEach((muuri) => {
-            muuri.refreshItems().layout();
-        });
-    }
-    /** Build Elements */
-    function buildElements(container){
-        var muuri = new Muuri(container, {
-            items: '.element',
-            layoutDuration: 400,
-            layoutEasing: 'ease',
-            dragEnabled: true,
-            dragSort: function () {
-                return columnGrids;
-            },
-            dragSortHeuristics: {
-                sortInterval: 0,
-                minDragDistance: 0,
-                minBounceBackAngle: 0
-            },
-            dragStartPredicate: {
-                handle: '#element-action-move'
-            },
-            dragContainer: document.body,
-            dragReleaseDuration: 400,
-            dragReleaseEasing: 'ease',
-            dragPlaceholder: {
-                enabled: true,
-                duration: 400,
-                createElement: function (item) {
-                    return item.getElement().cloneNode(true);
-                }
-            },
-        })
-            .on('dragStart', function (item) {
-                $('.email-grid').each(function() {
-                    $(this).find('.row').addClass('row-dropzone');
-                });
-                item.getElement().style.width = item.getWidth() + 'px';
-                item.getElement().style.height = item.getHeight() + 'px';
-                rowSetting.remove();
-                elementSetting.remove();
-                emailGrid.refreshItems().layout();
-            })
-            .on('dragReleaseEnd', function (item) {
-                $('.email-grid').each(function() {
-                    $(this).find('.row').removeClass('row-dropzone');
-                });
-                item.getElement().style.width = '';
-                item.getElement().style.height = '';
-                columnGrids.forEach(function (muuri) {
-                    muuri.refreshItems();
-                });
-                emailGrid.refreshItems().layout();
-            })
-            .on('layoutStart', function () {
-                emailGrid.refreshItems().layout();
-            });
-        columnGrids.push(muuri);
-    }
-    emailGrid = new Muuri('.email-grid', {
-        layoutDuration: 400,
-        layoutEasing: 'ease',
-        dragEnabled: true,
-        dragSortHeuristics: {
-            sortInterval: 0,
-            minDragDistance: 0,
-            minBounceBackAngle: 0
-        },
-        dragStartPredicate: {
-            handle: '#row-action-move'
-        },
-        dragReleaseDuration: 400,
-        dragReleaseEasing: 'ease',
-    });
-
     /** Add new element */
     $(document).on('click', '#btn-add-new-element', function(){
         var row = document.createElement('div');
             row.innerHTML = $('#new-row').html();
             row.className = "row col-sm-12";
-        emailGrid.add(row);
-        /** Reinitiate grid */
-        initElementGrid();
+        $('#builder_dom').append(row);
+        cleanSettingScript();
+    });
+
+    /** Clone Row */
+    $(document).on('click', '#row-action-clone', function(){
+        /** Clone Row */
+        let row_content = $(this).parent().parent().parent();
+        var row = document.createElement('div');
+            row.innerHTML = $(row_content).html();
+            row.className = "row col-sm-12";
+        $('#builder_dom').append(row);
+        cleanSettingScript();
     });
 
     /** Remove row from the grid */
@@ -112,8 +75,8 @@ jQuery(document).ready(function($){
             type: 'red',
             buttons: {
                 confirm: function () {
-                    emailGrid.remove(row[0], {removeElements: true});
-                    renderGrid();
+                    $(row).remove();
+                    cleanSettingScript();
                 },
                 cancel: function () {},
             }
@@ -126,7 +89,7 @@ jQuery(document).ready(function($){
         let element = $(this).parent().parent();
         $('#element-setting', element).remove();
         $(element).clone().appendTo(row_content);
-        initElementGrid();
+        cleanSettingScript();
     });
 
     /** Remove element from the grid */
@@ -141,10 +104,8 @@ jQuery(document).ready(function($){
             type: 'red',
             buttons: {
                 confirm: function () {
-                    columnGrids.forEach((muuri) => {
-                        muuri.remove(element[0], {removeElements: true});
-                    });
-                    renderGrid();
+                    $(element).remove();
+                    cleanSettingScript();
                 },
                 cancel: function () {},
             }
@@ -219,6 +180,14 @@ jQuery(document).ready(function($){
                 }).done(function (response) {
                     self.setContent(response);
                     setTimeout(function(){
+                        /** Set Attributes */
+                        let attrClass = rowContent.attr('class');
+                            attrClass = attrClass.replace('row-content','').replace('ui-sortable', '');
+                            attrClass = $.trim(attrClass);
+                        let attributes = { id: rowContent.attr('id'), class: attrClass };
+                        if(attributes.id) $('#row-id').val(attributes.id);
+                        if(attributes.class) $('#row-class').val(attributes.class);
+
                         /** Set Style */
                         initColorPicker({ 'default' : rowSetting.background });
                         setMarginorPaddingValue('row', 'margin', rowSetting.rowMargin);
@@ -234,6 +203,14 @@ jQuery(document).ready(function($){
             },
             buttons: {
                 save: function () {
+                    /** Save Attributes */
+                    let attributes = {
+                        id: $('#row-id').val().replace(/ {1,}/g," "),
+                        class: $('#row-class').val().replace(/ {1,}/g," ")
+                    };
+                    if(attributes.id) rowContent.attr('id', attributes.id);
+                    if(attributes.class) rowContent.attr('class', `row-content ui-sortable ${attributes.class}`);
+
                     /** Save Style */
                     rowContent.css('background', $('.pcr-button').css('color'));
                     setMarginorPadding(rowContent, 'row', 'margin');
@@ -261,11 +238,11 @@ jQuery(document).ready(function($){
         let elementClass = element.attr('class').split(' ');
         var elementSetting = {
             column : elementClass.filter((value) => (value.includes('col-sm-')) )[0].replace('col-sm-',''),
-            rowMargin : getMarginorPadding(elementContent, 'margin'),
-            rowPadding : getMarginorPadding(elementContent, 'padding'),
+            rowMargin : getMarginorPadding(element, 'margin'),
+            rowPadding : getMarginorPadding(element, 'padding'),
             linked : {
-                margin: (elementContent.attr('data-margin-linked')==undefined) ? true : (elementContent.attr('data-margin-linked')=='true'),
-                padding: (elementContent.attr('data-padding-linked')==undefined) ? true : (elementContent.attr('data-padding-linked')=='true'),
+                margin: (element.attr('data-margin-linked')==undefined) ? true : (element.attr('data-margin-linked')=='true'),
+                padding: (element.attr('data-padding-linked')==undefined) ? true : (element.attr('data-padding-linked')=='true'),
             }
         };
         $.confirm({
@@ -301,6 +278,14 @@ jQuery(document).ready(function($){
                     }).success(function(response){
                         $('#element-editor').html(response);
                         setTimeout(function(){
+                            /** Set Attributes */
+                            let attrClass = elementContent.attr('class');
+                                attrClass = attrClass.replace('element-content','');
+                                attrClass = $.trim(attrClass);
+                            let attributes = { id: element.attr('id'), class: attrClass };
+                            if(attributes.id) $('#element-id').val(attributes.id);
+                            if(attributes.class) $('#element-class').val(attributes.class);
+
                             /** Set Style */
                             $('#grid-column-size').val(elementSetting.column);
                             setMarginorPaddingValue('element', 'margin', elementSetting.rowMargin);
@@ -325,9 +310,18 @@ jQuery(document).ready(function($){
 
                     /** Grid Setting */
                     $(element).removeAttr('class');
-                    $(element).addClass(`element col-sm-${$('#grid-column-size').val()}`);
+                    $(element).addClass(`element ui-sortable-handle col-sm-${$('#grid-column-size').val()}`);
+
+                    /** Save Attributes */
+                    let attributes = {
+                        id: $('#element-id').val().replace(/ {1,}/g," "),
+                        class: $('#element-class').val().replace(/ {1,}/g," ")
+                    };
+                    if(attributes.id) elementContent.attr('id', attributes.id);
+                    if(attributes.class) elementContent.attr('class', `element-content ${attributes.class}`);
 
                     /** Save Style */
+                    console.log(value);
                     elementContent.html(value);
                     setMarginorPadding(elementContent, 'element', 'margin');
                     setMarginorPadding(elementContent, 'element', 'padding');
@@ -444,30 +438,17 @@ jQuery(document).ready(function($){
     }
 
     /**
-     * Grab #builder_dom into #template_html to be saved
-     * */
-    function renderGrid(){
-        let dom = $('#builder_dom');
-        /** Clean Dom */
-        $('.row',dom).css('transform', 'none');
-        $('.row-content',dom).css('transform', 'none');
-        $('.element',dom).css('transform', 'none');
-        $('.element-content',dom).css('transform', 'none');
-        /** Render */
-        $('#template_html').val(dom.html());
-    }
-
-    /**
      * Clean setting script, used to re-initiate setting modal dialog
      * */
     function cleanSettingScript(){
+        /** Remove Setting */
+        $('#builder_dom').find('.control-setting').remove();
         /** Clean TinyMCE */
         $('.mce-toolbar-grp').remove();
-
         /** Refresh Grid */
-        emailGrid.refreshItems().layout();
-        refreshElementGrid();
-
+        initSortable();
+        /** Render Grid */
+        renderGrid();
         /** Reset MarginPadding Linked */
         rowLinked = { margin: true, padding: true };
         elementLinked = { margin: true, padding: true };
@@ -475,16 +456,24 @@ jQuery(document).ready(function($){
 
     /** Trigger On Submit */
     $(document).on('submit', '#post', triggerOnSubmit);
-    function triggerOnSubmit(e){
-        /** Remove Setting */
-        $('#builder_dom #row-setting').remove();
-        $('#builder_dom #element-setting').remove();
-        /** Render Grid */
-        renderGrid();
-        /** Refresh Grid */
-        emailGrid.refreshItems().layout();
-        refreshElementGrid();
+    function triggerOnSubmit(){
+        cleanSettingScript();
         return true;
+    }
+
+    /**
+     * Grab #builder_dom into #template_html to be saved
+     * */
+    function renderGrid(){
+        /** Copy Dom */
+        let dom = $('#builder_dom').html();
+        $('#rendered_dom').html(dom);
+        /** Clean Dom */
+        dom = $('#rendered_dom');
+        $('.row, .row-content', dom).removeClass('ui-sortable ui-sortable-handle');
+        $('.element, .element-content', dom).removeClass('ui-sortable ui-sortable-handle');
+        /** Render */
+        $('#template_html').val(dom.html());
     }
 
 });
