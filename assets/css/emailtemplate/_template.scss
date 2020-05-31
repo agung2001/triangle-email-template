@@ -1,7 +1,14 @@
+/**
+* Template modification
+*/
 body {
   background-color: #efefef;
   margin:0;
   padding:0;
+}
+// Fonts
+h1, h2, h3, h4, h5, h6, p {
+  font-family: 'Lato', sans-serif;
 }
 h1,h2,h3,h4,h5,h6 {
   font-weight:300;
@@ -14,6 +21,11 @@ h3 { font-size:24px; }
 h4 { font-size:20px; }
 a { color: $wisteria; }
 p, li { font-size:15px; }
+p { padding: 0; margin: 0; }
+ul {
+  padding: 0; margin: 0;
+  li { list-style: none; }
+}
 img {
   max-width:100%;
   height:auto;
@@ -24,9 +36,10 @@ img {
   border-radius: 5px;
 }
 .btn-primary { background: $amethyst; }
-ul {
-  padding: 0;
-  li { list-style: none; }
+.text-center { text-align:center; margin: 0 auto; }
+.horizontal-list li {
+  padding: 15px;
+  display:inline-block;
 }
 
 #builder_dom {

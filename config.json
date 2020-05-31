@@ -4,7 +4,7 @@
   "production" : false,
   "enableHooks" : ["action", "filter", "shortcode"],
   "defaultSettings" : {
-    "background" : "#fff",
+    "background" : "#efefef",
     "container" : {
       "width" : "800"
     }

@@ -187,7 +187,7 @@ jQuery(document).ready(function($){
                     self.setContent(response);
                     setTimeout(function(){
                         /** Set Attributes */
-                        let defaultClass = ['row', 'ui-sortable-handle'];
+                        let defaultClass = ['row', 'ui-sortable', 'ui-sortable-handle'];
                         let attrClass = row.attr('class')
                             .replace(/ +(?= )/g,'').split(' ')
                             .filter((name) => { return !defaultClass.includes(name) })
@@ -216,8 +216,8 @@ jQuery(document).ready(function($){
                         id: $('#row-id').val().replace(/ {1,}/g," "),
                         class: $('#row-class').val().replace(/ {1,}/g," ")
                     };
-                    if(attributes.id) row.attr('id', attributes.id);
-                    if(attributes.class) row.attr('class', `row ui-sortable ${attributes.class}`);
+                    row.attr('id', attributes.id);
+                    row.attr('class', `row ui-sortable ${attributes.class}`);
 
                     /** Save Style */
                     rowContent.css('background', $('.pcr-button').css('color'));
@@ -245,7 +245,7 @@ jQuery(document).ready(function($){
         let elementContent = $('.element-content', element);
         let elementClass = element.attr('class').split(' ');
         var elementSetting = {
-            column : elementClass.filter((value) => (value.includes('col-sm-')) )[0].replace('col-sm-',''),
+            column : elementClass.filter((value) => (value.includes('col-sm-')) ),
             rowMargin : getMarginorPadding(elementContent, 'margin'),
             rowPadding : getMarginorPadding(elementContent, 'padding'),
             linked : {
@@ -253,6 +253,7 @@ jQuery(document).ready(function($){
                 padding: (elementContent.attr('data-padding-linked')==undefined) ? true : (elementContent.attr('data-padding-linked')=='true'),
             }
         };
+        elementSetting.column = (elementSetting.column[0]) ? elementSetting.column[0].replace('col-sm-','') : '12';
         $.confirm({
             title: 'Element',
             columnClass: 'col-sm-12',
@@ -287,7 +288,7 @@ jQuery(document).ready(function($){
                         $('#element-editor').html(response);
                         setTimeout(function(){
                             /** Set Attributes */
-                            let defaultClass = ['element', 'ui-sortable-handle', `col-sm-${elementSetting.column}`];
+                            let defaultClass = ['element', 'ui-sortable', 'ui-sortable-handle', `col-sm-${elementSetting.column}`];
                             let attrClass = element.attr('class')
                                 .replace(/ +(?= )/g,'').split(' ')
                                 .filter((name) => { return !defaultClass.includes(name) })
@@ -318,17 +319,13 @@ jQuery(document).ready(function($){
                     let value = tinymce.editors.wp_element_editor.getContent();
                     tinymce.execCommand('mceRemoveControl', true, '#wp_element_editor');
 
-                    /** Grid Setting */
-                    $(element).removeAttr('class');
-                    $(element).addClass(`element ui-sortable-handle col-sm-${$('#grid-column-size').val()}`);
-
                     /** Save Attributes */
                     let attributes = {
                         id: $('#element-id').val().replace(/ {1,}/g," "),
                         class: $('#element-class').val().replace(/ {1,}/g," ")
                     };
-                    if(attributes.id) element.attr('id', attributes.id);
-                    if(attributes.class) element.attr('class', `element ${attributes.class}`);
+                    element.attr('id', attributes.id);
+                    element.attr('class', `element ui-sortable-handle col-sm-${$('#grid-column-size').val()} ${attributes.class}`);
 
                     /** Save Style */
                     elementContent.html(value);

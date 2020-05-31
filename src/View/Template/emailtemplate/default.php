@@ -25,6 +25,8 @@ if(!isset($user->ID) || !$user->ID) $service->Page->wp_redirect('/');
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?= ($post->post_title) ? $post->post_title : 'Template' ?></title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
 </head>
 <body>
     <?php foreach($this->sections as $path => $options): ?>
