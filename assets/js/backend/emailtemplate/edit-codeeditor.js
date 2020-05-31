@@ -34,7 +34,7 @@
             url: 'admin-ajax.php',
             dataType : "json",
             data: {
-                'action'    : 'triangle-codeeditor',
+                'action'    : 'triangle-section-codeeditor',
                 'args'      : {
                     'post_id' : window.trianglePlugin.screen.post.ID,
                     'post_name' : window.trianglePlugin.screen.post.post_name,

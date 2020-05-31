@@ -2,31 +2,35 @@ jQuery(document).ready(function($){
 /**
  * jQuery UI Sortable
  * */
-    // $().removeAttr('style');
-    // $('.row-content').removeAttr('id');
-
     /** Init Sortable */
     cleanSettingScript();
     function initSortable() {
         /** Draggable Row */
         $('#builder_dom').sortable({
             helper:'#row-action-move',
-            placeholder: "row-placeholder col-sm-12",
             items: "> div",
+            tolerance: 'pointer',
+            scrollSensitivity:40,
+
             stop: function( event, ui ) {
                 renderGrid();
             }
         }).disableSelection();
         /** Draggable Element */
         $( ".row-content" ).sortable({
-            containment: "document",
             items: "> div",
             connectWith: ".row-content",
+            tolerance: 'pointer',
+
+            scrollSensitivity:40,
+            forcePlaceholderSize:true,
+            revert: true,
+
             start: function( event, ui ) {
                 /** Placeholder Grid */
                 let element = ui.item;
                 let height = $(element).css('height');
-                $('.ui-sortable-placeholder').css('min-height', height);
+                $('.ui-sortable-placeholder').css('height', height);
                 $('.row').addClass('row-dropzone');
                 $('.element').addClass('element-highlight');
             },
@@ -47,7 +51,8 @@ jQuery(document).ready(function($){
     $(document).on('click', '#btn-add-new-element', function(){
         var row = document.createElement('div');
             row.innerHTML = $('#new-row').html();
-            row.className = "row col-sm-12";
+            row.className = "row ui-sortable-handle";
+        $('.row, .element').removeAttr('id').removeAttr('style');
         $('#builder_dom').append(row);
         cleanSettingScript();
     });
@@ -58,7 +63,8 @@ jQuery(document).ready(function($){
         let row_content = $(this).parent().parent().parent();
         var row = document.createElement('div');
             row.innerHTML = $(row_content).html();
-            row.className = "row col-sm-12";
+            row.className = "row ui-sortable-handle";
+        $('.row, .element').removeAttr('id').removeAttr('style');
         $('#builder_dom').append(row);
         cleanSettingScript();
     });
@@ -175,16 +181,18 @@ jQuery(document).ready(function($){
                     method: 'POST',
                     url: 'admin-ajax.php',
                     data: {
-                        'action'    : 'triangle-editor-row-setting',
+                        'action'    : 'triangle-builder-row-setting',
                     },
                 }).done(function (response) {
                     self.setContent(response);
                     setTimeout(function(){
                         /** Set Attributes */
-                        let attrClass = rowContent.attr('class');
-                            attrClass = attrClass.replace('row-content','').replace('ui-sortable', '');
-                            attrClass = $.trim(attrClass);
-                        let attributes = { id: rowContent.attr('id'), class: attrClass };
+                        let defaultClass = ['row', 'ui-sortable-handle'];
+                        let attrClass = row.attr('class')
+                            .replace(/ +(?= )/g,'').split(' ')
+                            .filter((name) => { return !defaultClass.includes(name) })
+                            .join(' ');
+                        let attributes = { id: row.attr('id'), class: attrClass };
                         if(attributes.id) $('#row-id').val(attributes.id);
                         if(attributes.class) $('#row-class').val(attributes.class);
 
@@ -208,8 +216,8 @@ jQuery(document).ready(function($){
                         id: $('#row-id').val().replace(/ {1,}/g," "),
                         class: $('#row-class').val().replace(/ {1,}/g," ")
                     };
-                    if(attributes.id) rowContent.attr('id', attributes.id);
-                    if(attributes.class) rowContent.attr('class', `row-content ui-sortable ${attributes.class}`);
+                    if(attributes.id) row.attr('id', attributes.id);
+                    if(attributes.class) row.attr('class', `row ui-sortable ${attributes.class}`);
 
                     /** Save Style */
                     rowContent.css('background', $('.pcr-button').css('color'));
@@ -238,11 +246,11 @@ jQuery(document).ready(function($){
         let elementClass = element.attr('class').split(' ');
         var elementSetting = {
             column : elementClass.filter((value) => (value.includes('col-sm-')) )[0].replace('col-sm-',''),
-            rowMargin : getMarginorPadding(element, 'margin'),
-            rowPadding : getMarginorPadding(element, 'padding'),
+            rowMargin : getMarginorPadding(elementContent, 'margin'),
+            rowPadding : getMarginorPadding(elementContent, 'padding'),
             linked : {
-                margin: (element.attr('data-margin-linked')==undefined) ? true : (element.attr('data-margin-linked')=='true'),
-                padding: (element.attr('data-padding-linked')==undefined) ? true : (element.attr('data-padding-linked')=='true'),
+                margin: (elementContent.attr('data-margin-linked')==undefined) ? true : (elementContent.attr('data-margin-linked')=='true'),
+                padding: (elementContent.attr('data-padding-linked')==undefined) ? true : (elementContent.attr('data-padding-linked')=='true'),
             }
         };
         $.confirm({
@@ -262,7 +270,7 @@ jQuery(document).ready(function($){
                     method: 'POST',
                     url: 'admin-ajax.php',
                     data: {
-                        'action'    : 'triangle-editor-element-setting',
+                        'action'    : 'triangle-builder-element-setting',
                         'column'    : elementSetting.column,
                     },
                 }).success(function (response) {
@@ -279,9 +287,11 @@ jQuery(document).ready(function($){
                         $('#element-editor').html(response);
                         setTimeout(function(){
                             /** Set Attributes */
-                            let attrClass = elementContent.attr('class');
-                                attrClass = attrClass.replace('element-content','');
-                                attrClass = $.trim(attrClass);
+                            let defaultClass = ['element', 'ui-sortable-handle', `col-sm-${elementSetting.column}`];
+                            let attrClass = element.attr('class')
+                                .replace(/ +(?= )/g,'').split(' ')
+                                .filter((name) => { return !defaultClass.includes(name) })
+                                .join(' ');
                             let attributes = { id: element.attr('id'), class: attrClass };
                             if(attributes.id) $('#element-id').val(attributes.id);
                             if(attributes.class) $('#element-class').val(attributes.class);
@@ -317,11 +327,10 @@ jQuery(document).ready(function($){
                         id: $('#element-id').val().replace(/ {1,}/g," "),
                         class: $('#element-class').val().replace(/ {1,}/g," ")
                     };
-                    if(attributes.id) elementContent.attr('id', attributes.id);
-                    if(attributes.class) elementContent.attr('class', `element-content ${attributes.class}`);
+                    if(attributes.id) element.attr('id', attributes.id);
+                    if(attributes.class) element.attr('class', `element ${attributes.class}`);
 
                     /** Save Style */
-                    console.log(value);
                     elementContent.html(value);
                     setMarginorPadding(elementContent, 'element', 'margin');
                     setMarginorPadding(elementContent, 'element', 'padding');

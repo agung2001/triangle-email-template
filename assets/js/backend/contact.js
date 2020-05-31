@@ -10,7 +10,7 @@
             url: 'admin-ajax.php',
             dataType : "json",
             data: {
-                'action'    : 'triangle-emailtemplate-page-contact',
+                'action'    : 'triangle-page-contact',
                 'user_id'   : jQuery('#default-user').val(),
                 'typeArgs'      : {
                     'numberposts': -1,

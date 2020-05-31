@@ -1,14 +1,10 @@
 <div class="builder-container">
     <div id="builder_dom" class="grid email-grid">
-        <?php if($template==''){ ?>
-            <div class="row col-sm-12">
-                <div class="row-content">
-                    <div class="element col-sm-12">
-                        <div class="element-content" >
-                            <p style="text-align:center; margin: 0 auto; padding:40px 0;">
-                                Hello Triangle!
-                            </p>
-                        </div>
+        <?php if(trim($template)==''){ ?>
+            <div class="row ui-sortable-handle">
+                <div class="row-content ui-sortable" data-margin-linked="true" data-padding-linked="true">
+                    <div class="element col-sm-12 ui-sortable-handle">
+                        <div class="element-content" data-margin-linked="true" data-padding-linked="true" style="padding: 20px 0;"><p style="text-align:center;">Hello Triangle!</p></div>
                     </div>
                 </div>
             </div>
@@ -17,7 +13,6 @@
         <?php } ?>
     </div>
 </div>
-
 
 <!--Start : Builder Elements-->
 <div style="display:none;">
@@ -37,8 +32,10 @@
         <a id="element-action-remove" title="Remove Element"><i class="fas fa-trash"></i></a>
     </div>
     <div id="new-row">
-        <div class="row-content">
-            <div class="element col-sm-12"><div class="element-content">NEW ELEMENT</div></div>
+        <div class="row-content ui-sortable" data-margin-linked="true" data-padding-linked="true">
+            <div class="element col-sm-12 ui-sortable-handle">
+                <div class="element-content" data-margin-linked="true" data-padding-linked="true" style="padding: 20px 0;"><p style="text-align:center;">Hello Triangle!</p></div>
+            </div>
         </div>
     </div>
 </div>

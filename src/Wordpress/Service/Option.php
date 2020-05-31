@@ -28,6 +28,12 @@ class Option {
     public function set_theme_mod($name, $value){ return set_theme_mod($name, $value); }
 
     /**
+     * Remove theme modification name from current theme list.
+     * @param   string      $name       	Theme modification name.
+     */
+    public function remove_theme_mod($name){ return remove_theme_mod($name); }
+
+    /**
      * Retrieves an option value based on an option name.
      * @return  mixed       Value set for the option
      * @param     string      $option         Name of option to retrieve. Expected to not be SQL-escaped.

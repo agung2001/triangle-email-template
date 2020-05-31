@@ -16,7 +16,7 @@ class Ace extends \WP_Customize_Control {
     /**
      * Default class type from WP_Customize_Control
      */
-    public $type = 'triangle_range';
+    public $type = 'triangle_text';
 
     /**
      * @access   protected

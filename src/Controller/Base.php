@@ -2,8 +2,6 @@
 
 namespace Triangle\Controller;
 
-use Triangle\View;
-
 !defined( 'WPINC ' ) or die;
 
 /**
@@ -12,6 +10,8 @@ use Triangle\View;
  * @package    Triangle
  * @subpackage Triangle/Controller
  */
+
+use Triangle\View;
 
 class Base extends Controller {
 

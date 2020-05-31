@@ -35,7 +35,7 @@
                 method: 'POST',
                 url: 'admin-ajax.php',
                 data: {
-                    'action'    : 'triangle-emailtemplate-send',
+                    'action'    : 'triangle-send',
                     'template'  : template_standard,
                     'users'     : jQuery('#contact_users').val(),
                     'from'      : {
@@ -50,8 +50,6 @@
                 console.log('SEND FAILED');
             });
         } else if (counter < 10) { setTimeout(function(){ counter++; triangle_send_email(); }, 1000);
-        } else {
-            console.log('BUILD FAILED');
-        }
+        } else { console.log('BUILD FAILED'); }
     }
 </script>

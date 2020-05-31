@@ -9,10 +9,12 @@
  * @subpackage Triangle/EmailTemplate
  */
 
-$range = (isset($range)) ? $range : [
-    'min' => 0,
-    'max' => 100,
-];
+/** Set Default Value */
+$range = (isset($range)) ? $range : array();
+$range['min'] = (isset($range['min'])) ? $range['min'] : 0;
+$range['max'] = (isset($range['max'])) ? $range['max'] : 100;
+$range['step'] = (isset($range['step'])) ? $range['step'] : 1;
+
 ?>
 <div class="triangle_range">
     <span class="customize-control-title"><?= $this->esc( 'html', $control->label ); ?></span>
@@ -22,7 +24,7 @@ $range = (isset($range)) ? $range : [
            class="triangle_range"
            min="<?= $range['min'] ?>"
            max="<?= $range['max'] ?>"
-           step="1"
+           step="<?= $range['step'] ?>"
            value="<?= $this->esc( 'html',  $control->value() ); ?>"
            <?php $control->link() ?>
     />

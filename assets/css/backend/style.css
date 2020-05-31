@@ -956,19 +956,22 @@ input:checked + .slider:before {
   line-height: 1.8;
   /** Grid Template */
   font-family: 'Lato', sans-serif;
-  position: relative;
   margin: 0 auto;
   max-width: 800px; }
   #section-builder #builder_dom h1, #section-builder #builder_dom h2, #section-builder #builder_dom h3, #section-builder #builder_dom h4, #section-builder #builder_dom h5, #section-builder #builder_dom h6 {
-    font-weight: 300; }
+    font-weight: 300;
+    padding: 0;
+    margin: 0; }
+  #section-builder #builder_dom h1 {
+    font-size: 28px; }
   #section-builder #builder_dom h2 {
-    font-size: 44px; }
-  #section-builder #builder_dom h2 {
-    font-size: 40px; }
-  #section-builder #builder_dom h3 {
     font-size: 24px; }
-  #section-builder #builder_dom h4 {
+  #section-builder #builder_dom h2 {
+    font-size: 22px; }
+  #section-builder #builder_dom h3 {
     font-size: 20px; }
+  #section-builder #builder_dom h4 {
+    font-size: 18px; }
   #section-builder #builder_dom a {
     color: #3498db; }
   #section-builder #builder_dom p, #section-builder #builder_dom li {
@@ -1020,8 +1023,6 @@ input:checked + .slider:before {
     #section-builder #builder_dom .element.ui-sortable-helper {
       transform: scale(1.015);
       z-index: 100; }
-    #section-builder #builder_dom .element.ui-sortable-placeholder {
-      min-height: 50px; }
     #section-builder #builder_dom .element .element-content {
       font-size: 17px;
       cursor: pointer;

@@ -3,7 +3,7 @@
     <!-- Element Attributes -->
     <div class="row section-title">
         <div class="col-sm-12">
-            <h3>Attributes</h3>
+            <h3>Element Attributes</h3>
         </div>
     </div>
 
@@ -25,10 +25,10 @@
         </div>
     </div>
 
-    <!-- Element Setting -->
+    <!-- Element Style -->
     <div class="row section-title">
         <div class="col-sm-12">
-            <h3>Setting</h3>
+            <h3>Style</h3>
         </div>
     </div>
 

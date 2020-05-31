@@ -67,13 +67,6 @@ class EmailTemplateCustomizer extends Customizer {
         $action->setCallback('customizer_remove_panel');
         $action->setAcceptedArgs(2);
         $this->hooks[] = $action;
-
-        /** @backend - Customizer save template */
-        $action = clone $action;
-        $action->setHook('customize_save_after');
-        $action->setCallback('customizer_save_template');
-        $action->setAcceptedArgs(1);
-        $this->hooks[] = $action;
     }
 
     /**
@@ -120,12 +113,12 @@ class EmailTemplateCustomizer extends Customizer {
     /**
      * Load customizer panels
      */
-    public function loadPanels($wp_customize, $data = []){}
+    public function loadPanels($wp_customize){}
 
     /**
      * Load customizer sections
      */
-    public function loadSections($wp_customize, $data = []){
+    public function loadSections($wp_customize){
         /** @section @setting */
         $ID = 'section_triangle_setting';
         $section = new Section();
@@ -151,19 +144,21 @@ class EmailTemplateCustomizer extends Customizer {
 
     /**
      * Load customizer settings
+     * - @param     array       $data
      */
     public function loadSettings($wp_customize, $data = []){
         /** Defaults Customizer Settings */
         $defaults = $this->Plugin->getConfig()->defaultSettings;
-        $options = (isset($data['post']->options)) ? $data['post']->options : false;
+        extract($data);
 
         /** @section @setting - Background Color */
         $ID = 'setting_triangle_post_id';
         $setting = new Setting();
         $setting->setID($ID);
         $setting->setArgs([
-            'default' => isset($_GET['post_id']) ? $_GET['post_id'] : 0,
+            'default' => 0,
             'transport' => 'refresh',
+            'customFieldValue' => (isset($post->ID)) ? $post->ID : false,
         ]);
         $setting->build($wp_customize);
         $this->settings[$ID] = $setting;
@@ -173,8 +168,9 @@ class EmailTemplateCustomizer extends Customizer {
         $setting = new Setting();
         $setting->setID($ID);
         $setting->setArgs([
-            'default' => (isset($options->background)) ? $options->background : $defaults->background,
+            'default' => $defaults->background,
             'transport' => 'postMessage',
+            'customFieldValue' => (isset($post->options->background)) ? $post->options->background : false,
         ]);
         $setting->build($wp_customize);
         $this->settings[$ID] = $setting;
@@ -184,8 +180,9 @@ class EmailTemplateCustomizer extends Customizer {
         $setting = new Setting();
         $setting->setID($ID);
         $setting->setArgs([
-            'default' => (isset($options->container->width)) ? $options->container->width : $defaults->container->width,
+            'default' => $defaults->container->width,
             'transport' => 'postMessage',
+            'customFieldValue' => (isset($post->options->container->width)) ? $post->options->container->width : false,
         ]);
         $setting->build($wp_customize);
         $this->settings[$ID] = $setting;
@@ -195,8 +192,9 @@ class EmailTemplateCustomizer extends Customizer {
         $setting = new Setting();
         $setting->setID($ID);
         $setting->setArgs([
-            'default' => (isset($data['post']->css)) ? $data['post']->css : '',
+            'default' => '',
             'transport' => 'postMessage',
+            'customFieldValue' => (isset($post->css)) ? $post->css : false,
         ]);
         $setting->build($wp_customize);
         $this->settings[$ID] = $setting;
@@ -205,7 +203,7 @@ class EmailTemplateCustomizer extends Customizer {
     /**
      * Load customizer controls
      */
-    public function loadControls($wp_customize, $data = []){
+    public function loadControls($wp_customize){
         /** @section @setting */
         $section = 'section_triangle_setting'; $setting = 'setting_triangle_post_id';
         if( in_array($section, array_keys($this->sections)) && in_array($setting, array_keys($this->settings)) ){
@@ -253,7 +251,8 @@ class EmailTemplateCustomizer extends Customizer {
             $control->getHandler()->getView()->addData([
                 'range'         => [
                     'min'   => 600,
-                    'max'   => 1280
+                    'max'   => 1280,
+                    'step'  => 10,
                 ],
             ]);
             $control->build($wp_customize);
@@ -286,19 +285,30 @@ class EmailTemplateCustomizer extends Customizer {
      * - Register Sections
      * - Register Settings
      * - Register Control
+     * - Setup additional logic
      */
     public function customizer_register($wp_customize){
         /** Prepare Data */
-        $post = (isset($_GET['post_id'])) ? $this->get_emailtemplate_meta($_GET['post_id']) : 0;
+        $post = (isset($_GET['post_id'])) ? $this->get_emailtemplate_meta($_GET['post_id']) : [];
         /** Load Customizer Elements */
-        $this->loadPanels($wp_customize, ['post' => $post]);
-        $this->loadSections($wp_customize, ['post' => $post]);
+        $this->loadPanels($wp_customize);
+        $this->loadSections($wp_customize);
         $this->loadSettings($wp_customize, ['post' => $post]);
-        $this->loadControls($wp_customize, ['post' => $post]);
-        /** Set Theme Mod Default */
-        foreach($this->settings as $key => $setting){
-            if(!$this->Service->Option->get_theme_mod($key))
-                $this->Service->Option->set_theme_mod($key, $setting->getArgs()['default']);
+        $this->loadControls($wp_customize);
+        if(!empty($post)){
+            /** Setup Customizer Setting Script */
+            $view = new View($this->Plugin);
+            $view->setTemplate('backend.blank');
+            $view->setSections(['EmailTemplate.backend.customizer-script' => []]);
+            $view->setOptions(['shortcode' => false]);
+            $view->addData(['settings' => $this->settings]);
+            $view->build();
+            /** Set Theme Mod */
+            foreach($this->settings as $key => $setting){
+                $customFieldValue = $setting->getArgs()['customFieldValue'];
+                if($customFieldValue) $this->Service->Option->set_theme_mod($key, $customFieldValue);
+                else $this->Service->Option->remove_theme_mod($key);
+            }
         }
     }
 
@@ -328,28 +338,6 @@ class EmailTemplateCustomizer extends Customizer {
             $resolve = (in_array($panel->id, $panels)) ? true : false;
         }
         return $resolve;
-    }
-
-    /**
-     * Save customizer setting to meta fields
-     */
-    public function customizer_save_template(){
-        $post_id = intval($this->Service->Option->get_theme_mod('setting_triangle_post_id'));
-        $this->EmailTemplate->setID($post_id);
-        /** Save Option */
-        $options = [
-            'background'    => $this->Service->Option->get_theme_mod('setting_triangle_background'),
-            'container'     => [
-                'width'         => $this->Service->Option->get_theme_mod('setting_triangle_container_width'),
-            ],
-        ];
-        $meta = $this->EmailTemplate->getMetas()['template_options'];
-        $meta->setValue(json_encode($options));
-        $meta->update_post_meta();
-        /** Save CSS */
-        $meta = $this->EmailTemplate->getMetas()['template_css'];
-        $meta->setValue($this->Service->Option->get_theme_mod('setting_triangle_css'));
-        $meta->update_post_meta();
     }
 
     /**
