@@ -39,6 +39,7 @@ class Base extends Controller {
                 ]]);
                 $view->build();
             }
+
             /** Styles and Scripts */
             $min = (TRIANGLE_PRODUCTION) ? '.min' : '';
             $this->Service->Asset->wp_enqueue_style('triangle_css', "backend/style$min.css" );

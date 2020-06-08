@@ -275,7 +275,7 @@ jQuery(document).ready(function($){
                         'column'    : elementSetting.column,
                     },
                 }).success(function (response) {
-                    $('#element-editor').html(response);
+                    /** Set Content */
                     self.setContent(response);
                     $.ajax({
                         method: 'POST',
@@ -285,27 +285,29 @@ jQuery(document).ready(function($){
                             'content'   : elementContent.html(),
                         },
                     }).success(function(response){
+                        /** Set TinyMCE */
                         $('#element-editor').html(response);
-                        setTimeout(function(){
-                            /** Set Attributes */
-                            let defaultClass = ['element', 'ui-sortable', 'ui-sortable-handle', `col-sm-${elementSetting.column}`];
-                            let attrClass = element.attr('class')
-                                .replace(/ +(?= )/g,'').split(' ')
-                                .filter((name) => { return !defaultClass.includes(name) })
-                                .join(' ');
-                            let attributes = { id: element.attr('id'), class: attrClass };
-                            if(attributes.id) $('#element-id').val(attributes.id);
-                            if(attributes.class) $('#element-class').val(attributes.class);
+                        tinymce.init( tinymce.extend( {}, tinyMCEPreInit.mceInit[ 'wp_element_editor' ] ) );
+                        $('#wp-wp_element_editor-wrap').removeClass(`tmce-active html-active`).addClass(`tmce-active`);
 
-                            /** Set Style */
-                            $('#grid-column-size').val(elementSetting.column);
-                            setMarginorPaddingValue('element', 'margin', elementSetting.rowMargin);
-                            setMarginorPaddingValue('element', 'padding', elementSetting.rowPadding);
+                        /** Set Attributes */
+                        let defaultClass = ['element', 'ui-sortable', 'ui-sortable-handle', `col-sm-${elementSetting.column}`];
+                        let attrClass = element.attr('class')
+                            .replace(/ +(?= )/g,'').split(' ')
+                            .filter((name) => { return !defaultClass.includes(name) })
+                            .join(' ');
+                        let attributes = { id: element.attr('id'), class: attrClass };
+                        if(attributes.id) $('#element-id').val(attributes.id);
+                        if(attributes.class) $('#element-class').val(attributes.class);
 
-                            /** Set Linked */
-                            if(elementSetting.linked.margin==false) toggleMarginorPaddingLinked('element', 'margin');
-                            if(elementSetting.linked.padding==false) toggleMarginorPaddingLinked('element', 'padding');
-                        }, 300);
+                        /** Set Style */
+                        $('#grid-column-size').val(elementSetting.column);
+                        setMarginorPaddingValue('element', 'margin', elementSetting.rowMargin);
+                        setMarginorPaddingValue('element', 'padding', elementSetting.rowPadding);
+
+                        /** Set Linked */
+                        if(elementSetting.linked.margin==false) toggleMarginorPaddingLinked('element', 'margin');
+                        if(elementSetting.linked.padding==false) toggleMarginorPaddingLinked('element', 'padding');
                     });
                 }).fail(function(){
                     self.setContent('Something went wrong.');
@@ -314,15 +316,14 @@ jQuery(document).ready(function($){
             buttons: {
                 save: function () {
                     /** Editor */
-                    let init = tinymce.extend( {}, tinyMCEPreInit.mceInit[ 'wp_element_editor' ] );
-                    try { tinymce.init( init ); } catch(e){}
-                    let value = tinymce.editors.wp_element_editor.getContent();
-                    tinymce.execCommand('mceRemoveControl', true, '#wp_element_editor');
+                    let mode = ($('#wp-wp_element_editor-wrap').hasClass(`tmce-active`)) ? 'visual' : 'text';
+                    let value = (mode=='visual') ? tinymce.editors.wp_element_editor.getContent() : wpautop($('#wp_element_editor').val());
+                    tinymce.execCommand('mceRemoveControl', true, 'wp_element_editor');
 
                     /** Save Attributes */
                     let attributes = {
                         id: $('#element-id').val().replace(/ {1,}/g," "),
-                        class: $('#element-class').val().replace(/ {1,}/g," ")
+                        class: $('#element-class').val().replace(/ {1,}/g," "),
                     };
                     element.attr('id', attributes.id);
                     element.attr('class', `element ui-sortable-handle col-sm-${$('#grid-column-size').val()} ${attributes.class}`);

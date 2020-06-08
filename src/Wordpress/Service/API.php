@@ -23,11 +23,12 @@ class API {
 
     /**
      * Wordpress - Load wp_editor
-     * @var     string      $content    Html content string to be edited
-     * @var     string      $id         WP_Editor id
+     * @params     string      $content    Html content string to be edited
+     * @params     string      $id         WP_Editor id
+     * @params     string      $settings   Settings
      * @return  string                  Generated html consist of wp_editor
      */
-    public function ajax_wp_editor($content, $id){
+    public function ajax_wp_editor($content, $id, $settings = []){
         ob_start();
         wp_editor( $content, $id, [] );
         $content = ob_get_clean();

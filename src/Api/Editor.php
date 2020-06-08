@@ -44,7 +44,10 @@ class Editor extends Api {
         /** Return block editor */
         $content = html_entity_decode($_POST['content']);
         $content = preg_replace('/\s+/', ' ', stripslashes($content));
-        $content = $this->Service->API->ajax_wp_editor($content, 'wp_element_editor');
+        $content = $this->Service->API->ajax_wp_editor($content, 'wp_element_editor', [
+            'wpautop'           => true,
+            'default_editor'    => 'TinyMCE',
+        ]);
         echo $content; exit;
     }
 

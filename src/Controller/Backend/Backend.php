@@ -87,7 +87,11 @@ class Backend extends Base {
         if($screen->base=='users') $this->Service->Asset->wp_enqueue_script('triangle_user_js', 'backend/user.js');
         if($screen->base=='toplevel_page_triangle') {
             $this->Service->Asset->wp_enqueue_script('triangle_contact_js', 'backend/contact.js', '', '', true);
-            $this->Service->Asset->wp_enqueue_script('juice_js', 'backend/juice.build.js', [], false, true);
+            if($this->Service->Option->get_option('triangle_builder_inliner')=='juice'){
+                $this->Service->Asset->wp_enqueue_script('juice_js', 'builder/juice.build.js', [], false, true);
+            } else {
+                $this->Service->Asset->wp_enqueue_script('juice_js', 'builder/none.build.js', [], false, true);
+            }
         }
         if($screen->base=='triangle_page_triangle-setting') $this->Service->Asset->wp_enqueue_script('triangle_setting_js', 'backend/setting.js', '', '', true);
     }

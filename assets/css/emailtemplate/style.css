@@ -34,15 +34,7 @@
   clear: both; }
 
 .row {
-  margin-right: -15px;
-  margin-left: -15px; }
-
-.row:before, .row:after {
-  display: table;
-  content: " "; }
-
-.row:after {
-  clear: both; }
+  display: grid; }
 
 .row-no-gutters {
   margin-right: 0;
@@ -739,10 +731,6 @@ a {
 p, li {
   font-size: 15px; }
 
-p {
-  padding: 0;
-  margin: 0; }
-
 ul {
   padding: 0;
   margin: 0; }
@@ -780,7 +768,10 @@ img {
     height: auto;
     position: relative;
     border-radius: 3px;
-    margin: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
     z-index: 1;
     transform: none !important;
     will-change: transform; }

@@ -16,7 +16,7 @@
             url: 'admin-ajax.php',
             data: params,
         }).done(function (response) {
-            console.log(response);
+            console.log('SETTING SAVED!');
         }).fail(function(){
             console.log('Something went wrong.');
         });

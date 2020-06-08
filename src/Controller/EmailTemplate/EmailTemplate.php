@@ -136,15 +136,21 @@ class EmailTemplate extends Base {
         /** Prepare Data */
         $this->EmailTemplate->setID($post_id);
         $post = $this->EmailTemplate->get_post();
+        $post->options = $this->EmailTemplate->getMetas()['template_options']->get_post_meta(true);
+        $post->options = json_decode($post->options);
         $post->template = $this->EmailTemplate->getMetas()['template_html']->get_post_meta(true);
+        $post->css = $this->EmailTemplate->getMetas()['template_css']->get_post_meta(true);
 
         /** Setup View */
         $view = new View($this->Plugin);
         $view->setTemplate('emailtemplate.default');
-        $sections['EmailTemplate.edit-builder'] = ['name' => 'Builder', 'link' => 'builder'];
-        $view->setSections(['EmailTemplate.email-content' => ['name' => 'Email Content', 'active' => true]]);
+        $view->setSections(['EmailTemplate.email-content' => ['name' => 'Customize', 'active' => true]]);
         $view->setOptions(['shortcode' => true]);
-        $view->addData(compact('post'));
+        $view->addData([
+            'post'      => $post,
+            'options' => $post->options,
+            'defaults'  => $this->Plugin->getConfig()->defaultSettings,
+        ]);
         return $view;
     }
 
