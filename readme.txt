@@ -4,7 +4,7 @@ Tags: email template, html mail, email design, mail, email templates, email edit
 Requires at least: 5.0
 Tested up to: 5.4
 Requires PHP: 7.1
-Stable tag: 1.0.4
+Stable tag: 1.1.0
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -14,6 +14,8 @@ Email template editor and builder that can be used to send a beautiful professio
 Triangle is an email template editor and builder that can be used to send a beautiful professional design email template to your customers.
 You can drag and drop element on email template builder to setup the layout and also customize your email by adding your custom css style.
 The plugin will then automatically combine your HTML and CSS script into a standardized email template that will be sent to your customers.
+
+* Github Repo [Triangle Email Template](https://github.com/agung2001/triangle-email-template)
 
 = Features = 
 
@@ -57,6 +59,13 @@ We are very excited about the plugin and hope you do as well. There are lots of 
 * Download the plugin and extract the zip file and just drop the contents in the wp-content/plugins/ directory of your WordPress installation
 
 == Changelog ==
+
+= 1.1.0 =
+* add template builder feature
+* add template customizer feature
+
+= 1.0.4 =
+* adjust plugin to match wordpress guideliness
 
 = 1.0.3 =
 * finish setting up automattic/juice for css inliner
