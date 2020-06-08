@@ -11,10 +11,8 @@ namespace Triangle\Model;
  * @subpackage Triangle/Model
  */
 
-use Triangle\Wordpress\Action;
-use Triangle\Wordpress\Meta;
-use Triangle\Wordpress\Service;
-use Triangle\Wordpress\Type;
+use Triangle\Wordpress\Hook\Action;
+use Triangle\Wordpress\Model\Meta;
 
 class EmailTemplate extends Model {
 
@@ -24,9 +22,9 @@ class EmailTemplate extends Model {
      * @var    object $plugin Plugin configuration
      * @pattern prototype
      */
-    public function __construct($plugin)
-    {
+    public function __construct($plugin){
         parent::__construct($plugin);
+        $this->loadMetas();
 
         /** @backend - Post_type : emailtemplate */
         $this->args['publicly_queryable'] = false;
@@ -35,8 +33,28 @@ class EmailTemplate extends Model {
         $this->args['labels'] = ['name' => 'Email Template'];
         $this->args['supports'] = ['title'];
 
+        /** @backend - Hooks - Emailtemplate save post hook */
+        $action = new Action();
+        $action->setComponent($this);
+        $action->setHook('save_post');
+        $action->setCallback('saveEmailTemplate');
+        $action->setAcceptedArgs(3);
+        $this->hooks[] = $action;
+
+        /** @backend - Hooks - Emailtemplate save post hook */
+        $action = clone $action;
+        $action->setHook('before_delete_post');
+        $action->setCallback('deleteEmailTemplate');
+        $action->setAcceptedArgs(1);
+        $this->hooks[] = $action;
+    }
+
+    /**
+     * Load Modal Metas
+     */
+    public function loadMetas(){
         /** @backend - Meta_fields : Based on plugin config templates */
-        $templates = $plugin->getConfig()->templates;
+        $templates = $this->Plugin->getConfig()->templates;
         foreach($templates as $template) {
             foreach ($template->children as $children) {
                 $key = 'template_' . $children->id;
@@ -47,27 +65,12 @@ class EmailTemplate extends Model {
             }
         }
 
-        /** @backend - Meta_fields : Extra key for standard */
-        $key  = 'template_standard';
+        /** @backend - Meta_fields : Template options */
+        $key  = 'template_options';
         $meta = new Meta();
         $meta->setType($this);
         $meta->setKey($key);
         $this->metas[$key] = $meta;
-
-        /** @backend - Hooks - Emailtemplate save post hook */
-        $action = new Action();
-        $action->setComponent($this);
-        $action->setHook('save_post');
-        $action->setCallback('save_emailtemplate');
-        $action->setAcceptedArgs(3);
-        $this->hooks[] = $action;
-
-        /** @backend - Hooks - Emailtemplate save post hook */
-        $action = clone $action;
-        $action->setHook('before_delete_post');
-        $action->setCallback('delete_emailtemplate');
-        $action->setAcceptedArgs(1);
-        $this->hooks[] = $action;
     }
 
     /**
@@ -76,34 +79,43 @@ class EmailTemplate extends Model {
      * 2. Build email template script (html, css, js) file
      * @backend - @emailtemplate
      * @return  void
-     * @var     int     $post_id    Post ID
-     * @var     object  $post       Post Object
-     * @var     bool    $update     Whether this is an existing post being updated or not.
+     * @param     int     $post_id    Post ID
+     * @param     object  $post       Post Object
+     * @param     bool    $update     Whether this is an existing post being updated or not.
      */
-    public function save_emailtemplate($post_id, $post, $update){
-        $pagenow = Service::getScreen()->pagenow;
-        if (!empty($_POST) && $post->post_type=='emailtemplate' && in_array($pagenow, ['post.php', 'post-new.php'])){
+    public function saveEmailTemplate($post_id, $post, $update){
+        global $post, $pagenow;
+        if (!empty($_POST) && $post->post_type==$this->name && in_array($pagenow, ['post.php', 'post-new.php'])){
             /** Load Options */
             $this->loadController('EmailTemplate');
             $this->ID = $post_id;
 
             /** Validate Params */
-            $default = ['template_html', 'juice_output'];
+            $default = ['template_html'];
             if(!$this->EmailTemplate->validateParams($_POST, $default)) die('Parameters did not match the specs!');
 
             /** Sanitize Params */
             $default = array_flip($default);
-            foreach($default as &$value) $value = 'html';
+            $default['template_html'] = 'html';
+            $default['activeSection'] = 'text';
             $params = $this->EmailTemplate->sanitizeParams($_POST, $default);
 
             /** Save meta field */
-            $params['template_standard'] = $params['juice_output'];
+            $results = [];
             foreach($this->metas as $key => $meta){
                 if(!isset($params[$key])) continue;
-                $value = html_entity_decode($params[$key]);
+                $value = $params[$key];
                 $meta->setValue($value);
                 $results[] = $meta->update_post_meta();
             }
+
+            /** Redirect to activeSection */
+            $path = array();
+            $path['post'] = $post_id;
+            $path['action'] = 'edit';
+            $path['section'] = $params['activeSection'];
+            $path = unserialize(TRIANGLE_PATH)['admin_url'] . 'post.php?' . http_build_query($path);
+            $this->Service->Page->wp_redirect($path);
         }
     }
 
@@ -113,13 +125,14 @@ class EmailTemplate extends Model {
      * @return  void
      * @var     int     $post_id    Post ID
      */
-    public function delete_emailtemplate($post_id){
-        $post = Type::get_post($post_id);
+    public function deleteEmailTemplate($post_id){
+        $this->setID($post_id);
+        $post = $this->get_post();
         if($post->post_type==$this->name){
             $slug = str_replace('__trashed','',strtolower($post->post_name));
             $path = unserialize(TRIANGLE_PATH);
-            $dir = $path['upload_dir']['basedir'] . '/EmailTemplate/' . $slug;
-            if(is_dir($dir)) $this->Helper->deleteDir($dir);
+            $dir = $path['upload_dir']['basedir'] . '/emailtemplate/' . $slug . '/';
+            if(is_dir($dir)) $this->Helper->Directory->deleteDir($dir);
         }
     }
 

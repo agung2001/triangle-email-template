@@ -11,22 +11,7 @@ namespace Triangle\Controller;
  * @subpackage Triangle/Controller
  */
 
-use Triangle\Helper;
-use Triangle\Wordpress\Service;
-
 class Controller {
-
-    /**
-     * @access   protected
-     * @var      object    $Plugin  Store plugin object and configuration
-     */
-    protected $Plugin;
-
-    /**
-     * @access   protected
-     * @var      object    $helper  Helper object for controller
-     */
-    protected $Helper;
 
     /**
      * @access   protected
@@ -37,12 +22,13 @@ class Controller {
     /**
      * Admin constructor
      * @return void
-     * @var    object   $plugin     Plugin configuration
+     * @param    object   $plugin     Plugin configuration
      * @pattern prototype
      */
     public function __construct($plugin){
         $this->Plugin = $plugin;
-        $this->Helper = new Helper();
+        $this->Helper = $plugin->getHelper();
+        $this->Service = $plugin->getService();
         $this->hooks = [];
     }
 
@@ -84,7 +70,8 @@ class Controller {
     public function sanitizeParams($params, $default, $results = []){
         foreach($default as $key => $type){
             $results[$key] = (isset($params[$key])) ? $params[$key] : '';
-            $results[$key] = Service::sanitize($type, $results[$key]);
+            if(is_array($results[$key])) $results[$key] = $this->sanitizeParams($results[$key], $default[$key], []);
+            else $results[$key] = $this->Service->Validate->sanitize($type, $results[$key]);
         }
         return $results;
     }

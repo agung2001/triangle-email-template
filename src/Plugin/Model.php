@@ -11,22 +11,9 @@ namespace Triangle\Model;
  * @subpackage Triangle/Model
  */
 
-use Triangle\Helper;
-use Triangle\Wordpress\Type;
+use Triangle\Wordpress\Model\Type;
 
 class Model extends Type {
-
-    /**
-     * @access   protected
-     * @var      object    $Plugin  Store plugin object and configuration
-     */
-    protected $Plugin;
-
-    /**
-     * @access   protected
-     * @var      object    $helper  Helper object for controller
-     */
-    protected $Helper;
 
     /**
      * Construct type
@@ -39,7 +26,8 @@ class Model extends Type {
         $this->name = substr(strrchr(get_called_class(), "\\"), 1);
         $this->name = strtolower($this->name);
         $this->Plugin = $plugin;
-        $this->Helper = new Helper();
+        $this->Helper = $plugin->getHelper();
+        $this->Service = $plugin->getService();
         $this->taxonomies = [];
         $this->hooks = [];
         $this->metas = [];
