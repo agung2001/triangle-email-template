@@ -1,103 +1,72 @@
 jQuery(document).ready(function($){
 /**
+ * jQuery UI Sortable
+ * */
+    /** Init Sortable */
+    cleanSettingScript();
+    function initSortable() {
+        /** Draggable Row */
+        $('#builder_dom').sortable({
+            helper:'#row-action-move',
+            items: "> div",
+            tolerance: 'pointer',
+            scrollSensitivity:40,
+
+            stop: function( event, ui ) {
+                renderGrid();
+            }
+        }).disableSelection();
+        /** Draggable Element */
+        $( ".row-content" ).sortable({
+            items: "> div",
+            connectWith: ".row-content",
+            tolerance: 'pointer',
+
+            scrollSensitivity:40,
+            forcePlaceholderSize:true,
+            revert: true,
+
+            start: function( event, ui ) {
+                /** Placeholder Grid */
+                let element = ui.item;
+                let height = $(element).css('height');
+                $('.ui-sortable-placeholder').css('height', height);
+                $('.row').addClass('row-dropzone');
+                $('.element').addClass('element-highlight');
+            },
+            stop: function( event, ui ) {
+                /** Placeholder Grid */
+                $('.row').removeClass('row-dropzone');
+                $('.element').removeClass('element-highlight');
+                /** Render Grid */
+                renderGrid();
+            }
+        }).disableSelection();
+    }
+
+/**
  * Grid Functions
  * */
-    /** Muuri JS Grid */
-    var columnGrids, emailGrid;
-
-    /** Initiate Element Grid */
-    initElementGrid();
-    function initElementGrid(){
-        if(columnGrids) columnGrids.forEach((muuri) => { muuri.destroy(); });
-        columnGrids = [];
-        Array.prototype.slice.call($('.email-grid .row-content')).forEach(buildElements);
-        if(emailGrid) emailGrid.refreshItems().layout();
-        renderGrid();
-    }
-    function refreshElementGrid(){
-        columnGrids.forEach((muuri) => {
-            muuri.refreshItems().layout();
-        });
-    }
-    /** Build Elements */
-    function buildElements(container){
-        var muuri = new Muuri(container, {
-            items: '.element',
-            layoutDuration: 400,
-            layoutEasing: 'ease',
-            dragEnabled: true,
-            dragSort: function () {
-                return columnGrids;
-            },
-            dragSortHeuristics: {
-                sortInterval: 0,
-                minDragDistance: 0,
-                minBounceBackAngle: 0
-            },
-            dragStartPredicate: {
-                handle: '#element-action-move'
-            },
-            dragContainer: document.body,
-            dragReleaseDuration: 400,
-            dragReleaseEasing: 'ease',
-            dragPlaceholder: {
-                enabled: true,
-                duration: 400,
-                createElement: function (item) {
-                    return item.getElement().cloneNode(true);
-                }
-            },
-        })
-            .on('dragStart', function (item) {
-                $('.email-grid').each(function() {
-                    $(this).find('.row').addClass('row-dropzone');
-                });
-                item.getElement().style.width = item.getWidth() + 'px';
-                item.getElement().style.height = item.getHeight() + 'px';
-                rowSetting.remove();
-                elementSetting.remove();
-                emailGrid.refreshItems().layout();
-            })
-            .on('dragReleaseEnd', function (item) {
-                $('.email-grid').each(function() {
-                    $(this).find('.row').removeClass('row-dropzone');
-                });
-                item.getElement().style.width = '';
-                item.getElement().style.height = '';
-                columnGrids.forEach(function (muuri) {
-                    muuri.refreshItems();
-                });
-                emailGrid.refreshItems().layout();
-            })
-            .on('layoutStart', function () {
-                emailGrid.refreshItems().layout();
-            });
-        columnGrids.push(muuri);
-    }
-    emailGrid = new Muuri('.email-grid', {
-        layoutDuration: 400,
-        layoutEasing: 'ease',
-        dragEnabled: true,
-        dragSortHeuristics: {
-            sortInterval: 0,
-            minDragDistance: 0,
-            minBounceBackAngle: 0
-        },
-        dragStartPredicate: {
-            handle: '#row-action-move'
-        },
-        dragReleaseDuration: 400,
-        dragReleaseEasing: 'ease',
-    });
-
     /** Add new element */
     $(document).on('click', '#btn-add-new-element', function(){
         var row = document.createElement('div');
             row.innerHTML = $('#new-row').html();
-            row.className = "row col-sm-12";
-        emailGrid.add(row);
-        /** Reinitiate grid */
-        initElementGrid();
+            row.className = "row ui-sortable-handle";
+        $('.row, .element').removeAttr('id').removeAttr('style');
+        $('#builder_dom').append(row);
+        cleanSettingScript();
+    });
+
+    /** Clone Row */
+    $(document).on('click', '#row-action-clone', function(){
+        /** Clone Row */
+        let row_content = $(this).parent().parent().parent();
+        var row = document.createElement('div');
+            row.innerHTML = $(row_content).html();
+            row.className = "row ui-sortable-handle";
+        $('.row, .element').removeAttr('id').removeAttr('style');
+        $('#builder_dom').append(row);
+        cleanSettingScript();
     });
 
     /** Remove row from the grid */
@@ -112,8 +81,8 @@ jQuery(document).ready(function($){
             type: 'red',
             buttons: {
                 confirm: function () {
-                    emailGrid.remove(row[0], {removeElements: true});
-                    renderGrid();
+                    $(row).remove();
+                    cleanSettingScript();
                 },
                 cancel: function () {},
             }
@@ -126,7 +95,7 @@ jQuery(document).ready(function($){
         let element = $(this).parent().parent();
         $('#element-setting', element).remove();
         $(element).clone().appendTo(row_content);
-        initElementGrid();
+        cleanSettingScript();
     });
 
     /** Remove element from the grid */
@@ -141,10 +110,8 @@ jQuery(document).ready(function($){
             type: 'red',
             buttons: {
                 confirm: function () {
-                    columnGrids.forEach((muuri) => {
-                        muuri.remove(element[0], {removeElements: true});
-                    });
-                    renderGrid();
+                    $(element).remove();
+                    cleanSettingScript();
                 },
                 cancel: function () {},
             }
@@ -214,11 +181,21 @@ jQuery(document).ready(function($){
                     method: 'POST',
                     url: 'admin-ajax.php',
                     data: {
-                        'action'    : 'triangle-editor-row-setting',
+                        'action'    : 'triangle-builder-row-setting',
                     },
                 }).done(function (response) {
                     self.setContent(response);
                     setTimeout(function(){
+                        /** Set Attributes */
+                        let defaultClass = ['row', 'ui-sortable', 'ui-sortable-handle'];
+                        let attrClass = row.attr('class')
+                            .replace(/ +(?= )/g,'').split(' ')
+                            .filter((name) => { return !defaultClass.includes(name) })
+                            .join(' ');
+                        let attributes = { id: row.attr('id'), class: attrClass };
+                        if(attributes.id) $('#row-id').val(attributes.id);
+                        if(attributes.class) $('#row-class').val(attributes.class);
+
                         /** Set Style */
                         initColorPicker({ 'default' : rowSetting.background });
                         setMarginorPaddingValue('row', 'margin', rowSetting.rowMargin);
@@ -234,6 +211,14 @@ jQuery(document).ready(function($){
             },
             buttons: {
                 save: function () {
+                    /** Save Attributes */
+                    let attributes = {
+                        id: $('#row-id').val().replace(/ {1,}/g," "),
+                        class: $('#row-class').val().replace(/ {1,}/g," ")
+                    };
+                    row.attr('id', attributes.id);
+                    row.attr('class', `row ui-sortable ${attributes.class}`);
+
                     /** Save Style */
                     rowContent.css('background', $('.pcr-button').css('color'));
                     setMarginorPadding(rowContent, 'row', 'margin');
@@ -260,7 +245,7 @@ jQuery(document).ready(function($){
         let elementContent = $('.element-content', element);
         let elementClass = element.attr('class').split(' ');
         var elementSetting = {
-            column : elementClass.filter((value) => (value.includes('col-sm-')) )[0].replace('col-sm-',''),
+            column : elementClass.filter((value) => (value.includes('col-sm-')) ),
             rowMargin : getMarginorPadding(elementContent, 'margin'),
             rowPadding : getMarginorPadding(elementContent, 'padding'),
             linked : {
@@ -268,6 +253,7 @@ jQuery(document).ready(function($){
                 padding: (elementContent.attr('data-padding-linked')==undefined) ? true : (elementContent.attr('data-padding-linked')=='true'),
             }
         };
+        elementSetting.column = (elementSetting.column[0]) ? elementSetting.column[0].replace('col-sm-','') : '12';
         $.confirm({
             title: 'Element',
             columnClass: 'col-sm-12',
@@ -285,11 +271,11 @@ jQuery(document).ready(function($){
                     method: 'POST',
                     url: 'admin-ajax.php',
                     data: {
-                        'action'    : 'triangle-editor-element-setting',
+                        'action'    : 'triangle-builder-element-setting',
                         'column'    : elementSetting.column,
                     },
                 }).success(function (response) {
-                    $('#element-editor').html(response);
+                    /** Set Content */
                     self.setContent(response);
                     $.ajax({
                         method: 'POST',
@@ -299,17 +285,29 @@ jQuery(document).ready(function($){
                             'content'   : elementContent.html(),
                         },
                     }).success(function(response){
+                        /** Set TinyMCE */
                         $('#element-editor').html(response);
-                        setTimeout(function(){
-                            /** Set Style */
-                            $('#grid-column-size').val(elementSetting.column);
-                            setMarginorPaddingValue('element', 'margin', elementSetting.rowMargin);
-                            setMarginorPaddingValue('element', 'padding', elementSetting.rowPadding);
+                        tinymce.init( tinymce.extend( {}, tinyMCEPreInit.mceInit[ 'wp_element_editor' ] ) );
+                        $('#wp-wp_element_editor-wrap').removeClass(`tmce-active html-active`).addClass(`tmce-active`);
 
-                            /** Set Linked */
-                            if(elementSetting.linked.margin==false) toggleMarginorPaddingLinked('element', 'margin');
-                            if(elementSetting.linked.padding==false) toggleMarginorPaddingLinked('element', 'padding');
-                        }, 300);
+                        /** Set Attributes */
+                        let defaultClass = ['element', 'ui-sortable', 'ui-sortable-handle', `col-sm-${elementSetting.column}`];
+                        let attrClass = element.attr('class')
+                            .replace(/ +(?= )/g,'').split(' ')
+                            .filter((name) => { return !defaultClass.includes(name) })
+                            .join(' ');
+                        let attributes = { id: element.attr('id'), class: attrClass };
+                        if(attributes.id) $('#element-id').val(attributes.id);
+                        if(attributes.class) $('#element-class').val(attributes.class);
+
+                        /** Set Style */
+                        $('#grid-column-size').val(elementSetting.column);
+                        setMarginorPaddingValue('element', 'margin', elementSetting.rowMargin);
+                        setMarginorPaddingValue('element', 'padding', elementSetting.rowPadding);
+
+                        /** Set Linked */
+                        if(elementSetting.linked.margin==false) toggleMarginorPaddingLinked('element', 'margin');
+                        if(elementSetting.linked.padding==false) toggleMarginorPaddingLinked('element', 'padding');
                     });
                 }).fail(function(){
                     self.setContent('Something went wrong.');
@@ -318,14 +316,17 @@ jQuery(document).ready(function($){
             buttons: {
                 save: function () {
                     /** Editor */
-                    let init = tinymce.extend( {}, tinyMCEPreInit.mceInit[ 'wp_element_editor' ] );
-                    try { tinymce.init( init ); } catch(e){}
-                    let value = tinymce.editors.wp_element_editor.getContent();
-                    tinymce.execCommand('mceRemoveControl', true, '#wp_element_editor');
+                    let mode = ($('#wp-wp_element_editor-wrap').hasClass(`tmce-active`)) ? 'visual' : 'text';
+                    let value = (mode=='visual') ? tinymce.editors.wp_element_editor.getContent() : wpautop($('#wp_element_editor').val());
+                    tinymce.execCommand('mceRemoveControl', true, 'wp_element_editor');
 
-                    /** Grid Setting */
-                    $(element).removeAttr('class');
-                    $(element).addClass(`element col-sm-${$('#grid-column-size').val()}`);
+                    /** Save Attributes */
+                    let attributes = {
+                        id: $('#element-id').val().replace(/ {1,}/g," "),
+                        class: $('#element-class').val().replace(/ {1,}/g," "),
+                    };
+                    element.attr('id', attributes.id);
+                    element.attr('class', `element ui-sortable-handle col-sm-${$('#grid-column-size').val()} ${attributes.class}`);
 
                     /** Save Style */
                     elementContent.html(value);
@@ -397,7 +398,6 @@ jQuery(document).ready(function($){
         if(type=='element') elementLinked[MarginorPadding] = !elementLinked[MarginorPadding];
         /** Change Icon */
         let icon = (type=='row') ? rowLinked : elementLinked;
-        console.log(icon);
             icon = (icon[MarginorPadding]) ? `<i class="fas fa-link"></i>` : `<i class="fas fa-unlink"></i>`;
         $(`#${type}-${MarginorPadding}-linked`).html(icon);
     }
@@ -445,41 +445,42 @@ jQuery(document).ready(function($){
     }
 
     /**
-     * Grab #builder_dom into #template_html to be saved
-     * */
-    function renderGrid(){
-        let dom = $('#builder_dom').html();
-        $('#template_html').val(dom);
-    }
-
-    /**
      * Clean setting script, used to re-initiate setting modal dialog
      * */
     function cleanSettingScript(){
-        /** Refresh Grid */
-        emailGrid.refreshItems().layout();
-        refreshElementGrid();
-
+        /** Remove Setting */
+        $('#builder_dom').find('.control-setting').remove();
         /** Clean TinyMCE */
         $('.mce-toolbar-grp').remove();
-
+        /** Refresh Grid */
+        initSortable();
+        /** Render Grid */
+        renderGrid();
         /** Reset MarginPadding Linked */
         rowLinked = { margin: true, padding: true };
         elementLinked = { margin: true, padding: true };
-
-        /** Render Grid */
-        renderGrid();
     }
 
     /** Trigger On Submit */
     $(document).on('submit', '#post', triggerOnSubmit);
-    function triggerOnSubmit(e){
-        /** Remove Setting */
-        $('#builder_dom #row-setting').remove();
-        $('#builder_dom #element-setting').remove();
-        /** Render Grid */
-        renderGrid();
+    function triggerOnSubmit(){
+        cleanSettingScript();
         return true;
+    }
+
+    /**
+     * Grab #builder_dom into #template_html to be saved
+     * */
+    function renderGrid(){
+        /** Copy Dom */
+        let dom = $('#builder_dom').html();
+        $('#rendered_dom').html(dom);
+        /** Clean Dom */
+        dom = $('#rendered_dom');
+        $('.row, .row-content', dom).removeClass('ui-sortable ui-sortable-handle');
+        $('.element, .element-content', dom).removeClass('ui-sortable ui-sortable-handle');
+        /** Render */
+        $('#template_html').val(dom.html());
     }
 
 });

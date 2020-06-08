@@ -770,6 +770,21 @@ input:checked + .slider:before {
   color: #e74c3c; }
 
 /**
+* Template modification
+*/
+ul {
+  padding: 0;
+  margin: 0; }
+
+.text-center {
+  text-align: center;
+  margin: 0 auto; }
+
+.horizontal-list li {
+  padding: 15px;
+  display: inline-block; }
+
+/**
 * Modify Template - Container
 * @backend
 */
@@ -942,7 +957,7 @@ input:checked + .slider:before {
   background: #e67e22;
   color: #fff; }
 
-#section-send #email-send-status {
+#section-send #email_status {
   display: none;
   margin: 200px;
   text-align: center; }
@@ -951,70 +966,94 @@ input:checked + .slider:before {
 * Page Email Template
 * @backend @edit
 */
-#section-builder .email-grid {
+#section-builder #builder_dom {
   /** Templating */
+  line-height: 1.8;
   /** Grid Template */
   font-family: 'Lato', sans-serif;
-  position: relative;
   margin: 0 auto;
   max-width: 800px; }
-  #section-builder .email-grid h1, #section-builder .email-grid h2, #section-builder .email-grid h3, #section-builder .email-grid h4, #section-builder .email-grid h5, #section-builder .email-grid h6 {
-    font-weight: 300; }
-  #section-builder .email-grid h2 {
-    font-size: 44px; }
-  #section-builder .email-grid h2 {
-    font-size: 40px; }
-  #section-builder .email-grid h3 {
+  #section-builder #builder_dom h1, #section-builder #builder_dom h2, #section-builder #builder_dom h3, #section-builder #builder_dom h4, #section-builder #builder_dom h5, #section-builder #builder_dom h6 {
+    font-weight: 300;
+    padding: 0;
+    margin: 0; }
+  #section-builder #builder_dom h1 {
+    font-size: 28px; }
+  #section-builder #builder_dom h2 {
     font-size: 24px; }
-  #section-builder .email-grid h4 {
+  #section-builder #builder_dom h2 {
+    font-size: 22px; }
+  #section-builder #builder_dom h3 {
     font-size: 20px; }
-  #section-builder .email-grid a {
+  #section-builder #builder_dom h4 {
+    font-size: 18px; }
+  #section-builder #builder_dom a {
     color: #3498db; }
-  #section-builder .email-grid p, #section-builder .email-grid li {
-    font-size: 15px; }
-  #section-builder .email-grid .btn {
-    padding: 10px 18px;
+  #section-builder #builder_dom p, #section-builder #builder_dom li {
+    font-size: 15px;
+    margin: 0; }
+  #section-builder #builder_dom img {
+    max-width: 100%;
+    height: auto; }
+  #section-builder #builder_dom .btn {
+    padding: 5px 18px;
     border-radius: 5px;
     background: #bfbfbf;
-    color: #ffffff; }
-  #section-builder .email-grid .btn-primary {
+    color: #ffffff;
+    display: inline-block; }
+  #section-builder #builder_dom .btn-primary {
     background: #9b59b6; }
-  #section-builder .email-grid .row {
+  #section-builder #builder_dom .row {
     width: 100%;
     height: auto;
-    position: absolute;
+    position: relative;
     border-radius: 3px;
-    margin-bottom: -3px;
+    margin: 0;
     z-index: 1;
-    will-change: transform; }
-    #section-builder .email-grid .row:hover {
+    min-height: 30px; }
+    #section-builder #builder_dom .row:hover {
       border: 2px solid #9b59b6;
       z-index: 2; }
-    #section-builder .email-grid .row .row-header {
+    #section-builder #builder_dom .row .row-header {
       position: relative;
       overflow: hidden;
       padding: 8px 20px;
       background: #9b59b6;
       color: #fff;
       border-radius: 3px 3px 0 0; }
-    #section-builder .email-grid .row .row-content {
-      min-height: 20px;
-      position: relative; }
-    #section-builder .email-grid .row.muuri-item-dragging {
-      z-index: 3;
-      cursor: move; }
-    #section-builder .email-grid .row.muuri-item-releasing {
-      z-index: 2; }
-    #section-builder .email-grid .row.muuri-item-hidden {
+    #section-builder #builder_dom .row .row-content:after {
+      content: " ";
+      display: block;
+      height: 0;
+      clear: both; }
+  #section-builder #builder_dom .element {
+    position: relative;
+    padding: 0;
+    -webkit-transition: transform 0.25s ease-in-out;
+    -moz-transition: transform 0.25s ease-in-out;
+    -o-transition: transform 0.25s ease-in-out;
+    transition: transform 0.25s ease-in-out; }
+    #section-builder #builder_dom .element:hover {
+      cursor: pointer; }
+    #section-builder #builder_dom .element.ui-sortable-helper {
+      transform: scale(1.015);
+      z-index: 100; }
+    #section-builder #builder_dom .element .element-content {
+      font-size: 17px;
+      cursor: pointer;
       z-index: 0; }
-  #section-builder .email-grid .row-dropzone {
-    min-height: 100px;
-    border: 1px solid #9b59b6; }
+      #section-builder #builder_dom .element .element-content a {
+        text-decoration: none; }
+  #section-builder #builder_dom .row-dropzone {
+    border: 2px solid #9b59b6;
+    min-height: 70px; }
+  #section-builder #builder_dom .element-highlight .element-content {
+    border: 1px dashed #9b59b6; }
 #section-builder #row-setting {
   position: absolute;
-  z-index: 999;
+  z-index: 9999;
   right: 0;
-  margin-top: -35px;
+  margin-top: -40px;
   background: #9b59b6;
   border-radius: 5px 5px 0 0; }
   #section-builder #row-setting a {
@@ -1030,9 +1069,9 @@ input:checked + .slider:before {
   right: -25px;
   background: #9b59b6;
   border-radius: 5px;
-  padding: 3px 0px;
+  padding: 3px 0;
   margin: 0;
-  z-index: 999; }
+  z-index: 9999; }
   #section-builder #element-setting a {
     display: block;
     background: #9b59b6;
@@ -1042,31 +1081,6 @@ input:checked + .slider:before {
     cursor: pointer; }
     #section-builder #element-setting a i {
       padding: 0 3px; }
-
-.element {
-  position: relative;
-  padding: 0;
-  transform: none !important;
-  will-change: transform; }
-  .element:hover {
-    z-index: 999; }
-  .element .element-content {
-    position: relative;
-    font-size: 17px;
-    cursor: pointer;
-    z-index: 0; }
-    .element .element-content a {
-      text-decoration: none; }
-  .element.muuri-item-placeholder {
-    border: 3px dotted #9b59b6;
-    z-index: 2; }
-  .element.muuri-item-dragging {
-    z-index: 3;
-    cursor: move; }
-  .element.muuri-item-releasing {
-    z-index: 2; }
-  .element.muuri-item-hidden {
-    z-index: 0; }
 
 #section-codeeditor {
   padding: 10px; }

@@ -55,4 +55,9 @@ class Page {
         return $screen;
     }
 
+    /**
+     * Whether the site is being previewed in the Customizer.
+     */
+    public function is_customize_preview(){ return is_customize_preview(); }
+
 }

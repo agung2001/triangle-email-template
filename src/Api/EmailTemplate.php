@@ -12,7 +12,8 @@ namespace Triangle\Api;
  */
 
 use Triangle\View;
-use Triangle\Wordpress\Action;
+use Triangle\Wordpress\Email;
+use Triangle\Wordpress\Hook\Action;
 
 class EmailTemplate extends Api {
 
@@ -29,27 +30,39 @@ class EmailTemplate extends Api {
         /** @backend - API - Page Contact */
         $action = new Action();
         $action->setComponent($this);
-        $action->setHook('wp_ajax_triangle-emailtemplate-page-contact');
+        $action->setHook('wp_ajax_triangle-page-contact');
         $action->setCallback('page_contact');
         $action->setAcceptedArgs(0);
         $this->hooks[] = $action;
 
-        /** @backend - API - Page Contact */
+        /** @backend @builder - API - Editor Grid Setting */
         $action = clone $action;
-        $action->setHook('wp_ajax_triangle-emailtemplate-page-edit');
-        $action->setCallback('page_edit');
+        $action->setHook('wp_ajax_triangle-builder-row-setting');
+        $action->setCallback('builder_row_setting');
         $this->hooks[] = $action;
 
-        /** @backend - API - Editor Grid Setting */
+        /** @backend @builder - API - Editor Grid Setting */
         $action = clone $action;
-        $action->setHook('wp_ajax_triangle-editor-row-setting');
-        $action->setCallback('editor_row_setting');
+        $action->setHook('wp_ajax_triangle-builder-element-setting');
+        $action->setCallback('builder_element_setting');
         $this->hooks[] = $action;
 
-        /** @backend - API - Editor Grid Setting */
+        /** @backend @codeeditor - API - Editor Code Editor */
         $action = clone $action;
-        $action->setHook('wp_ajax_triangle-editor-element-setting');
-        $action->setCallback('editor_element_setting');
+        $action->setHook('wp_ajax_triangle-section-codeeditor');
+        $action->setCallback('codeeditor_section');
+        $this->hooks[] = $action;
+
+        /** @backend @customizer - API - Save data */
+        $action = clone $action;
+        $action->setHook('wp_ajax_triangle-customizer-save');
+        $action->setCallback('customizer_save');
+        $this->hooks[] = $action;
+
+        /** @backend - API - Send Email */
+        $action = clone $action;
+        $action->setHook('wp_ajax_triangle-send');
+        $action->setCallback('send_email');
         $this->hooks[] = $action;
     }
 
@@ -69,7 +82,7 @@ class EmailTemplate extends Api {
         $data['templates'] = [];
         foreach($this->EmailTemplate->get_posts() as $template){
             $this->EmailTemplate->setID($template->ID);
-            $meta = $this->EmailTemplate->getMetas()['template_standard']->get_post_meta();
+            $meta = $this->EmailTemplate->getMetas()['template_html']->get_post_meta();
             if($meta) $data['templates'][] = $template;
         }
 
@@ -82,11 +95,11 @@ class EmailTemplate extends Api {
     }
 
     /**
-     * Get data for EmailTemplate page
+     * Get data for EmailTemplate codeeditor section
      * @backend
      * @return  void
      */
-    public function page_edit(){
+    public function codeeditor_section(){
         /** Validate Params */
         $default = ['args' => ['post_id', 'post_name']];
         if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
@@ -104,7 +117,7 @@ class EmailTemplate extends Api {
      * @backend
      * @return  void
      */
-    public function editor_row_setting(){
+    public function builder_row_setting(){
         /** Load Page */
         ob_start();
         $view = new View($this->Plugin);
@@ -126,7 +139,7 @@ class EmailTemplate extends Api {
      * @backend
      * @return  void
      */
-    public function editor_element_setting(){
+    public function builder_element_setting(){
         /** Validate Params */
         $default = ['column'];
         if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
@@ -151,6 +164,75 @@ class EmailTemplate extends Api {
             $view->build();
         $content = ob_get_clean();
         echo $content; exit;
+    }
+
+    /**
+     * Save customizer setting
+     */
+    public function customizer_save(){
+        /** Validate parameters */
+        $default = ['setting_triangle_post_id'];
+        if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
+        /** Sanitize Params */
+        $default = array();
+        foreach($_POST as $key => $value) $default[$key] = 'text';
+        $params = $this->sanitizeParams($_POST, $default);
+        $params['setting_triangle_css'] = $_POST['setting_triangle_css'];
+
+        /** Prepare Data */
+        $this->EmailTemplate->setID($params['setting_triangle_post_id']);
+        $results = array();
+        /** Save Option */
+        $options = [
+            'background'    => $params['setting_triangle_background'],
+            'container'     => [
+                'width'         => $params['setting_triangle_container_width'],
+            ],
+        ];
+        $meta = $this->EmailTemplate->getMetas()['template_options'];
+        $meta->setValue(json_encode($options));
+        $results[] = $meta->update_post_meta();
+        /** Save CSS */
+        $meta = $this->EmailTemplate->getMetas()['template_css'];
+        $meta->setValue($params['setting_triangle_css']);
+        $results[] = $meta->update_post_meta();
+
+        $this->Service->API->wp_send_json($params);
+    }
+
+    /**
+     * Get EmailTemplate configuration and meta_fields data
+     * @var         int         Post ID
+     * @return      array       Configurations and meta_fields value
+     */
+    public function send_email(){
+        /** Validate parameters */
+        $default = ['template', 'users', 'from' => ['name', 'email'], 'subject'];
+        if(!$this->validateParams($_POST, $default)) die('Parameters did not match the specs!');
+
+        /** Sanitize Params */
+        $default = ['name' => 'text','email' => 'text'];
+        $params = $this->sanitizeParams($_POST['from'], $default);
+        $params = array('from' => $params);
+        $default = ['template' => 'html', 'users' => 'text', 'subject' => 'text'];
+        $params = array_merge($params, $this->sanitizeParams($_POST, $default));
+
+        /** Prepare Data */
+        $users = explode(',',$params['users']);
+        foreach($users as &$user) $user = $this->Service->User->get_user_by('ID', $user)->data->user_email;
+        $params['template'] = str_replace('\"','"', $params['template']);
+
+        /** Send Email */
+        $email = new Email();
+        $headers = $email->getHeaders();
+        $headers[] = 'From: '.$params['from']['name'].' <'.$params['from']['email'].'> ';
+        $email->setHeaders($headers);
+        $email->setTo($users);
+        $email->setSubject($params['subject']);
+        $email->setMessage($params['template']);
+        $status = $email->send();
+
+        $this->Service->API->wp_send_json($status);
     }
 
     /**

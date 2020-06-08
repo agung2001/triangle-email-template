@@ -44,25 +44,20 @@ class Directory {
     }
 
     /**
+     * Check directories is empty
+     */
+    public function is_dir_empty($dir) {
+        if (!is_readable($dir)) return NULL;
+        return (count(scandir($dir)) == 2);
+    }
+
+    /**
      * Delete directories and files
      * @return void
      */
     public function deleteDir($dirPath) {
-        if (! is_dir($dirPath)) {
-            throw new InvalidArgumentException("$dirPath must be a directory");
-        }
-        if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
-            $dirPath .= '/';
-        }
-        $files = glob($dirPath . '*', GLOB_MARK);
-        foreach ($files as $file) {
-            if (is_dir($file)) {
-                self::deleteDir($file);
-            } else {
-                unlink($file);
-            }
-        }
-        rmdir($dirPath);
+        system('rm -rf -- ' . escapeshellarg($dirPath), $retval);
+        return $retval == 0; // UNIX commands return zero on success
     }
 
     /**

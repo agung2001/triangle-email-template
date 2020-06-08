@@ -1,5 +1,5 @@
 <form method="POST" id="contact-form">
-    <input type="hidden" name="field_menu_slug" value="<?= $this->esc('attr',$menuSlug) ?>">
+    <input type="hidden" name="triangle_contact" value="send">
     <div id="form-message"></div>
 
     <div class="grid">

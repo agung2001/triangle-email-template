@@ -2,8 +2,6 @@
 
 namespace Triangle\Controller;
 
-use Triangle\View;
-
 !defined( 'WPINC ' ) or die;
 
 /**
@@ -12,6 +10,8 @@ use Triangle\View;
  * @package    Triangle
  * @subpackage Triangle/Controller
  */
+
+use Triangle\View;
 
 class Base extends Controller {
 
@@ -27,16 +27,19 @@ class Base extends Controller {
         if(in_array($screen->base,$screens) || (isset($screen->post->post_type) && in_array($screen->post->post_type,$types)) ){
             $assets = ($assets) ? array_flip($assets) : $assets;
             /** Plugin configuration */
-            $view = new View($this->Plugin);
-            $view->setTemplate('backend.blank');
-            $view->setSections(['Backend.script' => []]);
-            $view->setOptions(['shortcode' => false]);
-            $view->addData(['screen' => unserialize(TRIANGLE_SCREEN)]);
-            $view->addData(['options' => [
-                'animation_tab' => $this->Service->Option->get_option('triangle_animation_tab'),
-                'animation_content' => $this->Service->Option->get_option('triangle_animation_content'),
-            ]]);
-            $view->build();
+            if(!isset($assets['disableCore'])){
+                $view = new View($this->Plugin);
+                $view->setTemplate('backend.blank');
+                $view->setSections(['Backend.script' => []]);
+                $view->setOptions(['shortcode' => false]);
+                $view->addData(['screen' => unserialize(TRIANGLE_SCREEN)]);
+                $view->addData(['options' => [
+                    'animation_tab' => $this->Service->Option->get_option('triangle_animation_tab'),
+                    'animation_content' => $this->Service->Option->get_option('triangle_animation_content'),
+                ]]);
+                $view->build();
+            }
+
             /** Styles and Scripts */
             $min = (TRIANGLE_PRODUCTION) ? '.min' : '';
             $this->Service->Asset->wp_enqueue_style('triangle_css', "backend/style$min.css" );
@@ -59,20 +62,13 @@ class Base extends Controller {
                 $this->Service->Asset->wp_enqueue_style('confirm_css', 'jquery-confirm.min.css');
                 $this->Service->Asset->wp_enqueue_script('confirm_js', 'jquery-confirm.min.js','','',true);
             }
-            /** Muuri JS */
-            if(isset($assets['muuri'])){
-                $this->Service->Asset->wp_enqueue_script('web-animation_js', 'muuri/web-animations.min.js','','',false);
-                $this->Service->Asset->wp_enqueue_script('velocity_js', 'muuri/velocity.min.js','','',false);
-                $this->Service->Asset->wp_enqueue_script('hammer_js', 'muuri/hammer.min.js','','',false);
-                $this->Service->Asset->wp_enqueue_script('muuri_js', 'muuri/muuri.min.js','','',false);
-            }
             /** Ace JS - Code Editor */
             if(isset($assets['ace'])){
-                $this->Service->Asset->wp_enqueue_script('acejs_emmet_core', 'ace/emmet.min.js','','',true);
                 $this->Service->Asset->wp_enqueue_script('acejs', 'ace/ace.min.js','','',true);
-                $this->Service->Asset->wp_enqueue_script('acejs_mode_html', 'ace/mode-html.min.js','','',true);
-                $this->Service->Asset->wp_enqueue_script('acejs_emmet', 'ace/ext-emmet.min.js','','',true);
                 $this->Service->Asset->wp_enqueue_script('acejs_search', 'ace/ext-searchbox.min.js','','',true);
+                $this->Service->Asset->wp_enqueue_script('acejs_mode_html', 'ace/mode-html.min.js','','',true);
+                $this->Service->Asset->wp_enqueue_script('acejs_emmet_core', 'ace/emmet.min.js','','',true);
+                $this->Service->Asset->wp_enqueue_script('acejs_emmet', 'ace/ext-emmet.min.js','','',true);
             }
         }
     }

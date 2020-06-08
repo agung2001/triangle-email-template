@@ -22,7 +22,7 @@ class Controller {
     /**
      * Admin constructor
      * @return void
-     * @var    object   $plugin     Plugin configuration
+     * @param    object   $plugin     Plugin configuration
      * @pattern prototype
      */
     public function __construct($plugin){

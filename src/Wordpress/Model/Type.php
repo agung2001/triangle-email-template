@@ -1,6 +1,6 @@
 <?php
 
-namespace Triangle\Wordpress;
+namespace Triangle\Wordpress\Model;
 
 !defined( 'WPINC ' ) or die;
 
@@ -38,21 +38,14 @@ class Type extends Model {
     protected $hooks;
 
     /**
-     * Clear args for the next function call - dynamic args usage
-     */
-    public function clearArgs($data){ $this->args = []; return $data; }
-
-    /**
      * Retrieves post data given a post ID or post object.
-     * @var     int|object      Post ID or post object. Defaults to global $post
-     * @var     string          The required return type. One of OBJECT, ARRAY_A, or ARRAY_N
-     * @var     filter          Type of filter to apply. Accepts 'raw', 'edit', 'db', or 'display'
+     * @param     int|object      Post ID or post object. Defaults to global $post
+     * @param     string          The required return type. One of OBJECT, ARRAY_A, or ARRAY_N
+     * @param     filter          Type of filter to apply. Accepts 'raw', 'edit', 'db', or 'display'
      * @return  object          Post Type object
      */
-    public function get_post(){
-        $this->args['output'] = (!isset($this->args['output']) || !is_object($this->args['output'])) ? OBJECT : $this->args['output'];
-        $this->args['filter'] = (!isset($this->args['filter']) || !is_string($this->args['filter'])) ? 'raw' : $this->args['filter'];
-        return $this->clearArgs(get_post($this->ID, $this->args['output'], $this->args['filter']));
+    public function get_post($output = OBJECT, $filter = 'raw'){
+        return get_post($this->ID, $output, $filter);
     }
 
     /**
