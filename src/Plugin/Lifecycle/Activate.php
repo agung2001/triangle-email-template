@@ -44,11 +44,11 @@ class Activate {
             $dst = $path['upload_dir']['basedir'] . '/emailtemplate/' . $theme;
             if(!is_dir($dst)) {
                 mkdir($dst, 0755, true);
-                $this->Helper->copyDir($src,$dst);
+                $this->Helper->Directory->copyDir($src,$dst);
                 /** Remove files */
-                if(file_exists($dst . '/' . $theme . '.css')) unlink($dst . '/' . $theme . '.css');
                 if(file_exists($dst . '/' . $theme . '.html')) unlink($dst . '/' . $theme . '.html');
-                if(file_exists($dst . '/standard.html')) unlink($dst . '/standard.html');
+                if(file_exists($dst . '/style.css')) unlink($dst . '/style.css');
+                if(file_exists($dst . '/options.json')) unlink($dst . '/options.json');
             }
             /** Setup Theme Data */
             $this->setupThemeData($theme, $src);
@@ -76,16 +76,20 @@ class Activate {
             ]);
             $post_id = $EmailTemplate->insert_post();
             $EmailTemplate->setID($post_id);
-            $templates = $this->Plugin->getConfig()->templates;
-            $templates = $this->Helper->getTemplatesFromConfig($templates);
             $results = [];
+            $elements = [
+                'template_html' => $src . '/' . $theme . '.html',
+                'template_css' => $src . '/style.css',
+                'template_options' => $src . '/options.json',
+            ];
             foreach($EmailTemplate->getMetas() as $key => $meta){
-                $filePath = $src . '/' . $theme . '.html';
-                if(file_exists($filePath)){
-                    $value = $this->Helper->convertImagesRelativetoAbsolutePath(
+                if(isset($elements[$key]) && file_exists($elements[$key])){
+                    $value = file_get_contents($elements[$key]);
+                    $value = ($key!='template_html') ? $value :
+                        $this->Helper->convertImagesRelativetoAbsolutePath(
                         $path['upload_dir']['baseurl'] . '/emailtemplate/' . $theme . '/',
-                        file_get_contents($filePath)
-                    );
+                            $value
+                        );
                     $meta->setValue($value);
                     $results[] = $meta->update_post_meta();
                 }

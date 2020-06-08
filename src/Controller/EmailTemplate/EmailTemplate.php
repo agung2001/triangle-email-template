@@ -154,43 +154,4 @@ class EmailTemplate extends Base {
         return $view;
     }
 
-    /**
-     * Send template email
-     * @backend - @emailtemplate from [@contactPage]
-     * @return  void
-     */
-    public function shortcode_send($atts, $content = null){
-        /** Validate attributes */
-        $default = ['field_template', 'field_users', 'field_from_name', 'field_from_email', 'field_email_subject'];
-        if(!$this->validateParams($atts, $default)) { echo ('Parameters did not match the specs!'); return; }
-
-        /** Prepare Data */
-        $this->EmailTemplate->setID($atts['field_template']);
-        $template = $this->EmailTemplate->getMetas()['template_standard']->get_post_meta(true);
-        $template = isset($template) ? $template : '';
-        $users = explode(',',$atts['field_users']);
-        foreach($users as &$user) $user = $this->Service->User->get_user_by('ID', $user)->data->user_email;
-
-        /** Send Email */
-        $email = new Email();
-        $headers = $email->getHeaders();
-        $headers[] = 'From: '.$atts['field_from_name'].' <'.$atts['field_from_email'].'> ';
-        $email->setHeaders($headers);
-        $email->setTo($users);
-        $email->setSubject($atts['field_email_subject']);
-        $email->setMessage($template);
-        $status = $email->send();
-
-        /** Show status */
-        ob_start();
-            $view = new View($this->Plugin);
-            $view->setTemplate('backend.blank');
-            $view->addData([
-                'status' => ($status) ? 'Email send successfully!' : 'Email failed to send, please turn off conflicting plugin and try again!',
-            ]);
-            $view->setSections(['Backend.contact.send-status' => ['name' => 'Send Notification']]);
-            $view->build();
-        echo ob_get_clean();
-    }
-
 }

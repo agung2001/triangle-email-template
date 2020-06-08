@@ -82,7 +82,7 @@ class EmailTemplate extends Api {
         $data['templates'] = [];
         foreach($this->EmailTemplate->get_posts() as $template){
             $this->EmailTemplate->setID($template->ID);
-            $meta = $this->EmailTemplate->getMetas()['template_standard']->get_post_meta();
+            $meta = $this->EmailTemplate->getMetas()['template_html']->get_post_meta();
             if($meta) $data['templates'][] = $template;
         }
 

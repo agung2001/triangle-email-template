@@ -131,8 +131,8 @@ class EmailTemplate extends Model {
         if($post->post_type==$this->name){
             $slug = str_replace('__trashed','',strtolower($post->post_name));
             $path = unserialize(TRIANGLE_PATH);
-            $dir = $path['upload_dir']['basedir'] . '/emailtemplate/' . $slug;
-            if(is_dir($dir)) $this->Helper->deleteDir($dir);
+            $dir = $path['upload_dir']['basedir'] . '/emailtemplate/' . $slug . '/';
+            if(is_dir($dir)) $this->Helper->Directory->deleteDir($dir);
         }
     }
 

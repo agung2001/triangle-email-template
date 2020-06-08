@@ -54,7 +54,8 @@
             jQuery('#select-field-template').select2({
                 data: data.templates.map((template) => {
                     return {id: template.ID, text: template.post_title};
-                })
+                }),
+                sorter: data => data.sort((a, b) => a.text.localeCompare(b.text)),
             });
         } else {
             let html = `You don't have any template, please <a href="edit.php?post_type=emailtemplate">create one</a>! <br>`;
