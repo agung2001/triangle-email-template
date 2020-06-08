@@ -12,14 +12,15 @@ Email template editor and builder that can be used to send a beautiful professio
 
 == Description ==
 Triangle is an email template editor and builder that can be used to send a beautiful professional design email template to your customers.
-You can set up your custom email template design by pasting your HTML and CSS into the editor.
+You can drag and drop element on email template builder to setup the layout and also customize your email by adding your custom css style.
 The plugin will then automatically combine your HTML and CSS script into a standardized email template that will be sent to your customers.
-
-You can use the plugin for cases like, sending custom invoice, getting in touch with your customers, sending a notification about payments, etc.
-You can also modify the pre-built templates to match your needs.
 
 = Features = 
 
+* **Drag & Drop EmailTemplate Builder:**
+Design and Customize your email by dragging and dropping element into the builder.
+* **Customize EmailTemplate:**
+Add your custom css style into your email template.
 * **Built in CSSInline:**
 Email clients are unpredictable. Even today many clients strip styles that are not inlined, so it is important to inline your CSS before sending.
 The plugin using custom libraries to inline your CSS script with your HTML. Don't risk your transactional emails or marketing campaigns falling apart.
@@ -35,11 +36,9 @@ We have provide extra custom link action under users.php page so then you can ea
 
 Unsupported plugins
 * WP Html Mail
-* ...
 
 Supported plugins
 * WP Mail SMTP
-* ...
 
 = Credits =
 
@@ -57,7 +56,6 @@ We are very excited about the plugin and hope you do as well. There are lots of 
 * You can install the plugin from the Wordpress Plugin Repositories or
 * Download the plugin and extract the zip file and just drop the contents in the wp-content/plugins/ directory of your WordPress installation
 
-
 == Changelog ==
 
 = 1.0.3 =
@@ -67,21 +65,3 @@ We are very excited about the plugin and hope you do as well. There are lots of 
 == Upgrade Notice ==
 
 == Frequently Asked Questions ==
-
-= The images is not showing, in a customer email? =
-
-Before you send the email to your customers, please make sure that your email template is already using absolute path.
-For example :
-`
-<img src="images/picture1.jpg">
-<img src="/images/picture1.jpg">
-`
-Cant be used, you need to change that into your images absolute path like :
-`
-<img src="https://mydomain.com/wp-content/uploads/2020/04/picture1.jpg">
-`
-
-= My email template is not updating? =
-
-After you copy and paste your html code into the editor, please make a little bit of changes like giving a spaces,
-so then the javascript library will be invoked and render your html script.
