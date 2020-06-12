@@ -20,7 +20,7 @@ class Ace extends \WP_Customize_Control {
 
     /**
      * @access   protected
-     * @var      object    $view    Customizer View
+     * @var      $view    Customizer View
      */
     protected $view;
 
@@ -35,7 +35,7 @@ class Ace extends \WP_Customize_Control {
     }
 
     /**
-     * @return object
+     * @return
      */
     public function getView()
     {
@@ -43,7 +43,7 @@ class Ace extends \WP_Customize_Control {
     }
 
     /**
-     * @param object $view
+     * @param
      */
     public function setView($view)
     {

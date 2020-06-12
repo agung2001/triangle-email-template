@@ -74,7 +74,7 @@ class Meta {
     /**
      * @return object
      */
-    public function getType(): object
+    public function getType()
     {
         return $this->type;
     }
@@ -82,7 +82,7 @@ class Meta {
     /**
      * @param object $type
      */
-    public function setType(object $type): void
+    public function setType($type): void
     {
         $this->type = $type;
     }

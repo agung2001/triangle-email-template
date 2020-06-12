@@ -47,7 +47,7 @@ class Plugin {
 
     /**
      * Lists of plugin controllers
-     * @var     object
+     * @var
      */
     protected $api;
 
@@ -241,7 +241,7 @@ class Plugin {
     /**
      * @return object
      */
-    public function getApi(): object
+    public function getApi()
     {
         return $this->api;
     }
@@ -249,7 +249,7 @@ class Plugin {
     /**
      * @param object $api
      */
-    public function setApi(object $api): void
+    public function setApi($api): void
     {
         $this->api = $api;
     }
@@ -289,7 +289,7 @@ class Plugin {
     /**
      * @return object
      */
-    public function getConfig(): object
+    public function getConfig()
     {
         return $this->config;
     }
@@ -297,7 +297,7 @@ class Plugin {
     /**
      * @param object $config
      */
-    public function setConfig(object $config): void
+    public function setConfig($config): void
     {
         $this->config = $config;
     }

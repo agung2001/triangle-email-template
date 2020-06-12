@@ -15,7 +15,7 @@ class View {
 
     /**
      * Provide page information page_title, menu_title, etc
-     * @var     object  $Page   Page object where the view is located
+     * @var     $Page   Page object where the view is located
      */
     protected $Page;
 
