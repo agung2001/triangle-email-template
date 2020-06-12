@@ -8,21 +8,26 @@ Stable tag: 1.1.0
 License: GPL-3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
-Email template editor and builder that can be used to send a beautiful professional design email template to your customers.
+Drag and drop email template editor for wordpress.
 
 == Description ==
-Triangle is an email template editor and builder that can be used to send a beautiful professional design email template to your customers.
-You can drag and drop element on email template builder to setup the layout and also customize your email by adding your custom css style.
-The plugin will then automatically combine your HTML and CSS script into a standardized email template that will be sent to your customers.
+Drag and drop email template editor for wordpress, create custom email template like a pro.
+You can drag and drop element on email template builder to set up the layout.
 
-* Github Repo [Triangle Email Template](https://github.com/agung2001/triangle-email-template)
+Integrate your HTML and CSS into your email template as easy as never before.
+Worry less, we will handle the rest Inlining CSS, standardized your email, and much more.
 
 = Features = 
 
-* **Drag & Drop EmailTemplate Builder:**
-Design and Customize your email by dragging and dropping element into the builder.
-* **Customize EmailTemplate:**
+* **Drag & Drop:**
+Design and customize your email template by dragging and dropping element into the builder.
+* **Style your email:**
 Add your custom css style into your email template.
+* **Boring stuff:**
+We include powerful automattic inline library (Juice)
+We support SMTP route options
+We craft beautiful User Interface (UI) with animation
+
 * **Built in CSSInline:**
 Email clients are unpredictable. Even today many clients strip styles that are not inlined, so it is important to inline your CSS before sending.
 The plugin using custom libraries to inline your CSS script with your HTML. Don't risk your transactional emails or marketing campaigns falling apart.
@@ -44,15 +49,15 @@ Supported plugins
 
 = Credits =
 
+* Thanks to Ace Js for the high performance code editor [Ace Js](https://ace.c9.io/)
 * Thanks to Automattic for the css inline library [Juice on Github](https://github.com/Automattic/juice)
 * Thanks to ColorlibHQ for the great responsive email layout [Email-Templates on Github](https://github.com/ColorlibHQ/email-templates)
 * Thanks to Daniel Eden for his beautiful animation library [Denaden on Github](https://github.com/daneden/animate.css)
-* Thanks to Select2 for the best jquery select boxes replacement [Select2 on Github](https://github.com/select2/select2)
 * Thanks to Font Awesome for the best crafted icons library [Fontawesome](https://fontawesome.com/)
-* Thanks to Ace Js for the high performance code editor [Ace Js](https://ace.c9.io/)
+* Thanks to Select2 for the best jquery select boxes replacement [Select2 on Github](https://github.com/select2/select2)
 
-The plugin is still in an early stage of development so we are expecting your feedback and rating so then we can improve the plugins even more.
-We are very excited about the plugin and hope you do as well. There are lots of features coming so stay tuned and also thank you for your very supports.
+= Development =
+* Github Repo [Triangle Email Template](https://github.com/agung2001/triangle-email-template)
 
 == Installation ==
 * You can install the plugin from the Wordpress Plugin Repositories or

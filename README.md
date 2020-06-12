@@ -1,8 +1,10 @@
 # Triangle Email Template Plugin for Wordpress
 
-Triangle is an email template editor and builder that can be used to send a beautiful professional design email template to your customers. <br> 
-You can drag and drop element on email template builder to setup the layout and also customize your email by adding your custom css style. <br>
-The plugin will then automatically combine your HTML and CSS script into a standardized email template that will be sent to your customers. <br>
+Drag and drop email template editor for wordpress, create custom email template like a pro.
+You can drag and drop element on email template builder to set up the layout.
+
+Integrate your HTML and CSS into your email template as easy as never before.
+Worry less, we will handle the rest Inlining CSS, standardized your email, and much more.
 
 ## Setup and installation 
 * Setup `./build.sh production`

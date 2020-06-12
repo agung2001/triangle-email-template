@@ -65,7 +65,6 @@ class Plugin {
 
     /**
      * Plugin configuration
-     * @var     object
      */
     protected $config;
 

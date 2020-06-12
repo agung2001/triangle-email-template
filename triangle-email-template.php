@@ -2,7 +2,7 @@
 /*
 * Plugin Name:       Triangle - Email Template Builder
 * Plugin URI:        https://agungsundoro.blogspot.com
-* Description:       Create custom professional looking email template for invoices, newsletter and notifications.
+* Description:       Drag and drop email template editor for wordpress.
 * Version:           1.1.0
 * Author:            Agung Sundoro
 * Author URI:        https://agungsundoro.blogspot.com

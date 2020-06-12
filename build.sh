@@ -25,4 +25,7 @@ if [ "production" == "$1" ]
 
       # Idea
       rm -rf .idea
+
+      # Self-delete
+      rm -- "$0"
 fi

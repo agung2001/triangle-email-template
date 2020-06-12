@@ -164,7 +164,6 @@ class BackendPage extends Base {
         ]);
         $view->setSections([
             'Backend.setting.setting' => ['name' => 'Setting', 'active' => true],
-            'Backend.setting.docs' => ['name' => 'Docs']
         ]);
 
         /** Set Page */
