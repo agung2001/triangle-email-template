@@ -11,7 +11,7 @@ namespace Triangle\Controller;
  * @subpackage Triangle/Controller
  */
 
-use Triangle\Wordpress\Hook\Action;
+use Dot\Wordpress\Hook\Action;
 
 class Backend extends Base {
 

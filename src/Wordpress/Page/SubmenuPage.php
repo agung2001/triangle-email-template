@@ -1,14 +1,14 @@
 <?php
 
-namespace Triangle\Wordpress\Page;
+namespace Dot\Wordpress\Page;
 
 !defined( 'WPINC ' ) or die;
 
 /**
  * Create custom page for wordpress
  *
- * @package    Triangle
- * @subpackage Triangle\Includes\Wordpress
+ * @package    Dot
+ * @subpackage Dot\Includes\Wordpress
  */
 
 class SubmenuPage extends Page {

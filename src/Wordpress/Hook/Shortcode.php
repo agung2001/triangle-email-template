@@ -1,14 +1,14 @@
 <?php
 
-namespace Triangle\Wordpress\Hook;
+namespace Dot\Wordpress\Hook;
 
 !defined( 'WPINC ' ) or die;
 
 /**
  * Abstract class for hook
  *
- * @package    Triangle
- * @subpackage Triangle\Includes\Wordpress
+ * @package    Dot
+ * @subpackage Dot\Includes\Wordpress
  */
 
 class Shortcode extends Hook {

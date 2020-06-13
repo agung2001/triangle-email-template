@@ -12,8 +12,8 @@ namespace Triangle\Api;
  */
 
 use Triangle\View;
-use Triangle\Wordpress\Email;
-use Triangle\Wordpress\Hook\Action;
+use Dot\Wordpress\Email;
+use Dot\Wordpress\Hook\Action;
 
 class EmailTemplate extends Api {
 

@@ -14,7 +14,7 @@ namespace Triangle\Lifecycle;
 use Triangle\Plugin;
 use Triangle\Helper;
 use Triangle\Model\EmailTemplate;
-use Triangle\Wordpress\Service;
+use Dot\Wordpress\Service;
 
 class Activate {
 

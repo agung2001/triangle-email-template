@@ -11,7 +11,7 @@ namespace Triangle\Api;
  * @subpackage Triangle/Controller
  */
 
-use Triangle\Wordpress\Hook\Action;
+use Dot\Wordpress\Hook\Action;
 
 class Editor extends Api {
 

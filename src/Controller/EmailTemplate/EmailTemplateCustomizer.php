@@ -14,10 +14,10 @@ namespace Triangle\Controller;
 use Triangle\View;
 use Triangle\Customizer\Ace;
 use Triangle\Customizer\Range;
-use Triangle\Wordpress\Hook\Action;
-use Triangle\Wordpress\Customizer\Section;
-use Triangle\Wordpress\Customizer\Setting;
-use Triangle\Wordpress\Customizer\Control;
+use Dot\Wordpress\Hook\Action;
+use Dot\Wordpress\Customizer\Section;
+use Dot\Wordpress\Customizer\Setting;
+use Dot\Wordpress\Customizer\Control;
 
 class EmailTemplateCustomizer extends Customizer {
 

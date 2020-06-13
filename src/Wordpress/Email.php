@@ -1,14 +1,14 @@
 <?php
 
-namespace Triangle\Wordpress;
+namespace Dot\Wordpress;
 
 !defined( 'WPINC ' ) or die;
 
 /**
  * Abstract class for wordpress model
  *
- * @package    Triangle
- * @subpackage Triangle\Includes\Wordpress
+ * @package    Dot
+ * @subpackage Dot\Includes\Wordpress
  */
 
 class Email {

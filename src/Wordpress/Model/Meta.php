@@ -1,14 +1,14 @@
 <?php
 
-namespace Triangle\Wordpress\Model;
+namespace Dot\Wordpress\Model;
 
 !defined( 'WPINC ' ) or die;
 
 /**
  * Abstract class for wordpress model
  *
- * @package    Triangle
- * @subpackage Triangle\Includes\Wordpress
+ * @package    Dot
+ * @subpackage Dot\Includes\Wordpress
  */
 
 class Meta {

@@ -11,7 +11,7 @@ namespace Triangle;
  * @subpackage Triangle\Includes
  */
 
-use Triangle\Wordpress\Service;
+use Dot\Wordpress\Service;
 
 class Plugin {
 
@@ -107,6 +107,7 @@ class Plugin {
      */
     public function run(){
         $this->path = $this->Service->Asset->getPath($this->config->path);
+        define('DOT_PATH', serialize($this->path));
         define('TRIANGLE_PATH', serialize($this->path));
         $this->Helper->defineConst($this);
         $this->loadModels();
@@ -129,7 +130,7 @@ class Plugin {
             $model->build();
             $this->models[$name] = $model;
             foreach($model->getHooks() as $hook){
-                $class = str_replace( 'Triangle\\Wordpress\\Hook\\' , '', get_class($hook) );
+                $class = str_replace( 'Dot\\Wordpress\\Hook\\' , '', get_class($hook) );
                 if(in_array(strtolower($class), $this->enableHooks)) $hook->run();
             }
         }
@@ -151,7 +152,7 @@ class Plugin {
             $controller = new $controller($this);
             if($dir=='Controller') $this->controllers[$name] = $controller;
             foreach($controller->getHooks() as $hook){
-                $class = str_replace( 'Triangle\\Wordpress\\Hook\\' , '', get_class($hook) );
+                $class = str_replace( 'Dot\\Wordpress\\Hook\\' , '', get_class($hook) );
                 if(in_array(strtolower($class), $this->enableHooks)) $hook->run();
             }
         }
