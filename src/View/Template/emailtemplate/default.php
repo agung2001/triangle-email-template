@@ -11,7 +11,7 @@
 
 /** Load Helper and Service */
 $helper = new Triangle\Helper();
-$service = new Triangle\Wordpress\Service();
+$service = new Dot\Wordpress\Service();
 $user = $this->Service->User->get_current_user();
 if(!isset($user->ID) || !$user->ID) $service->Page->wp_redirect('/');
 
