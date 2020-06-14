@@ -11,11 +11,9 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Drag and drop email template editor for wordpress.
 
 == Description ==
-Drag and drop email template editor for WordPress, create custom email template like a pro.
-You can drag and drop elements on the email template builder to set up the layout.
+Drag and drop email template editor for WordPress, create custom email template like a pro. You can drag and drop elements on the email template builder to set up the layout.
 
-Integrate your HTML and CSS into your email template as easy as never before.
-Worry less, we will handle the rest Inlining CSS, standardized your email, and much more.
+Integrate your HTML and CSS into your email template as easy as never before. Worry less, we will handle the rest Inlining CSS, standardized your email, and much more.
 
 = Features = 
 
@@ -23,21 +21,10 @@ Worry less, we will handle the rest Inlining CSS, standardized your email, and m
 Design and customize your email template by dragging and dropping element into the builder.
 * **Style your email:**
 Add your custom css style into your email template.
-* **Boring stuff:**
+* **Bo ring stuff:**
 We include powerful automattic inline library (Juice)
 We support SMTP route options
 We craft beautiful User Interface (UI) with animation
-
-* **Built in CSSInline:**
-Email clients are unpredictable. Even today many clients strip styles that are not inlined, so it is important to inline your CSS before sending.
-The plugin using custom libraries to inline your CSS script with your HTML. Don't risk your transactional emails or marketing campaigns falling apart.
-* **Support SMTP Option**
-We have provide custom SMTP email route options under the setting menu, so you can easily integrate your SMTP server with the plugin.
-It also supports 3rd party route plugin like WP Mail SMTP, etc.
-* **Beautiful User Interface (UI):**
-We have set up a beautiful user interface and functionality to our custom editor, to make you create an email template as easy as never before.
-* **Contact Customers**
-We have provide extra custom link action under users.php page so then you can easily contact your customers from the admin users page
 
 = 3rd Party Plugins =
 
