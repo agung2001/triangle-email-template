@@ -1,14 +1,14 @@
 <?php
 
-namespace Triangle\Wordpress;
+namespace Dot\Wordpress;
 
 !defined( 'WPINC ' ) or die;
 
 /**
  * Add extra layer for wordpress functions
  *
- * @package    Triangle
- * @subpackage Triangle\Wordpress
+ * @package    Dot
+ * @subpackage Dot\Wordpress
  */
 
 class Service {

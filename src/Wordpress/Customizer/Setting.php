@@ -1,14 +1,14 @@
 <?php
 
-namespace Triangle\Wordpress\Customizer;
+namespace Dot\Wordpress\Customizer;
 
 !defined( 'WPINC ' ) or die;
 
 /**
  * Register all actions
  *
- * @package    Triangle
- * @subpackage Triangle\Includes\Wordpress
+ * @package    Dot
+ * @subpackage Dot\Includes\Wordpress
  */
 
 class Setting extends Customizer {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Triangle\Wordpress\Service;
+namespace Dot\Wordpress\Service;
 
 !defined( 'WPINC ' ) or die;
 
 /**
  * Add extra layer for wordpress functions
  *
- * @package    Triangle
- * @subpackage Triangle\Wordpress
+ * @package    Dot
+ * @subpackage Dot\Wordpress
  */
 
 class Asset {
@@ -67,7 +67,7 @@ class Asset {
      */
     public function wp_enqueue_style($handle, $src = '', $deps = [], $ver = false, $media = 'all'){
         if(!$this->core){
-            $path = unserialize(TRIANGLE_PATH)['plugin_url'] . 'assets/css/';
+            $path = unserialize(DOT_PATH)['plugin_url'] . 'assets/css/';
             if(!strpos($src, '//')) $src = $path . $src;
         }
         wp_enqueue_style($handle, $src, $deps, $ver, $media);
@@ -83,7 +83,7 @@ class Asset {
      */
     public function wp_enqueue_script($handle, $src = '', $deps = [], $ver = false, $in_footer = false){
         if(!$this->core) {
-            $path = unserialize(TRIANGLE_PATH)['plugin_url'] . 'assets/js/';
+            $path = unserialize(DOT_PATH)['plugin_url'] . 'assets/js/';
             if (!strpos($src, '//')) $src = $path . $src;
         }
         wp_enqueue_script($handle, $src, $deps, $ver, $in_footer);

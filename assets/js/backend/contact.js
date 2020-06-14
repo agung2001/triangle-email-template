@@ -96,8 +96,9 @@
     function trigger_add_user_to_lists(){
         /** Set Data */
         let lists = jQuery('#field-users').val(),
-            selected = jQuery('#select-user-lists').val(),
-            selectedText = jQuery('#select-user-lists').text().replace(/\s/g,'');
+            select2 = jQuery('#select-user-lists').select2('data');
+        let selected = select2[0].id,
+            selectedText = select2[0].text.replace(/\s/g,'');
             selectedText = selectedText.split('-')[1];
             selectedText = `<span class="badges"><i data-user="${selected}">X</i>${selectedText}</span>`;
         /** Validate selected user */

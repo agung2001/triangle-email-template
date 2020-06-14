@@ -1,14 +1,14 @@
 <?php
 
-namespace Triangle\Wordpress\Hook;
+namespace Dot\Wordpress\Hook;
 
 !defined( 'WPINC ' ) or die;
 
 /**
  * Register all actions
  *
- * @package    Triangle
- * @subpackage Triangle\Includes\Wordpress
+ * @package    Dot
+ * @subpackage Dot\Includes\Wordpress
  */
 
 class Action extends Hook {

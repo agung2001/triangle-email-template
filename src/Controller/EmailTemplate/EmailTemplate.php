@@ -12,9 +12,9 @@ namespace Triangle\Controller;
  */
 
 use Triangle\View;
-use Triangle\Wordpress\Email;
-use Triangle\Wordpress\Hook\Action;
-use Triangle\Wordpress\Hook\Shortcode;
+use Dot\Wordpress\Email;
+use Dot\Wordpress\Hook\Action;
+use Dot\Wordpress\Hook\Shortcode;
 
 class EmailTemplate extends Base {
 

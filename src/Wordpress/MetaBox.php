@@ -1,14 +1,14 @@
 <?php
 
-namespace Triangle\Wordpress;
+namespace Dot\Wordpress;
 
 !defined( 'WPINC ' ) or die;
 
 /**
  * Initiate plugins
  *
- * @package    Triangle
- * @subpackage Triangle/Controller
+ * @package    Dot
+ * @subpackage Dot/Controller
  */
 
 class MetaBox {

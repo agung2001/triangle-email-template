@@ -1,14 +1,14 @@
 <?php
 
-namespace Triangle\Wordpress\Hook;
+namespace Dot\Wordpress\Hook;
 
 !defined( 'WPINC ' ) or die;
 
 /**
  * Wordpress parent hook for (Action, Filter, and Shortcode)
  *
- * @package    Triangle
- * @subpackage Triangle\Includes\Wordpress
+ * @package    Dot
+ * @subpackage Dot\Includes\Wordpress
  */
 
 abstract class Hook {

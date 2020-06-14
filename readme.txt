@@ -11,8 +11,8 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 Drag and drop email template editor for wordpress.
 
 == Description ==
-Drag and drop email template editor for wordpress, create custom email template like a pro.
-You can drag and drop element on email template builder to set up the layout.
+Drag and drop email template editor for WordPress, create custom email template like a pro.
+You can drag and drop elements on the email template builder to set up the layout.
 
 Integrate your HTML and CSS into your email template as easy as never before.
 Worry less, we will handle the rest Inlining CSS, standardized your email, and much more.

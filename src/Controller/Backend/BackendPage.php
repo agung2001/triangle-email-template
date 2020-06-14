@@ -12,9 +12,9 @@ namespace Triangle\Controller;
  */
 
 use Triangle\View;
-use Triangle\Wordpress\Hook\Action;
-use Triangle\Wordpress\Page\MenuPage;
-use Triangle\Wordpress\Page\SubmenuPage;
+use Dot\Wordpress\Hook\Action;
+use Dot\Wordpress\Page\MenuPage;
+use Dot\Wordpress\Page\SubmenuPage;
 
 class BackendPage extends Base {
 
