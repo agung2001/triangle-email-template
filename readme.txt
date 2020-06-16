@@ -35,7 +35,6 @@ Supported plugins
 * WP Mail SMTP
 
 = Credits =
-
 * Thanks to Ace Js for the high performance code editor [Ace Js](https://ace.c9.io/)
 * Thanks to Automattic for the css inline library [Juice on Github](https://github.com/Automattic/juice)
 * Thanks to ColorlibHQ for the great responsive email layout [Email-Templates on Github](https://github.com/ColorlibHQ/email-templates)
@@ -44,7 +43,9 @@ Supported plugins
 * Thanks to Select2 for the best jquery select boxes replacement [Select2 on Github](https://github.com/select2/select2)
 
 = Development =
-* Github Repo [Triangle Email Template](https://github.com/agung2001/triangle-email-template)
+* [Github Repositories](https://github.com/agung2001/triangle-email-template)
+* [Docs/Wiki](https://github.com/agung2001/triangle-email-template/wiki)
+* [Youtube Playlist](https://www.youtube.com/watch?v=xGq8roczoRA&list=PLc4H2My9zgNW6_wuPVZod9nDutk9KrtiX)
 
 == Installation ==
 * You can install the plugin from the Wordpress Plugin Repositories or
